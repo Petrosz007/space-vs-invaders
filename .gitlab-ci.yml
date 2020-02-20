@@ -3,9 +3,9 @@ image: andipeter/monogame-test:0.1
 build:
     stage: build
     script:
-        - dotnet build
+        - dotnet build src/
 
 test:
     stage: test
     script:
-        - dotnet test MyGame.Tests
+        - dotnet test src/MyGame.Tests

@@ -1201,7 +1201,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYsXWPHRgyLQ="
 							},
-							"name": "Health"
+							"name": "Health",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1209,7 +1210,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYsXWPHRgyLQ="
 							},
-							"name": "Cost"
+							"name": "Cost",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1217,7 +1219,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYsXWPHRgyLQ="
 							},
-							"name": "Level"
+							"name": "Level",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1225,7 +1228,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYsXWPHRgyLQ="
 							},
-							"name": "TickTime"
+							"name": "TickTime",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1233,7 +1237,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYsXWPHRgyLQ="
 							},
-							"name": "Cooldown"
+							"name": "Cooldown",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1241,7 +1246,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYsXWPHRgyLQ="
 							},
-							"name": "Range"
+							"name": "Range",
+							"type": ""
 						}
 					],
 					"operations": [
@@ -1309,9 +1315,9 @@
 														"$ref": "AAAAAAFwYssuJXWSd8M="
 													},
 													"font": "Arial;13;0",
-													"left": 75.97900390625,
+													"left": 71.58642578125,
 													"top": 10,
-													"width": 115.9052734375,
+													"width": 102.791015625,
 													"height": 13,
 													"text": "SequenceDiagram1"
 												},
@@ -1324,7 +1330,7 @@
 													"font": "Arial;13;1",
 													"left": 10,
 													"top": 10,
-													"width": 60.97900390625,
+													"width": 56.58642578125,
 													"height": 13,
 													"text": "interaction"
 												}
@@ -2481,7 +2487,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYsuI9HWjL80="
 							},
-							"name": "Health"
+							"name": "Health",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -2489,7 +2496,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYsuI9HWjL80="
 							},
-							"name": "Movement"
+							"name": "Movement",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -2497,7 +2505,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYsuI9HWjL80="
 							},
-							"name": "Damage"
+							"name": "Damage",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -2505,7 +2514,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYsuI9HWjL80="
 							},
-							"name": "Cooldown"
+							"name": "Cooldown",
+							"type": ""
 						}
 					]
 				},
@@ -4138,6 +4148,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
+											"top": -48,
 											"height": 13
 										},
 										{
@@ -4148,7 +4159,7 @@
 											},
 											"font": "Arial;13;1",
 											"left": 117,
-											"top": 159,
+											"top": 135,
 											"width": 63.2353515625,
 											"height": 13,
 											"text": "Castle"
@@ -4161,6 +4172,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
+											"top": -48,
 											"width": 80.9072265625,
 											"height": 13,
 											"text": "(from Model2)"
@@ -4173,13 +4185,14 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
+											"top": -48,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 112,
-									"top": 152,
+									"top": 128,
 									"width": 73.2353515625,
 									"height": 25,
 									"stereotypeLabel": {
@@ -4216,7 +4229,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 117,
-											"top": 182,
+											"top": 158,
 											"width": 63.2353515625,
 											"height": 13,
 											"text": "+Health",
@@ -4233,7 +4246,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 117,
-											"top": 197,
+											"top": 173,
 											"width": 63.2353515625,
 											"height": 13,
 											"text": "+Level",
@@ -4242,7 +4255,7 @@
 									],
 									"font": "Arial;13;0",
 									"left": 112,
-									"top": 177,
+									"top": 153,
 									"width": 73.2353515625,
 									"height": 38
 								},
@@ -4257,7 +4270,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 112,
-									"top": 215,
+									"top": 191,
 									"width": 73.2353515625,
 									"height": 10
 								},
@@ -4272,6 +4285,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
+									"top": -24,
 									"width": 10,
 									"height": 10
 								},
@@ -4286,6 +4300,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
+									"top": -24,
 									"width": 10,
 									"height": 10
 								}
@@ -4293,7 +4308,7 @@
 							"font": "Arial;13;0",
 							"containerChangeable": true,
 							"left": 112,
-							"top": 152,
+							"top": 128,
 							"width": 73.2353515625,
 							"height": 73,
 							"nameCompartment": {
@@ -4358,7 +4373,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYtRCAXdMyyI="
 							},
-							"name": "Money"
+							"name": "Money",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4366,7 +4382,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYtRCAXdMyyI="
 							},
-							"name": "SecondsElapsed"
+							"name": "SecondsElapsed",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4392,7 +4409,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYtRCAXdMyyI="
 							},
-							"name": "Rows"
+							"name": "Rows",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4400,7 +4418,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYtRCAXdMyyI="
 							},
-							"name": "Columns"
+							"name": "Columns",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4417,7 +4436,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYtRCAXdMyyI="
 							},
-							"name": "Difficulty"
+							"name": "Difficulty",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4425,7 +4445,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYtRCAXdMyyI="
 							},
-							"name": "Castle"
+							"name": "Castle",
+							"type": ""
 						}
 					],
 					"operations": [
@@ -4636,7 +4657,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYuyZQ3hBAOo="
 							},
-							"name": "Difficulty"
+							"name": "Difficulty",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4644,7 +4666,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYuyZQ3hBAOo="
 							},
-							"name": "Row"
+							"name": "Row",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4652,7 +4675,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYuyZQ3hBAOo="
 							},
-							"name": "Column"
+							"name": "Column",
+							"type": ""
 						}
 					],
 					"operations": [
@@ -4741,7 +4765,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYvEksnmaaN0="
 							},
-							"name": "SpawnColumn"
+							"name": "SpawnColumn",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4749,7 +4774,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYvEksnmaaN0="
 							},
-							"name": "SpawnTick"
+							"name": "SpawnTick",
+							"type": ""
 						}
 					]
 				},
@@ -4767,7 +4793,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYvYVEHyU+tw="
 							},
-							"name": "Health"
+							"name": "Health",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4775,7 +4802,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFwYvYVEHyU+tw="
 							},
-							"name": "Level"
+							"name": "Level",
+							"type": ""
 						}
 					]
 				}

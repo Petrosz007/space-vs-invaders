@@ -1,0 +1,11 @@
+image: andipeter/monogame-test:0.1
+
+build:
+    stage: build
+    script:
+        - dotnet build src/SpaceVsInvaders/
+
+test:
+    stage: test
+    script:
+        - dotnet test src/SpaceVsInvaders.Tests/

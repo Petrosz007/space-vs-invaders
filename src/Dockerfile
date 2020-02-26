@@ -24,6 +24,9 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN dotnet tool install -g dotnet-reportgenerator-globaltool
+ENV PATH="/root/.dotnet/tools/:${PATH}" 
+
 # COPY . /work
 # WORKDIR /work
 

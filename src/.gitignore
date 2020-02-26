@@ -1,6 +1,4 @@
-# Binary files
+coveragereport
+.vscode
 bin
 obj
-
-# Editor config files
-.vscode

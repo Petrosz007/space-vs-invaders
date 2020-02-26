@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
+    <!-- <GenerateAssemblyInfo>false</GenerateAssemblyInfo> -->
   </PropertyGroup>
 
   <ItemGroup>

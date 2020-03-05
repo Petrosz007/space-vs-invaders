@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceVsInvaders.Model;
-using System;
+using SpaceVsInvaders.View;
 
 namespace SpaceVsInvaders
 {
@@ -18,7 +19,11 @@ namespace SpaceVsInvaders
         MockModel model;
         Dictionary<string, Texture2D> sprites;
 
+        Button button;
+
         double prevSecond;
+        bool prevLeftClickState;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -36,6 +41,9 @@ namespace SpaceVsInvaders
             model = new MockModel();
             sprites = new Dictionary<string, Texture2D>();
             prevSecond = 0;
+            prevLeftClickState = false;
+
+            this.IsMouseVisible = true;
 
             base.Initialize();
         }
@@ -50,6 +58,8 @@ namespace SpaceVsInvaders
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             sprites.Add("lul", Content.Load<Texture2D>("GameSprites/LUL"));
+
+            button = new Button(Content.Load<Texture2D>("Buttons/notClicked"), Content.Load<Texture2D>("Buttons/clicked"), new Vector2(50, 50), 50, 100);
         }
 
         /// <summary>
@@ -73,6 +83,21 @@ namespace SpaceVsInvaders
 
             HandleTick(gameTime.TotalGameTime.TotalSeconds);
 
+
+            MouseState mouseState = Mouse.GetState();
+            Point mousePosition = new Point(mouseState.X, mouseState.Y);
+
+            // Console.WriteLine(button.isMouseOver(mousePosition) + " " + (mouseState.LeftButton == ButtonState.Pressed).ToString());
+            button.Clicked = button.isMouseOver(mousePosition) && mouseState.LeftButton == ButtonState.Pressed;
+
+            if(button.isMouseOver(mousePosition) && prevLeftClickState == true && mouseState.LeftButton != ButtonState.Pressed) {
+                Console.WriteLine("Click received!");
+                model.Player.X += 100;
+            }
+
+
+            prevLeftClickState = (mouseState.LeftButton == ButtonState.Pressed);
+
             base.Update(gameTime);
         }
 
@@ -88,6 +113,8 @@ namespace SpaceVsInvaders
             spriteBatch.Begin();
 
             spriteBatch.Draw(sprites["lul"], new Rectangle(model.Player.X, model.Player.Y, 100, 100), Color.Pink);
+
+            button.Draw(spriteBatch);
 
             spriteBatch.End();
 

@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SpaceVsInvaders.Model;
+using System;
 
 namespace SpaceVsInvaders
 {
@@ -9,10 +12,15 @@ namespace SpaceVsInvaders
     /// </summary>
     public class Game1 : Game
     {
+        private const double TickTime = 0.1;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        MockModel model;
+        Dictionary<string, Texture2D> sprites;
 
-              
+        double prevSecond;
+        bool hasTickedThisSecond;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,7 +35,9 @@ namespace SpaceVsInvaders
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            model = new MockModel();
+            sprites = new Dictionary<string, Texture2D>();
+            prevSecond = 0;
 
             base.Initialize();
         }
@@ -40,6 +50,8 @@ namespace SpaceVsInvaders
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            sprites.Add("lul", Content.Load<Texture2D>("GameSprites/LUL"));
         }
 
         /// <summary>
@@ -61,6 +73,8 @@ namespace SpaceVsInvaders
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            HandleTick(gameTime.TotalGameTime.TotalSeconds);
+
             base.Update(gameTime);
         }
 
@@ -75,9 +89,22 @@ namespace SpaceVsInvaders
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
+            spriteBatch.Draw(sprites["lul"], new Rectangle(model.Player.X, model.Player.Y, 100, 100), Color.Pink);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void HandleTick(double currentSeconds)
+        {
+            if (currentSeconds > prevSecond + TickTime)
+            {
+                prevSecond = currentSeconds;
+                hasTickedThisSecond = true;
+
+                model.HandleTick();
+            }
         }
     }
 }

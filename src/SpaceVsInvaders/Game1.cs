@@ -99,8 +99,6 @@ namespace SpaceVsInvaders
             if (currentSeconds > prevSecond + TickTime)
             {
                 prevSecond = currentSeconds;
-                hasTickedThisSecond = true;
-
                 model.HandleTick();
             }
         }

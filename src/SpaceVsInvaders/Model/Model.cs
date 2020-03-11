@@ -5,7 +5,9 @@ namespace SpaceVsInvaders.Model
         public int TickCount { get; set; }
         SVsIModel()
         {
-
+            TickCount = 10;
         }
+
+        void NewGame() {}
     }
 }

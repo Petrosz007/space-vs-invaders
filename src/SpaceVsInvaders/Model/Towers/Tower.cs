@@ -1,6 +1,6 @@
 using System;
 
-namespace SpaceVsInvaders.Tower
+namespace Towers.SpaceVsInvaders.Tower
 {
     public class SVsITower
     {
@@ -10,8 +10,9 @@ namespace SpaceVsInvaders.Tower
         public int TickTime { get; private set; }
         public int CoolDown { get; private set; }
         public int Range { get; private set; }
-        public SVsITower()
-        {
+        
+        public  SVsITower() 
+        { 
             
         }
     }

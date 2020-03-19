@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using SpaceVsInvaders.Castle;
-using SpaceVsInvaders.Towers;
-using SpaceVsInvaders.Enemies;
+using SpaceVsInvaders.Model.Towers;
+using SpaceVsInvaders.Model.Enemies;
 
 namespace SpaceVsInvaders.Model
 {

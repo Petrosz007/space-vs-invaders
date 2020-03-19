@@ -1,6 +1,6 @@
 using System;
 
-namespace SpaceVsInvaders.Castle
+namespace SpaceVsInvaders.Model
 {
     public class SVsICastle
     {

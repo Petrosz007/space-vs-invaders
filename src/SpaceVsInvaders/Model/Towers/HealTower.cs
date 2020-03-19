@@ -1,7 +1,6 @@
 using System;
-using Towers.SpaceVsInvaders.Tower;
 
-namespace Towers.SpaceVsInvaders.HealTower
+namespace SpaceVsInvaders.Towers
 {
     public class SVsIHealTower : SVsITower
     {

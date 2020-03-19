@@ -1,6 +1,6 @@
 using System;
 
-namespace Towers.SpaceVsInvaders.Tower
+namespace SpaceVsInvaders.Towers
 {
     public class SVsITower
     {

@@ -16,7 +16,6 @@ namespace SpaceVsInvaders
         private const double TickTime = 0.1;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        MockModel model;
         Dictionary<string, Texture2D> sprites;
 
         Button button;
@@ -38,7 +37,6 @@ namespace SpaceVsInvaders
         /// </summary>
         protected override void Initialize()
         {
-            model = new MockModel();
             sprites = new Dictionary<string, Texture2D>();
             prevSecond = 0;
             prevLeftClickState = false;
@@ -92,7 +90,7 @@ namespace SpaceVsInvaders
 
             if(button.isMouseOver(mousePosition) && prevLeftClickState == true && mouseState.LeftButton != ButtonState.Pressed) {
                 Console.WriteLine("Click received!");
-                model.Player.X += 100;
+                // model.Player.X += 100;
             }
 
 
@@ -112,8 +110,6 @@ namespace SpaceVsInvaders
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            spriteBatch.Draw(sprites["lul"], new Rectangle(model.Player.X, model.Player.Y, 100, 100), Color.Pink);
-
             button.Draw(spriteBatch);
 
             spriteBatch.End();
@@ -126,7 +122,6 @@ namespace SpaceVsInvaders
             if (currentSeconds > prevSecond + TickTime)
             {
                 prevSecond = currentSeconds;
-                model.HandleTick();
             }
         }
     }

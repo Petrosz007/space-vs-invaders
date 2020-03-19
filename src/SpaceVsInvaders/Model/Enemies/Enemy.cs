@@ -1,6 +1,6 @@
 using System;
 
-namespace Enemies.SpaceVsInvaders.Enemy
+namespace SpaceVsInvaders.Enemies
 {
     public class SVsIEnemy
     {

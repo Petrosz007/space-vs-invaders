@@ -15,9 +15,9 @@ namespace SpaceVsInvaders.Model.Towers
                 Range = 6;
             }
 
-            public void  DamageTower()
+            public override int Damage()
             {
-                
+                return Level * 5;
             }
         }
 }

@@ -11,12 +11,13 @@ namespace SpaceVsInvaders.Model.Towers
             Level = 1;
             TickTime = 3;
             CoolDown = 0; 
-            Range = 3;
+            // Range = 3;
         }
 
-        public void Heal()
+
+        public override int Heal()
         {
-                
+           return Level * 5;
         }
 
     }

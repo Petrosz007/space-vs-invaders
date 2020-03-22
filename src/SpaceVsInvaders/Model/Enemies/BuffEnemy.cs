@@ -9,6 +9,7 @@ namespace SpaceVsInvaders.Model.Enemies
             Health = 50;
             Movement = 3;
             Damage = 20;
+            TickTime = 7;
             CoolDown = 0;
         }
 

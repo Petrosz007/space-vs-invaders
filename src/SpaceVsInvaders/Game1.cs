@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceVsInvaders.Model;
 using SpaceVsInvaders.View;
+using SpaceVsInvaders.View.Board;
+using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders
 {
@@ -16,13 +18,10 @@ namespace SpaceVsInvaders
         private const double TickTime = 0.1;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Dictionary<string, Texture2D> sprites;
-
-        Button button;
+        List<Component> components;
+        Board board;
 
         double prevSecond;
-        bool prevLeftClickState;
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -37,9 +36,7 @@ namespace SpaceVsInvaders
         /// </summary>
         protected override void Initialize()
         {
-            sprites = new Dictionary<string, Texture2D>();
             prevSecond = 0;
-            prevLeftClickState = false;
 
             this.IsMouseVisible = true;
 
@@ -55,9 +52,34 @@ namespace SpaceVsInvaders
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            sprites.Add("lul", Content.Load<Texture2D>("GameSprites/LUL"));
+            TextureLoader.LoadTextures(Content);
 
-            button = new Button(Content.Load<Texture2D>("Buttons/notClicked"), Content.Load<Texture2D>("Buttons/clicked"), new Vector2(50, 50), 50, 100);
+            // Tile enemyTile = new Tile(new Vector2(100,100), 250, 50, TileType.SpeedyEnemy);
+            // Button myButton = new Button(new Vector2(50, 50), 50, 100);
+            // components = new List<Component>
+            // {
+            //     // myButton,
+            //     // enemyTile
+            // };
+
+            // enemyTile.LeftClicked += new EventHandler(EnemyTileClicked);
+            // myButton.LeftClicked += new EventHandler(MyButtonClicked);
+
+            board = new Board(new Vector2(100,100), 300, 300);
+            components = new List<Component>
+            {
+                board
+            };
+        }
+
+        private void MyButtonClicked(object sender, EventArgs e)
+        {
+            Console.WriteLine("Button tile clicked");
+        }
+
+        private void EnemyTileClicked(object sender, EventArgs e)
+        {
+            Console.WriteLine("Enemy tile clicked");
         }
 
         /// <summary>
@@ -81,20 +103,10 @@ namespace SpaceVsInvaders
 
             HandleTick(gameTime.TotalGameTime.TotalSeconds);
 
-
-            MouseState mouseState = Mouse.GetState();
-            Point mousePosition = new Point(mouseState.X, mouseState.Y);
-
-            // Console.WriteLine(button.isMouseOver(mousePosition) + " " + (mouseState.LeftButton == ButtonState.Pressed).ToString());
-            button.Clicked = button.isMouseOver(mousePosition) && mouseState.LeftButton == ButtonState.Pressed;
-
-            if(button.isMouseOver(mousePosition) && prevLeftClickState == true && mouseState.LeftButton != ButtonState.Pressed) {
-                Console.WriteLine("Click received!");
-                // model.Player.X += 100;
+            foreach(var component in components)
+            {
+                component.Update(gameTime);
             }
-
-
-            prevLeftClickState = (mouseState.LeftButton == ButtonState.Pressed);
 
             base.Update(gameTime);
         }
@@ -107,10 +119,12 @@ namespace SpaceVsInvaders
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            button.Draw(spriteBatch);
+            foreach(var component in components)
+            {
+                component.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 

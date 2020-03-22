@@ -4,10 +4,10 @@ namespace SpaceVsInvaders.Model.Enemies
 {
     public class SVsIEnemy
     {
-        public int Health { get; private set; }
-        public int Movement { get; private set; }
-        public int Damage { get; private set; }
-        public int CoolDown { get; private set; }
+        public int Health { get; protected set; }
+        public int Movement { get; protected set; }
+        public int Damage { get; protected set; }
+        public int CoolDown { get; protected set; }
 
         public SVsIEnemy()
         {

@@ -10,6 +10,7 @@ namespace SpaceVsInvaders.View
         SpeedyEnemy,
         DamageTower,
         GoldTower,
-        HealTower
+        HealTower,
+        Empty
     }
 }

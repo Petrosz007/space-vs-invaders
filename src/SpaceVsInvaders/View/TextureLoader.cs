@@ -16,6 +16,10 @@ namespace SpaceVsInvaders.View
             "SvsI_SPrites/normal_enemy",
             "Buttons/clicked",
             "Buttons/notClicked",
+            "SvsI_SPrites/shooter-tower",
+            "SvsI_SPrites/gold-tower",
+            "SvsI_SPrites/heal-tower",
+            "Backgrounds/background"
         };
 
         public static void LoadTextures(ContentManager content)
@@ -47,6 +51,10 @@ namespace SpaceVsInvaders.View
                 case TileType.BuffEnemy: return GetTexture("SvsI_SPrites/big_enemy2");
                 case TileType.SpeedyEnemy: return GetTexture("SvsI_SPrites/fast_enemy");
                 case TileType.NormalEnemy: return GetTexture("SvsI_SPrites/normal_enemy");
+                case TileType.DamageTower: return GetTexture("SvsI_SPrites/shooter-tower");
+                case TileType.GoldTower: return GetTexture("SvsI_SPrites/gold-tower");
+                case TileType.HealTower: return GetTexture("SvsI_SPrites/heal-tower");
+                case TileType.Empty: return GetTexture("SvsI_SPrites/heal-tower");
                 default:
                     throw new ArgumentException("No texture for tile: " + tile);
             }

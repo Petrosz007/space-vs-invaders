@@ -21,6 +21,9 @@ namespace SpaceVsInvaders
         List<Component> components;
         Board board;
 
+        //! remove this
+        Texture2D background;
+
         double prevSecond;
         public Game1()
         {
@@ -39,6 +42,11 @@ namespace SpaceVsInvaders
             prevSecond = 0;
 
             this.IsMouseVisible = true;
+            this.Window.Title = "Space Vs Invaders";
+
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.ApplyChanges();
 
             base.Initialize();
         }
@@ -65,7 +73,12 @@ namespace SpaceVsInvaders
             // enemyTile.LeftClicked += new EventHandler(EnemyTileClicked);
             // myButton.LeftClicked += new EventHandler(MyButtonClicked);
 
-            board = new Board(new Vector2(100,100), 300, 300);
+            background = TextureLoader.GetTexture("Backgrounds/background");
+
+            int width = Window.ClientBounds.Width;
+            int height = Window.ClientBounds.Height;
+
+            board = new Board(new Vector2((width - height)/2, 0), height, height);
             components = new List<Component>
             {
                 board
@@ -120,6 +133,10 @@ namespace SpaceVsInvaders
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
+
+            spriteBatch.Draw(background,
+                new Rectangle(0,0, Window.ClientBounds.Width, Window.ClientBounds.Height),
+                new Rectangle(0,0, background.Width, background.Height), Color.Pink);
 
             foreach(var component in components)
             {

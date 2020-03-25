@@ -26,7 +26,10 @@ namespace SpaceVsInvaders.View.Board
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, area, new Rectangle(0, 0, texture.Width, texture.Height), Color.Pink);
+            if(tile != TileType.Empty)
+            {
+                spriteBatch.Draw(texture, area, new Rectangle(0, 0, texture.Width, texture.Height), Color.Pink);
+            }
         }
 
         public override void Update(GameTime gameTime)

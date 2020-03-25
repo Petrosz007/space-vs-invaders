@@ -12,7 +12,12 @@ namespace SpaceVsInvaders.Model.Towers
             Level = 1;
             TickTime = 2;
             CoolDown = 0; 
-            Range = 10; 
+           // Range = 10; 
+        }
+
+        public override int Gold()
+        {
+            return Level * 10;
         }
     }
 }

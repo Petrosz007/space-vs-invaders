@@ -40,6 +40,7 @@ namespace SpaceVsInvaders.Model
         {
             HandleTowers();
             HandleEnemies();
+            CheckGameOver();
         }
 
         private void HandleTowers()
@@ -138,6 +139,12 @@ namespace SpaceVsInvaders.Model
                         {
                             if (e.CoolDown == 0)
                             {
+                                /* //a tower előtti mezőről tud csak sebezni, amíg odaér addig "készenállhat harcra"
+                                if(Towers[i+1,j].GetType().ToString() != "SVsITower")
+                                {
+                                     Towers[k,j].Health -= e.Damage;
+                                }else e.CoolDown = e.TickTime;
+                                */
                                 for (int k = i; k < Rows; k++)
                                     if (Towers[k,j].GetType().ToString() != "SVsITower")
                                     {
@@ -194,27 +201,46 @@ namespace SpaceVsInvaders.Model
             }
         }
 
+        /// <summary>
+        /// Ha a játékosnak van elég pénze, akkor a kiválasztot tornyot fejleszti.
+        /// </summary>
         public void UpgradeTower(int row, int col)
         {
+            if(Money >= 150 + Towers[row, col].Level * 50) // ezt is majd config fájlból át kell írni
             Towers[row, col].Health += 10;
             Towers[row,col].Level += 1;
         }
 
-        public void PlaceTower(int row, int col, TowerType type)
+        /// <summary>
+        /// Ha a játékosnak van elég pénze, akkor lerak egy előre kiválaszott típusú tornyot a kiválasztott mezőre.
+        /// </summary>
+        public bool PlaceTower(int row, int col, TowerType type)
         {
             switch(type)
             {
                 case TowerType.Damage:
-                    Towers[row,col] = new SVsIDamageTower();
-                    break;
+                    if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                    {
+                        Money -= 150;
+                        Towers[row,col] = new SVsIDamageTower();
+                        return true;
+                    }else return false;
                 case TowerType.Gold:
-                    Towers[row,col] = new SVsIGoldTower();
-                    break;
+                    if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                    {
+                        Money -= 150;
+                        Towers[row,col] = new SVsIGoldTower();
+                        return true;
+                    }else return false;
                 case TowerType.Heal:
-                    Towers[row,col] = new SVsIHealTower();
-                    break;
+                     if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                    {
+                        Money -= 150;
+                        Towers[row,col] = new SVsIHealTower();
+                        return true;
+                    }else return false;
                 default:
-                    break;
+                    return false;
             }
         }
 
@@ -235,11 +261,20 @@ namespace SpaceVsInvaders.Model
             
         }
         */
-
-        public void UpgradeCastle()
+    
+        /// <summary>
+        /// Ha van elég pénze a játékosnak, akkor fejleszti a kastélyt. (Ha sikeres a fejlesztés akkor igazat ad vissza.)
+        /// </summary>
+        public bool UpgradeCastle()
         {
-            Castle.Level += 1;
-            Castle.Health += Castle.Level * 10;
+            if(Money >= Castle.UpgradeCost)
+            {
+                Money -= Castle.UpgradeCost;
+                Castle.UpgradeCost += Castle.Level * 100;
+                Castle.Level += 1;
+                Castle.Health += Castle.Level * 10;
+                return true;
+            }else return false;
         }
     }
 }

@@ -33,11 +33,49 @@ namespace SpaceVsInvaders.Model
 
         public WaveSpawner WS;
 
-        public event EventHandler EnemyMoved;
-        public event EventHandler EnemyDead;
-        public event EventHandler TowerDestroyed;
-        public event EventHandler TowerHasAttacked;
-        public event EventHandler GameOver;
+#region Events
+        public event EventHandler<SVsIEventArgs> EnemyMoved;
+        public event EventHandler<SVsIEventArgs> TowerHasAttacked;
+        public event EventHandler<SVsIEventArgs> EnemyDead;
+        public event EventHandler<SVsIEventArgs> TowerDestroyed;
+        public event EventHandler<SVsIEventArgs> GameOver;
+
+         public void onEnemyMoved(int fromX, int fromY, int toX, int toY)
+        {
+            if(EnemyMoved != null)
+            {
+                EnemyMoved(this, new SVsIEventArgs(fromX, fromY, toX, toY));
+            }
+        }
+        public void onTowerHasAttacked(int fromX, int fromY, int toX, int toY)
+        {
+            if(TowerHasAttacked != null)
+            {
+                TowerHasAttacked(this, new SVsIEventArgs(fromX, fromY, toX, toY));
+            }
+        }
+        public void onTowerDestroyed(int whereX, int whereY)
+        {
+            if(TowerDestroyed != null)
+            {
+                TowerDestroyed(this, new SVsIEventArgs(whereX, whereY));
+            }
+        }
+        public void onEnemyDead(int whereX, int whereY)
+        {
+            if(EnemyDead != null)
+            {
+                EnemyDead(this, new SVsIEventArgs(whereX, whereY));
+            }
+        }
+        public void onGameOver()
+        {
+            if(GameOver != null)
+            {
+                GameOver(this, new SVsIEventArgs(true));
+            }
+        }
+#endregion
 
         public SVsIModel()
         {
@@ -93,6 +131,12 @@ namespace SpaceVsInvaders.Model
                     foreach(SVsIEnemy e in Enemies[i,col])
                     {
                         e.Health -= Towers[row, col].Damage();
+                        onTowerHasAttacked(row, col, i, col);
+                        if(e.Health <= 0)
+                        {
+                            Enemies[i,col].Remove(e);
+                            onEnemyDead(i,col);
+                        }
                     }
                     break;
                 }
@@ -170,6 +214,7 @@ namespace SpaceVsInvaders.Model
                             {
                                 Enemies[i+1,j].Add(e);
                                 Enemies[i,j].Remove(e);
+                                onEnemyMoved(j,i, j,i+1);
                             }
                         }   
                     }
@@ -203,7 +248,10 @@ namespace SpaceVsInvaders.Model
                     foreach(SVsIEnemy e in Enemies[Rows-1,j])
                     {
                         if (SecondsElapsed % e.Movement == 0)
+                        {
                             IsGameOver = true;
+                            onGameOver();
+                        }
                     }
                 }
             }
@@ -261,6 +309,7 @@ namespace SpaceVsInvaders.Model
         private void DestroyTower(int row, int col)
         {
             Towers[row, col] = null;
+            onTowerDestroyed(row, col);
         }
 
         /*    

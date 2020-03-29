@@ -31,6 +31,14 @@ namespace SpaceVsInvaders.Model
 
         public bool IsGameOver { get; private set; }
 
+        public WaveSpawner WS;
+
+        public event EventHandler EnemyMoved;
+        public event EventHandler EnemyDead;
+        public event EventHandler TowerDestroyed;
+        public event EventHandler TowerHasAttacked;
+        public event EventHandler GameOver;
+
         public SVsIModel()
         {
             NewGame();

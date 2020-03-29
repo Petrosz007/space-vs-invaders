@@ -96,19 +96,19 @@ namespace SpaceVsInvaders.Model
                 {
                     if (Towers[i,j].CoolDown == 0)
                     {
-                        switch (Towers[i,j].GetType().ToString())
+                        
+                        // kikozmetikazva :'D
+                        if (Towers[i,j] is SVsIDamageTower)
                         {
-                            case "SVsIDamageTower":
-                                HandleDamageTower(i,j);
-                                break;
-                            case "SVsIGoldTower":
-                                HandleGoldTower(i,j);
-                                break;
-                            case "SVsIHealTower":
-                                HandleHealTower(i,j);
-                                break;
-                            default:
-                                break;
+                            HandleDamageTower(i,j);
+                        }
+                        if (Towers[i,j] is SVsIGoldTower)
+                        {
+                            HandleGoldTower(i,j);
+                        }
+                        if (Towers[i,j] is SVsIHealTower)
+                        {
+                            HandleHealTower(i,j);
                         }
                         Towers[i,j].CoolDown = Towers[i,j].TickTime;
                     }
@@ -311,13 +311,6 @@ namespace SpaceVsInvaders.Model
             Towers[row, col] = null;
             onTowerDestroyed(row, col);
         }
-
-        /*    
-        private SVsIEnemy TowerCanAttack(SVsITower Tower) ?en ez mar nem tudom, hogy mit csinal 
-        {
-            
-        }
-        */
     
         /// <summary>
         /// Ha van elég pénze a játékosnak, akkor fejleszti a kastélyt. (Ha sikeres a fejlesztés akkor igazat ad vissza.)

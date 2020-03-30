@@ -61,6 +61,18 @@
 /processorParam:TextureFormat=Color
 /build:GameSprites/LUL.png
 
+#begin Pixels/transparent-pixel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Pixels/transparent-pixel.png
+
 #begin SvsI_SPrites/big_enemy2.png
 /importer:TextureImporter
 /processor:TextureProcessor

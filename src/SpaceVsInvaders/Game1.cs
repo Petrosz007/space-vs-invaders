@@ -18,6 +18,9 @@ namespace SpaceVsInvaders
         private const double TickTime = 0.1;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        SVsIModel model;
+        StateManager stateManager;
         List<Component> components;
         Board board;
 
@@ -57,28 +60,26 @@ namespace SpaceVsInvaders
         /// </summary>
         protected override void LoadContent()
         {
+            model = new SVsIModel();
+            model.NewGame(7, 5);
+
+            stateManager = new StateManager(model);
+            
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            TextureLoader.AttachGraphicsDevice(GraphicsDevice);
             TextureLoader.LoadTextures(Content);
 
-            // Tile enemyTile = new Tile(new Vector2(100,100), 250, 50, TileType.SpeedyEnemy);
-            // Button myButton = new Button(new Vector2(50, 50), 50, 100);
-            // components = new List<Component>
-            // {
-            //     // myButton,
-            //     // enemyTile
-            // };
-
-            // enemyTile.LeftClicked += new EventHandler(EnemyTileClicked);
-            // myButton.LeftClicked += new EventHandler(MyButtonClicked);
+            
 
             background = TextureLoader.GetTexture("Backgrounds/background");
 
             int width = Window.ClientBounds.Width;
             int height = Window.ClientBounds.Height;
 
-            board = new Board(new Vector2((width - height)/2, 0), height, height);
+            board = new Board(new Vector2(0, 0), height, height, model);
+            board.TileClicked += new EventHandler<Tuple<int, int>>(stateManager.HandleTileClicked);
             components = new List<Component>
             {
                 board

@@ -1,13 +1,16 @@
+using System.Runtime.CompilerServices;
 using System;
 using System.Net.Mime;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace SpaceVsInvaders.View
 {
     public static class TextureLoader
     {
+        private static GraphicsDevice graphicsDevice;
         private static Dictionary<string, Texture2D> textures;
         private static readonly string[] texturePaths = {
             "SvsI_SPrites/big_enemy2",
@@ -19,8 +22,14 @@ namespace SpaceVsInvaders.View
             "SvsI_SPrites/shooter-tower",
             "SvsI_SPrites/gold-tower",
             "SvsI_SPrites/heal-tower",
-            "Backgrounds/background"
+            "Backgrounds/background",
+            "Pixels/transparent-pixel"
         };
+
+        public static void AttachGraphicsDevice(GraphicsDevice gd)
+        {
+            graphicsDevice = gd;
+        }
 
         public static void LoadTextures(ContentManager content)
         {
@@ -58,6 +67,13 @@ namespace SpaceVsInvaders.View
                 default:
                     throw new ArgumentException("No texture for tile: " + tile);
             }
+        }
+
+        public static Texture2D CreateSolidtexture(Color color)
+        {
+            Texture2D texture = new Texture2D(graphicsDevice, 1, 1);
+            texture.SetData(new[] { color });
+            return texture;
         }
     }
 }

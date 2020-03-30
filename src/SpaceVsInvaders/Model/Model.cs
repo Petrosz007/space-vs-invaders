@@ -33,7 +33,6 @@ namespace SpaceVsInvaders.Model
 
         public SVsIModel()
         {
-            NewGame();
         }
 
         public void HandleTick()
@@ -160,12 +159,20 @@ namespace SpaceVsInvaders.Model
                     }
         }
 
-        public void NewGame() 
+        public void NewGame(int rows, int cols) 
         {
+            Rows = rows;
+            Cols = cols;
+
             Money = 0;
             SecondsElapsed = 0;
             Castle = new SVsICastle();
             Enemies = new List<SVsIEnemy>[Rows, Cols];
+
+            for(int i = 0; i < Rows; ++i)
+                for(int j = 0; j < Cols; ++j)
+                    Enemies[i,j] = new List<SVsIEnemy>();
+
             Towers = new SVsITower[Rows, Cols];
             IsGameOver = false;
         }

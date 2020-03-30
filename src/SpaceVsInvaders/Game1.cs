@@ -68,12 +68,12 @@ namespace SpaceVsInvaders
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            TextureLoader.AttachGraphicsDevice(GraphicsDevice);
-            TextureLoader.LoadTextures(Content);
+            ContentLoader.AttachGraphicsDevice(GraphicsDevice);
+            ContentLoader.LoadContent(Content);
 
-            
 
-            background = TextureLoader.GetTexture("Backgrounds/background");
+
+            background = ContentLoader.GetTexture("Backgrounds/background");
 
             int width = Window.ClientBounds.Width;
             int height = Window.ClientBounds.Height;

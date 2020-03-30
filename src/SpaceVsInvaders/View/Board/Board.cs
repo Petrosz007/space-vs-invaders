@@ -23,7 +23,7 @@ namespace SpaceVsInvaders.View.Board
         {
             this.model = model;
 
-            divTexture = TextureLoader.CreateSolidtexture(Color.Pink);
+            divTexture = ContentLoader.CreateSolidtexture(Color.Pink);
             divWidth = 2;
 
             colWidth = width / model.Cols;
@@ -104,7 +104,7 @@ namespace SpaceVsInvaders.View.Board
                     tiles[i, j].LeftClicked += new EventHandler(HandleTileClick);
                 }
             }
-            
+
             foreach (var tile in tiles)
             {
                 tile.Update(gameTime);

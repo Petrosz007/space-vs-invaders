@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace SpaceVsInvaders.View
 {
-    public static class TextureLoader
+    public static class ContentLoader
     {
         private static GraphicsDevice graphicsDevice;
         private static Dictionary<string, Texture2D> textures;
@@ -26,17 +26,29 @@ namespace SpaceVsInvaders.View
             "Pixels/transparent-pixel"
         };
 
+        private static Dictionary<string, SpriteFont> fonts;
+
+        private static readonly string[] fontsPath = {
+            "Fonts/EpicFont"
+        };
+
         public static void AttachGraphicsDevice(GraphicsDevice gd)
         {
             graphicsDevice = gd;
         }
 
-        public static void LoadTextures(ContentManager content)
+        public static void LoadContent(ContentManager content)
         {
             textures = new Dictionary<string, Texture2D>();
             foreach (string path in texturePaths)
             {
                 textures.Add(path, content.Load<Texture2D>(path));
+            }
+
+            fonts = new Dictionary<string, SpriteFont>();
+            foreach(string path in fontsPath)
+            {
+                fonts.Add(path, content.Load<SpriteFont>(path));
             }
         }
 
@@ -46,6 +58,18 @@ namespace SpaceVsInvaders.View
             if (textures.TryGetValue(path, out texture))
             {
                 return texture;
+            }
+            else
+            {
+                throw new ArgumentException("Could not find texture: " + path);
+            }
+        }
+        public static SpriteFont GetFont(string path)
+        {
+            SpriteFont font;
+            if (fonts.TryGetValue(path, out font))
+            {
+                return font;
             }
             else
             {

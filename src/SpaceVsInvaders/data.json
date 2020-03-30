@@ -1,0 +1,12 @@
+{
+    "BuffEnemy" : {
+        "Health": 10,
+        "Movement": 1,
+        "TickTime": 2
+    },
+    "SpeedyEnemy" : {
+        "Health": 10,
+        "Movement": 1,
+        "TickTime": 2
+    }
+}

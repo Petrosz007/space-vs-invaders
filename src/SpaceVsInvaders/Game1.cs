@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceVsInvaders.Model;
 using SpaceVsInvaders.View;
+using SpaceVsInvaders.View.Board;
+using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders
 {
@@ -13,17 +15,19 @@ namespace SpaceVsInvaders
     /// </summary>
     public class Game1 : Game
     {
-        private const double TickTime = 0.1;
+        private readonly double TickTime = Config.GetValue<double>("TickTime");
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        MockModel model;
-        Dictionary<string, Texture2D> sprites;
 
-        Button button;
+        SVsIModel model;
+        StateManager stateManager;
+        List<Component> components;
+        Board board;
+
+        //! remove this
+        Texture2D background;
 
         double prevSecond;
-        bool prevLeftClickState;
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -38,12 +42,14 @@ namespace SpaceVsInvaders
         /// </summary>
         protected override void Initialize()
         {
-            model = new MockModel();
-            sprites = new Dictionary<string, Texture2D>();
             prevSecond = 0;
-            prevLeftClickState = false;
 
             this.IsMouseVisible = true;
+            this.Window.Title = "Space Vs Invaders";
+
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.ApplyChanges();
 
             base.Initialize();
         }
@@ -54,12 +60,63 @@ namespace SpaceVsInvaders
         /// </summary>
         protected override void LoadContent()
         {
+            model = new SVsIModel();
+            model.NewGame(7, 5);
+
+            stateManager = new StateManager(model);
+            
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            sprites.Add("lul", Content.Load<Texture2D>("GameSprites/LUL"));
+            ContentLoader.AttachGraphicsDevice(GraphicsDevice);
+            ContentLoader.LoadContent(Content);
 
-            button = new Button(Content.Load<Texture2D>("Buttons/notClicked"), Content.Load<Texture2D>("Buttons/clicked"), new Vector2(50, 50), 50, 100);
+
+
+            background = ContentLoader.GetTexture("Backgrounds/background");
+
+            int width = Window.ClientBounds.Width;
+            int height = Window.ClientBounds.Height;
+
+            Button btn_heal = new Button(new Vector2(width - 110,5), 50, 100);
+            btn_heal.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Heal));
+            Button btn_gold = new Button(new Vector2(width - 220,5), 50, 100);
+            btn_gold.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Gold));
+            Button btn_damage = new Button(new Vector2(width-330,5), 50, 100);
+            btn_damage.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Damage));
+
+            ErrorDisplay Err = new ErrorDisplay(new Vector2(width/2-200, height/2-100),300,500);
+            
+            board = new Board(new Vector2(0, 0), height, height, model);
+            board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
+
+            InfoPanel infoPanel = new InfoPanel(new Vector2(width - 400, height - 400), 400, 400, model);
+
+            TowerInfo towerInfo = new TowerInfo(new Vector2(width - 400, 200), 400, 400, stateManager);
+
+            UnderCursorTower underCursorTower = new UnderCursorTower(new Vector2(0,0), 50, 50, stateManager);
+
+            components = new List<Component>
+            {
+                board,
+                btn_damage,
+                btn_heal,
+                btn_gold,
+                Err,
+                infoPanel,
+                towerInfo,
+                underCursorTower
+            };            
+        }
+
+        private void MyButtonClicked(object sender, EventArgs e)
+        {
+            Console.WriteLine("Button tile clicked");
+        }
+
+        private void EnemyTileClicked(object sender, EventArgs e)
+        {
+            Console.WriteLine("Enemy tile clicked");
         }
 
         /// <summary>
@@ -83,20 +140,10 @@ namespace SpaceVsInvaders
 
             HandleTick(gameTime.TotalGameTime.TotalSeconds);
 
-
-            MouseState mouseState = Mouse.GetState();
-            Point mousePosition = new Point(mouseState.X, mouseState.Y);
-
-            // Console.WriteLine(button.isMouseOver(mousePosition) + " " + (mouseState.LeftButton == ButtonState.Pressed).ToString());
-            button.Clicked = button.isMouseOver(mousePosition) && mouseState.LeftButton == ButtonState.Pressed;
-
-            if(button.isMouseOver(mousePosition) && prevLeftClickState == true && mouseState.LeftButton != ButtonState.Pressed) {
-                Console.WriteLine("Click received!");
-                model.Player.X += 100;
+            foreach(var component in components)
+            {
+                component.Update(gameTime);
             }
-
-
-            prevLeftClickState = (mouseState.LeftButton == ButtonState.Pressed);
 
             base.Update(gameTime);
         }
@@ -109,12 +156,16 @@ namespace SpaceVsInvaders
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            spriteBatch.Draw(sprites["lul"], new Rectangle(model.Player.X, model.Player.Y, 100, 100), Color.Pink);
+            spriteBatch.Draw(background,
+                new Rectangle(0,0, Window.ClientBounds.Width, Window.ClientBounds.Height),
+                new Rectangle(0,0, background.Width, background.Height), Color.Pink);
 
-            button.Draw(spriteBatch);
+            foreach(var component in components)
+            {
+                component.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 
@@ -125,8 +176,9 @@ namespace SpaceVsInvaders
         {
             if (currentSeconds > prevSecond + TickTime)
             {
+                // TODO: call this when it isn't buggy
+                // model.HandleTick();
                 prevSecond = currentSeconds;
-                model.HandleTick();
             }
         }
     }

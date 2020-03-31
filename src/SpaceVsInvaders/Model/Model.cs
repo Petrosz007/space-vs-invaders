@@ -1,0 +1,409 @@
+using System;
+using System.Collections.Generic;
+using SpaceVsInvaders.Model.Towers;
+using SpaceVsInvaders.Model.Enemies;
+
+namespace SpaceVsInvaders.Model
+{
+    public enum TowerType
+    {
+        Damage,
+        Gold,
+        Heal
+    }
+    
+    public enum EnemyType
+    {
+        Buff,
+        Normal,
+        Speedy
+    }
+
+    public class SVsIModel
+    {
+        public int Money { get; set; }
+        public int SecondsElapsed { get; private set; }
+        
+        public List<SVsIEnemy>[,] Enemies;
+
+        public int Rows { get; set; }
+
+        public int Cols { get; set; }
+
+        public SVsITower[,] Towers;
+
+        public int Difficulty { get; private set; }
+
+        public SVsICastle Castle;
+
+        public bool IsGameOver { get; private set; }
+
+        public WaveSpawner WS;
+
+#region Events
+        public event EventHandler<SVsIEventArgs> EnemyMoved;
+        public event EventHandler<SVsIEventArgs> TowerHasAttacked;
+        public event EventHandler<SVsIEventArgs> EnemyDead;
+        public event EventHandler<SVsIEventArgs> TowerDestroyed;
+        public event EventHandler<SVsIEventArgs> GameOver;
+
+         public void onEnemyMoved(int fromX, int fromY, int toX, int toY)
+        {
+            if(EnemyMoved != null)
+            {
+                EnemyMoved(this, new SVsIEventArgs(fromX, fromY, toX, toY));
+            }
+        }
+        public void onTowerHasAttacked(int fromX, int fromY, int toX, int toY)
+        {
+            if(TowerHasAttacked != null)
+            {
+                TowerHasAttacked(this, new SVsIEventArgs(fromX, fromY, toX, toY));
+            }
+        }
+        public void onTowerDestroyed(int whereX, int whereY)
+        {
+            if(TowerDestroyed != null)
+            {
+                TowerDestroyed(this, new SVsIEventArgs(whereX, whereY));
+            }
+        }
+        public void onEnemyDead(int whereX, int whereY)
+        {
+            if(EnemyDead != null)
+            {
+                EnemyDead(this, new SVsIEventArgs(whereX, whereY));
+            }
+        }
+        public void onGameOver()
+        {
+            if(GameOver != null)
+            {
+                GameOver(this, new SVsIEventArgs(true));
+            }
+        }
+#endregion
+
+        public SVsIModel()
+        {
+        }
+
+        public void HandleTick()
+        {
+            Money += 1;
+            SecondsElapsed += 1;
+            HandleTowers();
+            HandleEnemies();
+            CheckGameOver();
+        }
+
+        /// <summary>
+        /// Tornyok lekezelése. (Gyógyítás, ellenség lövése, pénzmennyiség növelése.)
+        /// </summary>
+        private void HandleTowers()
+        {
+            for (int i = 0; i < Rows; i++)
+            {
+                for (int j = 0; j < Cols; j++)
+                if (null != Towers[i,j])
+                {
+                    if (Towers[i,j].CoolDown == 0)
+                    {
+                        
+                        if (Towers[i,j] is SVsIDamageTower)
+                        {
+                            HandleDamageTower(i,j);
+                        }
+                        if (Towers[i,j] is SVsIGoldTower)
+                        {
+                            HandleGoldTower(i,j);
+                        }
+                        if (Towers[i,j] is SVsIHealTower)
+                        {
+                            HandleHealTower(i,j);
+                        }
+                        Towers[i,j].CoolDown = Towers[i,j].TickTime;
+                    }
+                    else
+                    {
+                        Towers[i,j].CoolDown -= 1;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        ///  Megkeresi a hatótávolságában hozzá legközelebb eső ellenség(eket), és ennek (ezeknek) Health-jét csökkenti.
+        /// </summary>
+        private void HandleDamageTower(int row, int col)
+        {
+            for(int i = row-1; i >= 0; i--)
+            {
+                if (Enemies[i,col] != null && Towers[row,col].Range >= i)
+                {
+                    for (int k = 0; k < Enemies[i,col].Count; k++)
+                    {
+                        Enemies[i,col][k].Health -= Towers[row, col].Damage();
+                        onTowerHasAttacked(row, col, i, col);
+                        if(Enemies[i,col][k].Health <= 0)
+                        {
+                            Enemies[i,col].Remove(Enemies[i,col][k]);
+                            onEnemyDead(i,col);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// A játékos pénzének mennyiségét megemeli a fejlettségi szint függvényében.
+        /// </summary>
+        private void HandleGoldTower(int row, int col)
+        {
+            Money += Towers[row, col].Gold();
+        }
+
+        /// <summary>
+        /// Önnönmaga 3x3-as környezetében emeli minden torony Health-jét.
+        /// </summary>
+        public void HandleHealTower(int row, int col) // teszt miatt public
+        {
+            if (row-1 >= 0 && col-1 >= 0 && null != Towers[row-1, col-1])
+                Towers[row-1, col-1].Health += Towers[row, col].Heal();
+
+            if (row-1 >= 0 && null !=  Towers[row-1, col])
+                Towers[row-1, col].Health += Towers[row, col].Heal();
+
+            if (row-1 >= 0 && col+1 < Cols && null != Towers[row-1, col+1])
+                Towers[row-1, col+1].Health += Towers[row, col].Heal();
+
+            if (col-1 >= 0 && null !=  Towers[row, col-1])
+                Towers[row, col-1].Health += Towers[row, col].Heal();
+
+            if (col+1 < Cols && null !=  Towers[row, col+1])
+                Towers[row, col+1].Health += Towers[row, col].Heal();
+
+            if (row+1 < Rows && col-1 >= 0 && null != Towers[row+1, col-1])
+                Towers[row+1, col-1].Health += Towers[row, col].Heal();
+
+            if (row+1 < Rows && null != Towers[row+1, col])
+                Towers[row+1, col].Health += Towers[row, col].Heal();
+
+            if (row+1 < Rows && col+1 < Cols && null !=  Towers[row+1, col+1])
+                Towers[row+1, col+1].Health += Towers[row, col].Heal();
+        }
+
+        /// <summary>
+        /// Ellenségek lövésének, mozgatásának lekezelése.
+        /// </summary>
+        private void HandleEnemies()
+        {
+            //GenerateEnemy();
+            for (int i = Rows-1; i >= 0; i--)
+                for (int j = Cols-1; j >=  0; j--)
+                    if (null != Enemies[i,j])
+                    {
+                        for( int l = 0; l < Enemies[i,j].Count; l++)
+                        {
+                            if (Enemies[i,j][l].CoolDown == 0)
+                            {
+                                
+                                for (int k = i; k < Rows; k++)
+                                    if (Towers[k,j] is SVsITower)
+                                    {
+                                        Towers[k,j].Health -= Enemies[i,j][l].Damage;
+                                        break;
+                                    }
+                                Enemies[i,j][l].CoolDown = Enemies[i,j][l].TickTime;
+                            }
+                            else
+                            {
+                                Enemies[i,j][l].CoolDown -= 1;
+                            }
+
+                            if (SecondsElapsed % Enemies[i,j][l].Movement == 0 && i+1 < Rows)
+                            {
+                                if (null == Enemies[i+1,j])
+                                {
+                                    Enemies[i+1,j] = new List<SVsIEnemy>();
+                                }
+                                Enemies[i+1,j].Add(Enemies[i,j][l]);
+                                Enemies[i,j].Remove(Enemies[i,j][l]);
+                                onEnemyMoved(j,i, j,i+1);
+                            }
+                        }   
+                    }
+        }
+
+        public void NewGame(int rows, int cols) 
+        {
+            Money = 80;
+            SecondsElapsed = 0;
+            Castle = new SVsICastle();
+            Rows = rows;
+            Cols = cols;
+            Enemies = new List<SVsIEnemy>[Rows, Cols];
+
+            for(int i = 0; i < Rows; ++i)
+                for(int j = 0; j < Cols; ++j)
+                    Enemies[i,j] = new List<SVsIEnemy>();
+
+            Towers = new SVsITower[Rows, Cols];
+            IsGameOver = false;
+        }
+
+        private void CheckGameOver()
+        {
+            /// <remarks>
+            /// Amikor a var eletereje 0-ra csokkent mar
+            /// </remarks>
+            if (Castle.Health == 0)
+                IsGameOver = true;
+
+            /// <remarks>
+            /// Amikor az ellenseg kozvetlenul a var elott van, es a kovetkezo lepesevel belepne a varba
+            /// </remarks>
+            for (int j = 0; j < Cols; j++)
+            {
+                if (Enemies[Rows-1,j] != null)
+                {
+                    foreach(SVsIEnemy e in Enemies[Rows-1,j])
+                    {
+                        if (SecondsElapsed % e.Movement == 0)
+                        {
+                            IsGameOver = true;
+                            onGameOver();
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ha a játékosnak van elég pénze, akkor a kiválasztot tornyot fejleszti.
+        /// </summary>
+        public void UpgradeTower(int row, int col)
+        {
+            if(Money >= 150 + Towers[row, col].Level * 50) // ezt is majd config fájlból át kell írni
+            Towers[row, col].Health += 10;
+            Towers[row,col].Level += 1;
+        }
+
+        /// <summary>
+        /// Ha a játékosnak van elég pénze, akkor lerak egy előre kiválaszott típusú tornyot a kiválasztott mezőre.
+        /// </summary>
+        public bool PlaceTower(int row, int col, TowerType type)
+        {
+            switch(type)
+            {
+                // TODO: a tornyoknal van kulon cost propertyjuk
+                case TowerType.Damage:
+                    if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                    {
+                        Money -= 150;
+                        Towers[row,col] = new SVsIDamageTower();
+                        return true;
+                    }else return false;
+                case TowerType.Gold:
+                    if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                    {
+                        Money -= 150;
+                        Towers[row,col] = new SVsIGoldTower();
+                        return true;
+                    }else return false;
+                case TowerType.Heal:
+                     if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                    {
+                        Money -= 150;
+                        Towers[row,col] = new SVsIHealTower();
+                        return true;
+                    }else return false;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        ///Eladja az adott tornyot, es a torony értékénel felével növel a pénzt.
+        /// </summary>
+        public void SellTower(int row, int col)
+        {
+            Money += Towers[row, col].Cost/2;
+            Towers[row, col] = null;
+        }
+
+        /// <summary>
+        /// Leromboljuk az adott tornyot.
+        /// </summary>
+        private void DestroyTower(int row, int col)
+        {
+            Towers[row, col] = null;
+            onTowerDestroyed(row, col);
+        }
+    
+        /// <summary>
+        /// Ha van elég pénze a játékosnak, akkor fejleszti a kastélyt. (Ha sikeres a fejlesztés akkor igazat ad vissza.)
+        /// </summary>
+        public bool UpgradeCastle()
+        {
+            if(Money >= Castle.UpgradeCost)
+            {
+                Money -= Castle.UpgradeCost;
+                Castle.UpgradeCost += Castle.Level * 100;
+                Castle.Level += 1;
+                Castle.Health += Castle.Level * 10;
+                return true;
+            }else return false;
+        }
+
+       /*
+        public void GenerateEnemy()
+        {
+            if (SecondsElapsed % 3 == 0) // fontos, hogy ezt most csak a teszt vegett raktam ennyire, ez a valosagban inkabb 7-15 mp
+            {
+                Random rnd = new Random();
+                int number = rnd.Next(0,3);
+                int col = rnd.Next(0, Cols);
+                if (Enemies[0,col] == null)
+                {
+                    Enemies[0,col] = new List<SVsIEnemy>();
+                    if (number == 0)
+                    {
+                        Enemies[0,col].Add(new SVsIBuffEnemy());
+                    }
+                    if (number == 1)
+                    {
+                        Enemies[0,col].Add(new SVsINormalEnemy());
+                    }
+                    if (number == 2)
+                    {
+                        Enemies[0,col].Add(new SVsISpeedyEnemy());
+                    }
+                }
+            }
+        }
+        */
+
+        ///<summary>
+        /// Csak a teszteléshez kell.
+        ///</summary>
+        public void PlaceEnemy(int row, int col, EnemyType type)
+        {
+            if (null == Enemies[row,col])
+                Enemies[row,col] = new List<SVsIEnemy>();
+            switch(type)
+            {
+                case EnemyType.Buff:
+                     Enemies[row,col].Add(new SVsIBuffEnemy());
+                    break;
+                case EnemyType.Normal:
+                     Enemies[row,col].Add(new SVsINormalEnemy());
+                    break;
+                case EnemyType.Speedy:
+                     Enemies[row,col].Add(new SVsISpeedyEnemy());
+                    break;
+            }
+        }
+    }
+}

@@ -49,6 +49,13 @@
 /processorParam:TextureFormat=Color
 /build:Buttons/click2.png;Buttons/clicked.png
 
+#begin Fonts/EpicFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/EpicFont.spritefont
+
 #begin GameSprites/LUL.png
 /importer:TextureImporter
 /processor:TextureProcessor

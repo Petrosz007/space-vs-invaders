@@ -68,22 +68,35 @@ namespace SpaceVsInvaders
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            TextureLoader.AttachGraphicsDevice(GraphicsDevice);
-            TextureLoader.LoadTextures(Content);
+            ContentLoader.AttachGraphicsDevice(GraphicsDevice);
+            ContentLoader.LoadContent(Content);
 
-            
 
-            background = TextureLoader.GetTexture("Backgrounds/background");
+
+            background = ContentLoader.GetTexture("Backgrounds/background");
 
             int width = Window.ClientBounds.Width;
             int height = Window.ClientBounds.Height;
 
+            Button btn_heal = new Button(new Vector2(width - 110,5), 50, 100);
+            btn_heal.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Heal));
+            Button btn_gold = new Button(new Vector2(width - 220,5), 50, 100);
+            btn_gold.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Gold));
+            Button btn_damage = new Button(new Vector2(width-330,5), 50, 100);
+            btn_damage.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Damage));
+
+            ErrorDisplay Err = new ErrorDisplay(new Vector2(width/2-200, height/2-100),300,500);
+            
             board = new Board(new Vector2(0, 0), height, height, model);
             board.TileClicked += new EventHandler<Tuple<int, int>>(stateManager.HandleTileClicked);
             components = new List<Component>
             {
-                board
-            };
+                board,
+                btn_damage,
+                btn_heal,
+                btn_gold,
+                Err
+            };            
         }
 
         private void MyButtonClicked(object sender, EventArgs e)

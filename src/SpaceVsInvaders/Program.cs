@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Timers;
+using SpaceVsInvaders.Model;
 using Microsoft.Extensions.Configuration;
 
 namespace SpaceVsInvaders
 {
+
+
     public static class Program
     {
         [STAThread]
@@ -19,6 +23,7 @@ namespace SpaceVsInvaders
 
             using (var game = new Game1())
                 game.Run();
+
         }
     }
 }

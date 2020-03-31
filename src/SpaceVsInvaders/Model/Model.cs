@@ -12,16 +12,23 @@ namespace SpaceVsInvaders.Model
         Heal
     }
     
+    public enum EnemyType
+    {
+        Buff,
+        Normal,
+        Speedy
+    }
+
     public class SVsIModel
     {
-        public int Money { get; private set; }
+        public int Money { get; set; }
         public int SecondsElapsed { get; private set; }
         
         public List<SVsIEnemy>[,] Enemies;
 
-        public int Rows { get; private set; }
+        public int Rows { get; set; }
 
-        public int Cols { get; private set; }
+        public int Cols { get; set; }
 
         public SVsITower[,] Towers;
 
@@ -77,27 +84,33 @@ namespace SpaceVsInvaders.Model
         }
 #endregion
 
-        public SVsIModel()
+        public SVsIModel(int rows, int cols)
         {
-            NewGame();
+            NewGame(rows, cols);
         }
 
         public void HandleTick()
         {
+            Money += 1;
+            SecondsElapsed += 1;
             HandleTowers();
             HandleEnemies();
             CheckGameOver();
         }
 
+        /// <summary>
+        /// Tornyok lekezelése. (Gyógyítás, ellenség lövése, pénzmennyiség növelése.)
+        /// </summary>
         private void HandleTowers()
         {
             for (int i = 0; i < Rows; i++)
+            {
                 for (int j = 0; j < Cols; j++)
+                if (null != Towers[i,j])
                 {
                     if (Towers[i,j].CoolDown == 0)
                     {
                         
-                        // kikozmetikazva :'D
                         if (Towers[i,j] is SVsIDamageTower)
                         {
                             HandleDamageTower(i,j);
@@ -117,6 +130,7 @@ namespace SpaceVsInvaders.Model
                         Towers[i,j].CoolDown -= 1;
                     }
                 }
+            }
         }
 
         /// <summary>
@@ -128,17 +142,17 @@ namespace SpaceVsInvaders.Model
             {
                 if (Enemies[i,col] != null && Towers[row,col].Range >= i)
                 {
-                    foreach(SVsIEnemy e in Enemies[i,col])
+                    for (int k = 0; k < Enemies[i,col].Count; k++)
                     {
-                        e.Health -= Towers[row, col].Damage();
+                        Enemies[i,col][k].Health -= Towers[row, col].Damage();
                         onTowerHasAttacked(row, col, i, col);
-                        if(e.Health <= 0)
+                        if(Enemies[i,col][k].Health <= 0)
                         {
-                            Enemies[i,col].Remove(e);
+                            Enemies[i,col].Remove(Enemies[i,col][k]);
                             onEnemyDead(i,col);
                         }
+                        break;
                     }
-                    break;
                 }
             }
         }
@@ -154,77 +168,82 @@ namespace SpaceVsInvaders.Model
         /// <summary>
         /// Önnönmaga 3x3-as környezetében emeli minden torony Health-jét.
         /// </summary>
-        private void HandleHealTower(int row, int col)
+        public void HandleHealTower(int row, int col) // teszt miatt public
         {
-            if (row-1 >= 0 && col-1 >= 0)
+            if (row-1 >= 0 && col-1 >= 0 && null != Towers[row-1, col-1])
                 Towers[row-1, col-1].Health += Towers[row, col].Heal();
 
-            if (row-1 >= 0)
+            if (row-1 >= 0 && null !=  Towers[row-1, col])
                 Towers[row-1, col].Health += Towers[row, col].Heal();
 
-            if (row-1 >= 0 && col+1 < Cols)
+            if (row-1 >= 0 && col+1 < Cols && null != Towers[row-1, col+1])
                 Towers[row-1, col+1].Health += Towers[row, col].Heal();
 
-            if (col-1 >= 0)
+            if (col-1 >= 0 && null !=  Towers[row, col-1])
                 Towers[row, col-1].Health += Towers[row, col].Heal();
 
-            if (col+1 < Cols)
+            if (col+1 < Cols && null !=  Towers[row, col+1])
                 Towers[row, col+1].Health += Towers[row, col].Heal();
 
-            if (row+1 < Rows && col-1 >= 0)
+            if (row+1 < Rows && col-1 >= 0 && null != Towers[row+1, col-1])
                 Towers[row+1, col-1].Health += Towers[row, col].Heal();
 
-            if (row+1 < Rows)
+            if (row+1 < Rows && null != Towers[row+1, col])
                 Towers[row+1, col].Health += Towers[row, col].Heal();
 
-            if (row+1 < Rows && col+1 < Cols)
+            if (row+1 < Rows && col+1 < Cols && null !=  Towers[row+1, col+1])
                 Towers[row+1, col+1].Health += Towers[row, col].Heal();
         }
 
+        /// <summary>
+        /// Ellenségek lövésének, mozgatásának lekezelése.
+        /// </summary>
         private void HandleEnemies()
         {
-            for (int i = 0; i < Rows; i++)
-                for (int j = 0; j < Cols; j++)
-                    if (Enemies[i,j] != null)
+            //GenerateEnemy();
+            for (int i = Rows-1; i >= 0; i--)
+                for (int j = Cols-1; j >=  0; j--)
+                    if (null != Enemies[i,j])
                     {
-                        foreach(SVsIEnemy e in Enemies[i,j])
+                        for( int l = 0; l < Enemies[i,j].Count; l++)
                         {
-                            if (e.CoolDown == 0)
+                            if (Enemies[i,j][l].CoolDown == 0)
                             {
-                                /* //a tower előtti mezőről tud csak sebezni, amíg odaér addig "készenállhat harcra"
-                                if(Towers[i+1,j].GetType().ToString() != "SVsITower")
-                                {
-                                     Towers[k,j].Health -= e.Damage;
-                                }else e.CoolDown = e.TickTime;
-                                */
+                                
                                 for (int k = i; k < Rows; k++)
-                                    if (Towers[k,j].GetType().ToString() != "SVsITower")
+                                    if (Towers[k,j] is SVsITower)
                                     {
-                                        Towers[k,j].Health -= e.Damage;
+                                        Towers[k,j].Health -= Enemies[i,j][l].Damage;
                                         break;
                                     }
-                                e.CoolDown = e.TickTime;
+                                Enemies[i,j][l].CoolDown = Enemies[i,j][l].TickTime;
                             }
                             else
                             {
-                                e.CoolDown -= 1;
+                                Enemies[i,j][l].CoolDown -= 1;
                             }
 
-                            if (SecondsElapsed % e.Movement == 0 && i+1 < Rows)
+                            if (SecondsElapsed % Enemies[i,j][l].Movement == 0 && i+1 < Rows)
                             {
-                                Enemies[i+1,j].Add(e);
-                                Enemies[i,j].Remove(e);
+                                if (null == Enemies[i+1,j])
+                                {
+                                    Enemies[i+1,j] = new List<SVsIEnemy>();
+                                }
+                                Enemies[i+1,j].Add(Enemies[i,j][l]);
+                                Enemies[i,j].Remove(Enemies[i,j][l]);
                                 onEnemyMoved(j,i, j,i+1);
                             }
                         }   
                     }
         }
 
-        public void NewGame() 
+        public void NewGame(int rows, int cols) 
         {
-            Money = 0;
+            Money = 80;
             SecondsElapsed = 0;
             Castle = new SVsICastle();
+            Rows = rows;
+            Cols = cols;
             Enemies = new List<SVsIEnemy>[Rows, Cols];
             Towers = new SVsITower[Rows, Cols];
             IsGameOver = false;
@@ -274,6 +293,7 @@ namespace SpaceVsInvaders.Model
         {
             switch(type)
             {
+                // TODO: a tornyoknal van kulon cost propertyjuk
                 case TowerType.Damage:
                     if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
                     {
@@ -300,12 +320,18 @@ namespace SpaceVsInvaders.Model
             }
         }
 
+        /// <summary>
+        ///Eladja az adott tornyot, es a torony értékénel felével növel a pénzt.
+        /// </summary>
         public void SellTower(int row, int col)
         {
             Money += Towers[row, col].Cost/2;
             Towers[row, col] = null;
         }
 
+        /// <summary>
+        /// Leromboljuk az adott tornyot.
+        /// </summary>
         private void DestroyTower(int row, int col)
         {
             Towers[row, col] = null;
@@ -325,6 +351,55 @@ namespace SpaceVsInvaders.Model
                 Castle.Health += Castle.Level * 10;
                 return true;
             }else return false;
+        }
+
+       /*
+        public void GenerateEnemy()
+        {
+            if (SecondsElapsed % 3 == 0) // fontos, hogy ezt most csak a teszt vegett raktam ennyire, ez a valosagban inkabb 7-15 mp
+            {
+                Random rnd = new Random();
+                int number = rnd.Next(0,3);
+                int col = rnd.Next(0, Cols);
+                if (Enemies[0,col] == null)
+                {
+                    Enemies[0,col] = new List<SVsIEnemy>();
+                    if (number == 0)
+                    {
+                        Enemies[0,col].Add(new SVsIBuffEnemy());
+                    }
+                    if (number == 1)
+                    {
+                        Enemies[0,col].Add(new SVsINormalEnemy());
+                    }
+                    if (number == 2)
+                    {
+                        Enemies[0,col].Add(new SVsISpeedyEnemy());
+                    }
+                }
+            }
+        }
+        */
+
+        ///<summary>
+        /// Csak a teszteléshez kell.
+        ///</summary>
+        public void PlaceEnemy(int row, int col, EnemyType type)
+        {
+            if (null == Enemies[row,col])
+                Enemies[row,col] = new List<SVsIEnemy>();
+            switch(type)
+            {
+                case EnemyType.Buff:
+                     Enemies[row,col].Add(new SVsIBuffEnemy());
+                    break;
+                case EnemyType.Normal:
+                     Enemies[row,col].Add(new SVsINormalEnemy());
+                    break;
+                case EnemyType.Speedy:
+                     Enemies[row,col].Add(new SVsISpeedyEnemy());
+                    break;
+            }
         }
     }
 }

@@ -49,6 +49,27 @@
 /processorParam:TextureFormat=Color
 /build:Buttons/click2.png;Buttons/clicked.png
 
+#begin Fonts/EpicFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/EpicFont.spritefont
+
+#begin Fonts/EpicFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/EpicFont.spritefont
+
+#begin Fonts/TowerInfoFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/TowerInfoFont.spritefont
+
 #begin GameSprites/LUL.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -60,6 +81,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:GameSprites/LUL.png
+
+#begin Pixels/transparent-pixel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Pixels/transparent-pixel.png
 
 #begin SvsI_SPrites/big_enemy2.png
 /importer:TextureImporter

@@ -12,8 +12,8 @@ namespace SpaceVsInvaders.View.Components
         public Button(Vector2 position, int height, int width)
             : base(position, height, width)
         {
-            this.stillTexture = TextureLoader.GetTexture("Buttons/clicked");
-            this.clickedTexture = TextureLoader.GetTexture("Buttons/notClicked");
+            this.stillTexture = ContentLoader.GetTexture("Buttons/clicked");
+            this.clickedTexture = ContentLoader.GetTexture("Buttons/notClicked");
         }
 
         public override void Draw(SpriteBatch spriteBatch)

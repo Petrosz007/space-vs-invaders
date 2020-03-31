@@ -15,9 +15,12 @@ namespace SpaceVsInvaders
     /// </summary>
     public class Game1 : Game
     {
-        private const double TickTime = 0.1;
+        private readonly double TickTime = Config.GetValue<double>("TickTime");
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        SVsIModel model;
+        StateManager stateManager;
         List<Component> components;
         Board board;
 
@@ -57,32 +60,53 @@ namespace SpaceVsInvaders
         /// </summary>
         protected override void LoadContent()
         {
+            model = new SVsIModel();
+            model.NewGame(7, 5);
+
+            stateManager = new StateManager(model);
+            
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            TextureLoader.LoadTextures(Content);
+            ContentLoader.AttachGraphicsDevice(GraphicsDevice);
+            ContentLoader.LoadContent(Content);
 
-            // Tile enemyTile = new Tile(new Vector2(100,100), 250, 50, TileType.SpeedyEnemy);
-            // Button myButton = new Button(new Vector2(50, 50), 50, 100);
-            // components = new List<Component>
-            // {
-            //     // myButton,
-            //     // enemyTile
-            // };
 
-            // enemyTile.LeftClicked += new EventHandler(EnemyTileClicked);
-            // myButton.LeftClicked += new EventHandler(MyButtonClicked);
 
-            background = TextureLoader.GetTexture("Backgrounds/background");
+            background = ContentLoader.GetTexture("Backgrounds/background");
 
             int width = Window.ClientBounds.Width;
             int height = Window.ClientBounds.Height;
 
-            board = new Board(new Vector2((width - height)/2, 0), height, height);
+            Button btn_heal = new Button(new Vector2(width - 110,5), 50, 100);
+            btn_heal.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Heal));
+            Button btn_gold = new Button(new Vector2(width - 220,5), 50, 100);
+            btn_gold.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Gold));
+            Button btn_damage = new Button(new Vector2(width-330,5), 50, 100);
+            btn_damage.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Damage));
+
+            ErrorDisplay Err = new ErrorDisplay(new Vector2(width/2-200, height/2-100),300,500);
+            
+            board = new Board(new Vector2(0, 0), height, height, model);
+            board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
+
+            InfoPanel infoPanel = new InfoPanel(new Vector2(width - 400, height - 400), 400, 400, model);
+
+            TowerInfo towerInfo = new TowerInfo(new Vector2(width - 400, 200), 400, 400, stateManager);
+
+            UnderCursorTower underCursorTower = new UnderCursorTower(new Vector2(0,0), 50, 50, stateManager);
+
             components = new List<Component>
             {
-                board
-            };
+                board,
+                btn_damage,
+                btn_heal,
+                btn_gold,
+                Err,
+                infoPanel,
+                towerInfo,
+                underCursorTower
+            };            
         }
 
         private void MyButtonClicked(object sender, EventArgs e)
@@ -152,6 +176,8 @@ namespace SpaceVsInvaders
         {
             if (currentSeconds > prevSecond + TickTime)
             {
+                // TODO: call this when it isn't buggy
+                // model.HandleTick();
                 prevSecond = currentSeconds;
             }
         }

@@ -2,6 +2,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SpaceVsInvaders.Model;
+using SpaceVsInvaders.Model.Towers;
+using SpaceVsInvaders.Model.Enemies;
 using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Board
@@ -12,60 +14,100 @@ namespace SpaceVsInvaders.View.Board
 
         private int colWidth;
         private int rowHeight;
-        private int n;
         private Tile[,] tiles;
-        public Board(Vector2 position, int height, int width)
+        private Texture2D divTexture;
+        private int divWidth;
+        private Color divColor;
+        public event EventHandler<(int, int)> TileClicked;
+        public Board(Vector2 position, int height, int width, SVsIModel model)
             : base(position, height, width)
         {
-            n = 10;
-            colWidth = width / n;
-            rowHeight = height / n;
-            tiles = new Tile[n,n];
+            this.model = model;
 
-            for(int i = 0; i < n; ++i)
-            {
-                for(int j = 0; j < n; ++j)
-                {
-                    TileType tile;
-                    if(j == 0) tile = TileType.SpeedyEnemy;
-                    else if(j == 1) tile = TileType.NormalEnemy;
-                    else if(j == 2) tile = TileType.GoldTower;
-                    else if(j == 3) tile = TileType.DamageTower;
-                    else tile = TileType.HealTower;
-                    
-                    // only draw some sprites
-                    if(new Random().Next(100) < 70) tile = TileType.Empty;
+            divColor = Color.White;
+            divTexture = ContentLoader.CreateSolidtexture(Color.White);
+            divWidth = 2;
 
-                    tiles[i,j] = new Tile(
-                        new Vector2(position.X + colWidth * i, position.Y + rowHeight * j),
-                        rowHeight,
-                        colWidth,
-                        tile,
-                        i,
-                        j);
-                    tiles[i,j].LeftClicked += new EventHandler(HandleTileClick);
-                }
-            }
+            colWidth = width / model.Cols;
+            rowHeight = height / model.Rows;
+            tiles = new Tile[model.Rows, model.Cols];
         }
 
         private void HandleTileClick(object sender, EventArgs e)
         {
-            Tile tile = (Tile) sender;
+            Tile tile = (Tile)sender;
 
-            Console.WriteLine("Clicked x={0} y={1}", tile.X, tile.Y);
+            // Console.WriteLine("Clicked Row={0} Col={1}", tile.Row, tile.Col);
+            TileClicked?.Invoke(this, (tile.Row, tile.Col));
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            foreach(var tile in tiles)
+            foreach (var tile in tiles)
             {
                 tile.Draw(spriteBatch);
+            }
+
+            for (int i = 0; i < model.Cols + 1; ++i)
+            {
+                Rectangle divRect = new Rectangle(
+                    (int)position.X + i * colWidth,
+                    (int)position.Y,
+                    divWidth,
+                    height
+                );
+
+                spriteBatch.Draw(divTexture, divRect, divColor * 0.5f); 
+            }
+
+            for (int i = 0; i < model.Rows + 1; ++i)
+            {
+                Rectangle divRect = new Rectangle(
+                    (int)position.X,
+                    (int)position.Y + i * rowHeight,
+                    width,
+                    divWidth
+                );
+
+                spriteBatch.Draw(divTexture, divRect, divColor * 0.5f); 
             }
         }
 
         public override void Update(GameTime gameTime)
         {
-            foreach(var tile in tiles)
+            for (int i = 0; i < model.Rows; ++i)
+            {
+                for (int j = 0; j < model.Cols; ++j)
+                {
+                    TileType tile = TileType.Empty;
+                    if (model.Towers[i, j] != null)
+                    {
+                        if (model.Towers[i, j] is SVsIDamageTower) tile = TileType.DamageTower;
+                        else if (model.Towers[i, j] is SVsIGoldTower) tile = TileType.GoldTower;
+                        else if (model.Towers[i, j] is SVsIHealTower) tile = TileType.HealTower;
+                    }
+                    else
+                    {
+                        if (model.Enemies[i, j].Count > 0)
+                        {
+                            if (model.Enemies[i, j][0] is SVsINormalEnemy) tile = TileType.NormalEnemy;
+                            else if (model.Enemies[i, j][0] is SVsIBuffEnemy) tile = TileType.BuffEnemy;
+                            else if (model.Enemies[i, j][0] is SVsISpeedyEnemy) tile = TileType.SpeedyEnemy;
+                        }
+                    }
+
+                    tiles[i, j] = new Tile(
+                        new Vector2(position.X + colWidth * j, position.Y + rowHeight * i),
+                        rowHeight,
+                        colWidth,
+                        tile,
+                        i,
+                        j);
+                    tiles[i, j].LeftClicked += new EventHandler(HandleTileClick);
+                }
+            }
+
+            foreach (var tile in tiles)
             {
                 tile.Update(gameTime);
             }

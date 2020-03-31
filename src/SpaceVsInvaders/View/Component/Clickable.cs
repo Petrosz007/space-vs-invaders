@@ -19,9 +19,9 @@ namespace SpaceVsInvaders.View.Components
         {
         }
 
-        private bool isMouseOver(Point mousePosition)
+        protected bool isMouseOver()
         {
-            return area.Contains(mousePosition);
+            return area.Contains(Mouse.GetState().Position);
         }
 
         public override void Update(GameTime gameTime)
@@ -30,7 +30,7 @@ namespace SpaceVsInvaders.View.Components
 
             CurrentlyClicked = false;
 
-            if (isMouseOver(mouseState.Position))
+            if (isMouseOver())
             {
                 // Emit click events
                 if (prevLeftButtonState == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)

@@ -245,6 +245,11 @@ namespace SpaceVsInvaders.Model
             Rows = rows;
             Cols = cols;
             Enemies = new List<SVsIEnemy>[Rows, Cols];
+
+            for(int i = 0; i < Rows; ++i)
+                for(int j = 0; j < Cols; ++j)
+                    Enemies[i,j] = new List<SVsIEnemy>();
+
             Towers = new SVsITower[Rows, Cols];
             IsGameOver = false;
         }

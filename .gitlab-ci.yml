@@ -1,4 +1,4 @@
-image: andipeter/monogame-test:0.1
+image: andipeter/monogame-test:0.3
 
 build:
     stage: build
@@ -8,4 +8,9 @@ build:
 test:
     stage: test
     script:
-        - dotnet test src/SpaceVsInvaders.Tests/
+        - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info src/SpaceVsInvaders.Tests/
+        - reportgenerator "-reports:src/SpaceVsInvaders.Tests/lcov.info" "-targetdir:coveragereport" -reporttypes:Html
+    artifacts:
+        paths:
+        - coveragereport
+    

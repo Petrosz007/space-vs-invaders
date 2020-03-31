@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 
 namespace SpaceVsInvaders
 {
@@ -7,6 +8,15 @@ namespace SpaceVsInvaders
         [STAThread]
         static void Main()
         {
+            Config.Initiate();
+
+
+            EnemyConfig enemy = Config.GetValue<EnemyConfig>("BuffEnemy");
+            Console.WriteLine("Buff Enemy: {0} {1} {2}", enemy.Health, enemy.Movement, enemy.TickTime);
+
+            int speedyMovement = Config.GetValue<int>("SpeedyEnemy:Movement");
+            Console.WriteLine("SpeedyEnemy Movement: {0}", speedyMovement);
+
             using (var game = new Game1())
                 game.Run();
         }

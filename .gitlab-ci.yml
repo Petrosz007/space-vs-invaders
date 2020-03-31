@@ -9,3 +9,8 @@ test:
     stage: test
     script:
         - dotnet test src/SpaceVsInvaders.Tests/
+        - reportgenerator "-reports:MyGame.Tests/lcov.info" "-targetdir:coveragereport" -reporttypes:Html
+    artifacts:
+        paths:
+        - coveragereport
+    

@@ -19,7 +19,7 @@ namespace SpaceVsInvaders.Tests
         /// </summary>
         public void PlaceTower()
         {
-            _model = new SVsIModel(8,8);
+            _model = new SVsIModel();
             _model.NewGame(8,8);
            
             

@@ -84,9 +84,8 @@ namespace SpaceVsInvaders.Model
         }
 #endregion
 
-        public SVsIModel(int rows, int cols)
+        public SVsIModel()
         {
-            NewGame(rows, cols);
         }
 
         public void HandleTick()

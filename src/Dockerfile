@@ -27,7 +27,9 @@ RUN apt-get update \
 RUN dotnet tool install -g dotnet-reportgenerator-globaltool
 ENV PATH="/root/.dotnet/tools/:${PATH}" 
 
-# COPY . /work
 # WORKDIR /work
+COPY ./fonts /usr/share/fonts
+
+# RUN 
 
 CMD [ "bash" ]

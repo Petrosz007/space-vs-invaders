@@ -1,4 +1,4 @@
-image: andipeter/monogame-test:0.1
+image: andipeter/monogame-test:0.3
 
 build:
     stage: build

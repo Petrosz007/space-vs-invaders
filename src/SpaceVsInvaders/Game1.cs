@@ -15,7 +15,7 @@ namespace SpaceVsInvaders
     /// </summary>
     public class Game1 : Game
     {
-        private const double TickTime = 0.1;
+        private readonly double TickTime = Config.GetValue<double>("TickTime");
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -88,14 +88,24 @@ namespace SpaceVsInvaders
             ErrorDisplay Err = new ErrorDisplay(new Vector2(width/2-200, height/2-100),300,500);
             
             board = new Board(new Vector2(0, 0), height, height, model);
-            board.TileClicked += new EventHandler<Tuple<int, int>>(stateManager.HandleTileClicked);
+            board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
+
+            InfoPanel infoPanel = new InfoPanel(new Vector2(width - 400, height - 400), 400, 400, model);
+
+            TowerInfo towerInfo = new TowerInfo(new Vector2(width - 400, 200), 400, 400, stateManager);
+
+            UnderCursorTower underCursorTower = new UnderCursorTower(new Vector2(0,0), 50, 50, stateManager);
+
             components = new List<Component>
             {
                 board,
                 btn_damage,
                 btn_heal,
                 btn_gold,
-                Err
+                Err,
+                infoPanel,
+                towerInfo,
+                underCursorTower
             };            
         }
 
@@ -166,6 +176,8 @@ namespace SpaceVsInvaders
         {
             if (currentSeconds > prevSecond + TickTime)
             {
+                // TODO: call this when it isn't buggy
+                // model.HandleTick();
                 prevSecond = currentSeconds;
             }
         }

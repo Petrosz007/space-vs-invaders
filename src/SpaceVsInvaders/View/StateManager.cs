@@ -1,13 +1,16 @@
 using System;
 using SpaceVsInvaders.Model;
+using SpaceVsInvaders.Model.Towers;
 
 namespace SpaceVsInvaders.View
 {
     public class StateManager
     {
         private SVsIModel model;
-        public bool PlacingTower { get; set; }
-        public TowerType TowerPlacingType { get; set; }
+        public bool PlacingTower { get; private set; }
+        public TowerType TowerPlacingType { get; private set; }
+
+        public SVsITower SelectedTower { get; private set; }
 
         public StateManager(SVsIModel model)
         {
@@ -24,16 +27,19 @@ namespace SpaceVsInvaders.View
             if (type == TowerType.Gold) TowerPlacingType = TowerType.Gold;
         }
 
-        public void HandleTileClicked(object sender, Tuple<int,int> position)
+        public void HandleTileClicked(object sender, (int,int) pos)
         {
+            (int row, int col) = pos;
+            
             if(PlacingTower)
             {
                 PlacingTower = false;
-                model.PlaceTower(position.Item1, position.Item2, TowerPlacingType);
+                model.PlaceTower(row, col, TowerPlacingType);
             }
             else
             {
                 // TODO: implement tower info showing
+                SelectedTower = model.Towers[row, col];
             }
         }
 

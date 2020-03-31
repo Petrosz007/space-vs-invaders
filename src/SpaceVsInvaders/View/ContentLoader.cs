@@ -29,7 +29,8 @@ namespace SpaceVsInvaders.View
         private static Dictionary<string, SpriteFont> fonts;
 
         private static readonly string[] fontsPath = {
-            "Fonts/EpicFont"
+            "Fonts/EpicFont",
+            "Fonts/TowerInfoFont"
         };
 
         public static void AttachGraphicsDevice(GraphicsDevice gd)

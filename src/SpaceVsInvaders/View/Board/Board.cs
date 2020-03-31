@@ -17,13 +17,15 @@ namespace SpaceVsInvaders.View.Board
         private Tile[,] tiles;
         private Texture2D divTexture;
         private int divWidth;
-        public event EventHandler<Tuple<int, int>> TileClicked;
+        private Color divColor;
+        public event EventHandler<(int, int)> TileClicked;
         public Board(Vector2 position, int height, int width, SVsIModel model)
             : base(position, height, width)
         {
             this.model = model;
 
-            divTexture = ContentLoader.CreateSolidtexture(Color.Pink);
+            divColor = Color.White;
+            divTexture = ContentLoader.CreateSolidtexture(Color.White);
             divWidth = 2;
 
             colWidth = width / model.Cols;
@@ -35,8 +37,8 @@ namespace SpaceVsInvaders.View.Board
         {
             Tile tile = (Tile)sender;
 
-            Console.WriteLine("Clicked Row={0} Col={1}", tile.Row, tile.Col);
-            TileClicked?.Invoke(this, new Tuple<int, int>(tile.Row, tile.Col));
+            // Console.WriteLine("Clicked Row={0} Col={1}", tile.Row, tile.Col);
+            TileClicked?.Invoke(this, (tile.Row, tile.Col));
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -55,7 +57,7 @@ namespace SpaceVsInvaders.View.Board
                     height
                 );
 
-                spriteBatch.Draw(divTexture, divRect, Color.Pink); 
+                spriteBatch.Draw(divTexture, divRect, divColor * 0.5f); 
             }
 
             for (int i = 0; i < model.Rows + 1; ++i)
@@ -67,7 +69,7 @@ namespace SpaceVsInvaders.View.Board
                     divWidth
                 );
 
-                spriteBatch.Draw(divTexture, divRect, Color.Pink); 
+                spriteBatch.Draw(divTexture, divRect, divColor * 0.5f); 
             }
         }
 

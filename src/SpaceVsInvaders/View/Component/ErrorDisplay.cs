@@ -12,12 +12,14 @@ namespace SpaceVsInvaders.View.Components
         private Texture2D Texture;
         public List<(string, int)> Errors;
         private int LastSecond;
+        private SpriteFont Font;
         public ErrorDisplay(Vector2 position, int height, int width)
             : base(position, height, width)
         {
             Errors = new List<(string, int)>();
             LastSecond = 0;
             Texture = ContentLoader.CreateSolidtexture(Color.Beige);
+            Font = ContentLoader.GetFont("Fonts/EpicFont");
         }
 
        public void AddError(string error)
@@ -46,13 +48,15 @@ namespace SpaceVsInvaders.View.Components
                     35*Errors.Count
                 );
 
-            spriteBatch.Draw(Texture, divRect, Color.Yellow); 
+            spriteBatch.Draw(Texture, divRect, Color.Black*0.5f); 
             int i = 0;
             while(Errors.Count>0 && i < Errors.Count){
-            spriteBatch.DrawString(ContentLoader.GetFont("Fonts/EpicFont"),Errors[i].Item1, new Vector2(position.X+30, position.Y+30*i),Color.Red);
+            int StringHalf = (int)Font.MeasureString(Errors[i].Item1).X / 2;
+            spriteBatch.DrawString(Font,Errors[i].Item1, new Vector2(position.X+width/2-StringHalf, position.Y+30*i),Color.Red);
             i++;
             }
             
         }
     }
 }
+

@@ -5,6 +5,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <!-- <GenerateAssemblyInfo>false</GenerateAssemblyInfo> -->
+    <!-- <PublishTrimmed>true</PublishTrimmed> -->
+    <!-- <PublishReadyToRun>true</PublishReadyToRun> -->
+    <!-- <PublishSingleFile>true</PublishSingleFile> -->
+    <!-- <RuntimeIdentifier>win-x64</RuntimeIdentifier> -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +28,7 @@
   <ItemGroup>
     <Content Include="data.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content> 
   </ItemGroup>
 

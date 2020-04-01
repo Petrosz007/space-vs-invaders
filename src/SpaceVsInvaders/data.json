@@ -1,5 +1,5 @@
 {
-    "TickTime": 0.1,
+    "TickTime": 1,
     "BuffEnemy" : {
         "Health": 10,
         "Movement": 1,

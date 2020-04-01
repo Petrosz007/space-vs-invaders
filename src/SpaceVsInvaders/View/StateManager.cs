@@ -1,20 +1,23 @@
 using System;
 using SpaceVsInvaders.Model;
 using SpaceVsInvaders.Model.Towers;
+using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View
 {
     public class StateManager
     {
         private SVsIModel model;
+        private ErrorDisplay errorDisplay;
         public bool PlacingTower { get; private set; }
         public TowerType TowerPlacingType { get; private set; }
 
         public SVsITower SelectedTower { get; private set; }
 
-        public StateManager(SVsIModel model)
+        public StateManager(SVsIModel model, ErrorDisplay errorDisplay)
         {
             this.model = model;
+            this.errorDisplay = errorDisplay;
 
             PlacingTower = false;
         }
@@ -34,7 +37,10 @@ namespace SpaceVsInvaders.View
             if(PlacingTower)
             {
                 PlacingTower = false;
-                model.PlaceTower(row, col, TowerPlacingType);
+                if(!model.PlaceTower(row, col, TowerPlacingType))
+                {
+                    errorDisplay.AddError("No money REEEEEEEE");
+                }
             }
             else
             {

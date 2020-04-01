@@ -62,8 +62,18 @@ namespace SpaceVsInvaders
         {
             model = new SVsIModel();
             model.NewGame(7, 5);
+            
+            model.Money = 300;
 
-            stateManager = new StateManager(model);
+            // model.PlaceEnemy(0, 0, EnemyType.Normal);
+            // model.PlaceEnemy(0, 1, EnemyType.Buff);
+            // model.PlaceEnemy(1, 1, EnemyType.Buff);
+            // model.PlaceEnemy(2, 1, EnemyType.Buff);
+            // model.PlaceEnemy(0, 2, EnemyType.Speedy);
+
+            int width = Window.ClientBounds.Width;
+            int height = Window.ClientBounds.Height;
+
             
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -72,11 +82,12 @@ namespace SpaceVsInvaders
             ContentLoader.LoadContent(Content);
 
 
+            ErrorDisplay Err = new ErrorDisplay(new Vector2(width/2-200, 100),300,500);
+
+            stateManager = new StateManager(model, Err);
 
             background = ContentLoader.GetTexture("Backgrounds/background");
 
-            int width = Window.ClientBounds.Width;
-            int height = Window.ClientBounds.Height;
 
             Button btn_heal = new Button(new Vector2(width - 110,5), 50, 100);
             btn_heal.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Heal));
@@ -85,7 +96,6 @@ namespace SpaceVsInvaders
             Button btn_damage = new Button(new Vector2(width-330,5), 50, 100);
             btn_damage.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Damage));
 
-            ErrorDisplay Err = new ErrorDisplay(new Vector2(width/2-200, height/2-100),300,500);
             
             board = new Board(new Vector2(0, 0), height, height, model);
             board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
@@ -177,7 +187,7 @@ namespace SpaceVsInvaders
             if (currentSeconds > prevSecond + TickTime)
             {
                 // TODO: call this when it isn't buggy
-                // model.HandleTick();
+                model.HandleTick();
                 prevSecond = currentSeconds;
             }
         }

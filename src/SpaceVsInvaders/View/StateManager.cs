@@ -25,9 +25,7 @@ namespace SpaceVsInvaders.View
         public void HandleNewTowerType(TowerType type)
         {
             PlacingTower = true;
-            if (type == TowerType.Damage) TowerPlacingType = TowerType.Damage;
-            if (type == TowerType.Heal) TowerPlacingType = TowerType.Heal;
-            if (type == TowerType.Gold) TowerPlacingType = TowerType.Gold;
+            TowerPlacingType = type;
         }
 
         public void HandleTileClicked(object sender, (int,int) pos)

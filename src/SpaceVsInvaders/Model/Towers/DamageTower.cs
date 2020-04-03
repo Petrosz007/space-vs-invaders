@@ -7,12 +7,13 @@ namespace SpaceVsInvaders.Model.Towers
 
             public  SVsIDamageTower() 
             { 
-                Health = 100;
-                Cost = 200;
+                var conf = Config.GetValue<DamageTowerConfig>("DamageTower");
+                Health = conf.Health;
+                Cost = conf.Cost;
                 Level = 1;
-                TickTime = 1;
+                TickTime = conf.TickTime;
                 CoolDown = 0; 
-                Range = 6;
+                Range = conf.Range;
             }
 
             public override int Damage()

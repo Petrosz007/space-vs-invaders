@@ -6,10 +6,11 @@ namespace SpaceVsInvaders.Model.Enemies
     {
         public  SVsIBuffEnemy() 
         { 
-            Health = 50;
-            Movement = 3;
-            Damage = 20;
-            TickTime = 7;
+            EnemyConfig conf = Config.GetValue<EnemyConfig>("BuffEnemy");
+            Health = conf.Health;
+            Movement = conf.Movement;
+            Damage = conf.Damage;
+            TickTime = conf.TickTime;
             CoolDown = 0;
         }
 

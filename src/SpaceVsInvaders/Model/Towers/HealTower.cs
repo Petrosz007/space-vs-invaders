@@ -6,10 +6,11 @@ namespace SpaceVsInvaders.Model.Towers
     { 
         public  SVsIHealTower() 
         { 
-            Health = 50;
-            Cost = 100;
+            var conf = Config.GetValue<TowerConfig>("HealTower");
+            Health = conf.Health;
+            Cost = conf.Cost;
             Level = 1;
-            TickTime = 3;
+            TickTime = conf.TickTime;
             CoolDown = 0; 
             // Range = 3;
         }

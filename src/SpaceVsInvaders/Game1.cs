@@ -63,13 +63,13 @@ namespace SpaceVsInvaders
             model = new SVsIModel();
             model.NewGame(7, 5);
             
-            model.Money = 300;
+            model.Money = Config.GetValue<int>("StartingMoney");
 
-            // model.PlaceEnemy(0, 0, EnemyType.Normal);
-            // model.PlaceEnemy(0, 1, EnemyType.Buff);
-            // model.PlaceEnemy(1, 1, EnemyType.Buff);
-            // model.PlaceEnemy(2, 1, EnemyType.Buff);
-            // model.PlaceEnemy(0, 2, EnemyType.Speedy);
+            model.PlaceEnemy(0, 0, EnemyType.Normal);
+            model.PlaceEnemy(0, 1, EnemyType.Buff);
+            model.PlaceEnemy(1, 1, EnemyType.Buff);
+            model.PlaceEnemy(2, 1, EnemyType.Buff);
+            model.PlaceEnemy(0, 2, EnemyType.Speedy);
 
             int width = Window.ClientBounds.Width;
             int height = Window.ClientBounds.Height;

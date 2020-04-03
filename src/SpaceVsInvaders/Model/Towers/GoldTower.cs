@@ -7,10 +7,11 @@ namespace SpaceVsInvaders.Model.Towers
         
         public  SVsIGoldTower() 
         { 
-            Health = 75;
-            Cost = 150;
+            var conf = Config.GetValue<TowerConfig>("GoldTower");
+            Health = conf.Health;
+            Cost = conf.Cost;
             Level = 1;
-            TickTime = 2;
+            TickTime = conf.TickTime;
             CoolDown = 0; 
            // Range = 10; 
         }

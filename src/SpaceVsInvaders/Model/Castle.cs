@@ -9,8 +9,9 @@ namespace SpaceVsInvaders.Model
         public int Level { get; set; }
         public SVsICastle()
         {
-            Health = 10; // csak peldak, ezt ki kell majd pontosan szamolni
-            UpgradeCost = 100;
+            var conf = Config.GetValue<CastleConfig>("Castle");
+            Health = conf.Health; // csak peldak, ezt ki kell majd pontosan szamolni
+            UpgradeCost = conf.UpgradeCost;
             Level = 1;
         }
     }

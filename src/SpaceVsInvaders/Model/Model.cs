@@ -161,7 +161,10 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         private void HandleGoldTower(int row, int col)
         {
-            Money += Towers[row, col].Gold();
+            if(Towers[row, col] is SVsIGoldTower goldTower)
+            {
+                Money += goldTower.Gold();
+            }
         }
 
         /// <summary>
@@ -285,7 +288,7 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         public void UpgradeTower(int row, int col)
         {
-            if(Money >= 150 + Towers[row, col].Level * 50) // ezt is majd config fájlból át kell írni
+            if(Money >= Towers[row, col].Cost + Towers[row, col].Level * 50) // ezt is majd config fájlból át kell írni
             Towers[row, col].Health += 10;
             Towers[row,col].Level += 1;
         }
@@ -295,30 +298,40 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         public bool PlaceTower(int row, int col, TowerType type)
         {
+            int damageCost = Config.GetValue<DamageTowerConfig>("DamageTower").Cost;
+            int goldCost   = Config.GetValue<TowerConfig>("GoldTower").Cost;
+            int healCost   = Config.GetValue<TowerConfig>("HealTower").Cost;
+
             switch(type)
             {
                 // TODO: a tornyoknal van kulon cost propertyjuk
                 case TowerType.Damage:
-                    if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                    if(Money >= damageCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
                     {
-                        Money -= 150;
+                        Money -= damageCost;
                         Towers[row,col] = new SVsIDamageTower();
                         return true;
-                    }else return false;
+                    }
+                    return false;
+
                 case TowerType.Gold:
-                    if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                    if(Money >= goldCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
                     {
-                        Money -= 150;
+                        Money -= goldCost;
                         Towers[row,col] = new SVsIGoldTower();
                         return true;
-                    }else return false;
+                    }
+                    return false;
+
                 case TowerType.Heal:
-                     if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                     if(Money >= healCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
                     {
-                        Money -= 150;
+                        Money -= healCost;
                         Towers[row,col] = new SVsIHealTower();
                         return true;
-                    }else return false;
+                    }
+                    return false;
+
                 default:
                     return false;
             }
@@ -347,14 +360,17 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         public bool UpgradeCastle()
         {
-            if(Money >= Castle.UpgradeCost)
+            int upgradeCost = Castle.UpgradeCost * Castle.Level;
+
+            if(Money >= upgradeCost)
             {
-                Money -= Castle.UpgradeCost;
-                Castle.UpgradeCost += Castle.Level * 100;
+                Money -= upgradeCost;
                 Castle.Level += 1;
                 Castle.Health += Castle.Level * 10;
                 return true;
-            }else return false;
+            }
+            
+            return false;
         }
 
        /*
@@ -388,22 +404,18 @@ namespace SpaceVsInvaders.Model
         ///<summary>
         /// Csak a teszteléshez kell.
         ///</summary>
-        public void PlaceEnemy(int row, int col, EnemyType type)
+        public void PlaceEnemy(int row, int col, EnemyType enemyType)
         {
-            if (null == Enemies[row,col])
-                Enemies[row,col] = new List<SVsIEnemy>();
-            switch(type)
+            Enemies[row,col] ??= new List<SVsIEnemy>();
+
+            SVsIEnemy enemyToPlace = enemyType switch
             {
-                case EnemyType.Buff:
-                     Enemies[row,col].Add(new SVsIBuffEnemy());
-                    break;
-                case EnemyType.Normal:
-                     Enemies[row,col].Add(new SVsINormalEnemy());
-                    break;
-                case EnemyType.Speedy:
-                     Enemies[row,col].Add(new SVsISpeedyEnemy());
-                    break;
-            }
+                EnemyType.Buff   => new SVsIBuffEnemy(),
+                EnemyType.Normal => new SVsINormalEnemy(),
+                EnemyType.Speedy => new SVsISpeedyEnemy()
+            };
+
+            Enemies[row,col].Add(enemyToPlace);
         }
     }
 }

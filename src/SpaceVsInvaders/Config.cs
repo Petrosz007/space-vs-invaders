@@ -5,12 +5,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace SpaceVsInvaders
 {
-    public class EnemyConfig
-    {
-        public int Health { get; set; }
-        public int Movement { get; set; }
-        public int TickTime { get; set; }
-    }
     public static class Config
     {
         public static IConfiguration Configuration { get; set; }
@@ -22,5 +16,31 @@ namespace SpaceVsInvaders
         }
         public static T GetValue<T>(string key) =>
             Configuration.GetSection(key).Get<T>();
+    }
+
+    public class EnemyConfig
+    {
+        public int Health { get; set; }
+        public int Movement { get; set; }
+        public int Damage { get; set; }
+        public int TickTime { get; set; }
+    }
+
+    public class TowerConfig
+    {
+        public int Health { get; set; }
+        public int Cost { get; set; }
+        public int TickTime { get; set; }
+    }
+
+    public class DamageTowerConfig : TowerConfig
+    {
+        public int Range { get; set; }
+    }
+
+    public class CastleConfig
+    {
+        public int Health { get; set; }
+        public int UpgradeCost { get; set; }
     }
 }

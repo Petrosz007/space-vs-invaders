@@ -6,10 +6,11 @@ namespace SpaceVsInvaders.Model.Enemies
     {
         public  SVsINormalEnemy() 
         { 
-            Health = 100;
-            Movement = 3;
-            Damage = 10;
-            TickTime = 5;
+            EnemyConfig conf = Config.GetValue<EnemyConfig>("NormalEnemy");
+            Health = conf.Health;
+            Movement = conf.Movement;
+            Damage = conf.Damage;
+            TickTime = conf.TickTime;
             CoolDown = 0;
         }   
     }

@@ -61,7 +61,7 @@ namespace SpaceVsInvaders
         protected override void LoadContent()
         {
             model = new SVsIModel();
-            model.NewGame(7, 5);
+            model.NewGame(Config.GetValue<int>("Rows"), Config.GetValue<int>("Cols"));
             
             model.Money = Config.GetValue<int>("StartingMoney");
 

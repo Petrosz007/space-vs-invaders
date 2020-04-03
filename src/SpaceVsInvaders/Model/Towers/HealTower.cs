@@ -3,23 +3,13 @@ using System;
 namespace SpaceVsInvaders.Model.Towers
 {
     public class SVsIHealTower : SVsITower
-    { 
-        public  SVsIHealTower() 
-        { 
-            var conf = Config.GetValue<TowerConfig>("HealTower");
-            Health = conf.Health;
-            Cost = conf.Cost;
-            Level = 1;
-            TickTime = conf.TickTime;
-            CoolDown = 0; 
-            // Range = 3;
-        }
-
-
-        public override int Heal()
+    {
+        public SVsIHealTower()
+            : base(Config.GetValue<TowerConfig>("HealTower"))
         {
-           return Level * 5;
         }
 
+        public int Heal() =>
+            Level * 5;
     }
 }

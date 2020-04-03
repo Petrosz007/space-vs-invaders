@@ -31,10 +31,6 @@ namespace SpaceVsInvaders
         public int Health { get; set; }
         public int Cost { get; set; }
         public int TickTime { get; set; }
-    }
-
-    public class DamageTowerConfig : TowerConfig
-    {
         public int Range { get; set; }
     }
 

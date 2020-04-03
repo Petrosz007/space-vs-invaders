@@ -143,14 +143,18 @@ namespace SpaceVsInvaders.Model
                 {
                     for (int k = 0; k < Enemies[i,col].Count; k++)
                     {
-                        Enemies[i,col][k].Health -= Towers[row, col].Damage();
-                        onTowerHasAttacked(row, col, i, col);
-                        if(Enemies[i,col][k].Health <= 0)
+                        if(Towers[row, col] is SVsIDamageTower damageTower)
                         {
-                            Enemies[i,col].Remove(Enemies[i,col][k]);
-                            onEnemyDead(i,col);
+                            Enemies[i,col][k].Health -= damageTower.Damage();
+                            onTowerHasAttacked(row, col, i, col);
+                        
+                            if(Enemies[i,col][k].Health <= 0)
+                            {
+                                Enemies[i,col].Remove(Enemies[i,col][k]);
+                                onEnemyDead(i,col);
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
@@ -172,29 +176,32 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         public void HandleHealTower(int row, int col) // teszt miatt public
         {
-            if (row-1 >= 0 && col-1 >= 0 && null != Towers[row-1, col-1])
-                Towers[row-1, col-1].Health += Towers[row, col].Heal();
+            if(Towers[row, col] is SVsIHealTower healTower)
+            {
+                if (row-1 >= 0 && col-1 >= 0 && null != Towers[row-1, col-1])
+                    Towers[row-1, col-1].Health += healTower.Heal();
 
-            if (row-1 >= 0 && null !=  Towers[row-1, col])
-                Towers[row-1, col].Health += Towers[row, col].Heal();
+                if (row-1 >= 0 && null !=  Towers[row-1, col])
+                    Towers[row-1, col].Health += healTower.Heal();
 
-            if (row-1 >= 0 && col+1 < Cols && null != Towers[row-1, col+1])
-                Towers[row-1, col+1].Health += Towers[row, col].Heal();
+                if (row-1 >= 0 && col+1 < Cols && null != Towers[row-1, col+1])
+                    Towers[row-1, col+1].Health += healTower.Heal();
 
-            if (col-1 >= 0 && null !=  Towers[row, col-1])
-                Towers[row, col-1].Health += Towers[row, col].Heal();
+                if (col-1 >= 0 && null !=  Towers[row, col-1])
+                    Towers[row, col-1].Health += healTower.Heal();
 
-            if (col+1 < Cols && null !=  Towers[row, col+1])
-                Towers[row, col+1].Health += Towers[row, col].Heal();
+                if (col+1 < Cols && null !=  Towers[row, col+1])
+                    Towers[row, col+1].Health += healTower.Heal();
 
-            if (row+1 < Rows && col-1 >= 0 && null != Towers[row+1, col-1])
-                Towers[row+1, col-1].Health += Towers[row, col].Heal();
+                if (row+1 < Rows && col-1 >= 0 && null != Towers[row+1, col-1])
+                    Towers[row+1, col-1].Health += healTower.Heal();
 
-            if (row+1 < Rows && null != Towers[row+1, col])
-                Towers[row+1, col].Health += Towers[row, col].Heal();
+                if (row+1 < Rows && null != Towers[row+1, col])
+                    Towers[row+1, col].Health += healTower.Heal();
 
-            if (row+1 < Rows && col+1 < Cols && null !=  Towers[row+1, col+1])
-                Towers[row+1, col+1].Health += Towers[row, col].Heal();
+                if (row+1 < Rows && col+1 < Cols && null !=  Towers[row+1, col+1])
+                    Towers[row+1, col+1].Health += healTower.Heal();
+            }
         }
 
         /// <summary>
@@ -298,7 +305,7 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         public bool PlaceTower(int row, int col, TowerType type)
         {
-            int damageCost = Config.GetValue<DamageTowerConfig>("DamageTower").Cost;
+            int damageCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int goldCost   = Config.GetValue<TowerConfig>("GoldTower").Cost;
             int healCost   = Config.GetValue<TowerConfig>("HealTower").Cost;
 

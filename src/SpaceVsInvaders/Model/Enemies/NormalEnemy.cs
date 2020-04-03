@@ -5,13 +5,8 @@ namespace SpaceVsInvaders.Model.Enemies
     public class SVsINormalEnemy : SVsIEnemy
     {
         public  SVsINormalEnemy() 
+            : base(Config.GetValue<EnemyConfig>("NormalEnemy"))
         { 
-            EnemyConfig conf = Config.GetValue<EnemyConfig>("NormalEnemy");
-            Health = conf.Health;
-            Movement = conf.Movement;
-            Damage = conf.Damage;
-            TickTime = conf.TickTime;
-            CoolDown = 0;
         }   
     }
 }

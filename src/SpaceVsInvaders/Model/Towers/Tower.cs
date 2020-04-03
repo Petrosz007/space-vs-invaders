@@ -5,6 +5,7 @@ namespace SpaceVsInvaders.Model.Towers
     public abstract class SVsITower
     {
         public int Health { get; set; }
+        public int MaxHealth { get; set; }
         public int Cost { get; protected set; }
         public int Level { get; set; }
         public int TickTime { get; set; }
@@ -20,6 +21,7 @@ namespace SpaceVsInvaders.Model.Towers
 
             Level = 1;
             CoolDown = 0;
+            MaxHealth = Health;
         }
     }
 }

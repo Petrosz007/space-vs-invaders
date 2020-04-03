@@ -238,9 +238,11 @@ namespace SpaceVsInvaders.Model
                                 {
                                     Enemies[i+1,j] = new List<SVsIEnemy>();
                                 }
-                                Enemies[i+1,j].Add(Enemies[i,j][l]);
-                                Enemies[i,j].Remove(Enemies[i,j][l]);
-                                onEnemyMoved(j,i, j,i+1);
+
+                                //! turn back enemy moving
+                                // Enemies[i+1,j].Add(Enemies[i,j][l]);
+                                // Enemies[i,j].Remove(Enemies[i,j][l]);
+                                // onEnemyMoved(j,i, j,i+1);
                             }
                         }   
                     }

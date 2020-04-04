@@ -143,14 +143,18 @@ namespace SpaceVsInvaders.Model
                 {
                     for (int k = 0; k < Enemies[i,col].Count; k++)
                     {
-                        Enemies[i,col][k].Health -= Towers[row, col].Damage();
-                        onTowerHasAttacked(row, col, i, col);
-                        if(Enemies[i,col][k].Health <= 0)
+                        if(Towers[row, col] is SVsIDamageTower damageTower)
                         {
-                            Enemies[i,col].Remove(Enemies[i,col][k]);
-                            onEnemyDead(i,col);
+                            Enemies[i,col][k].Health -= damageTower.Damage();
+                            onTowerHasAttacked(row, col, i, col);
+                        
+                            if(Enemies[i,col][k].Health <= 0)
+                            {
+                                Enemies[i,col].Remove(Enemies[i,col][k]);
+                                onEnemyDead(i,col);
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
@@ -161,7 +165,10 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         private void HandleGoldTower(int row, int col)
         {
-            Money += Towers[row, col].Gold();
+            if(Towers[row, col] is SVsIGoldTower goldTower)
+            {
+                Money += goldTower.Gold();
+            }
         }
 
         /// <summary>
@@ -169,29 +176,32 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         public void HandleHealTower(int row, int col) // teszt miatt public
         {
-            if (row-1 >= 0 && col-1 >= 0 && null != Towers[row-1, col-1])
-                Towers[row-1, col-1].Health += Towers[row, col].Heal();
+            if(Towers[row, col] is SVsIHealTower healTower)
+            {
+                if (row-1 >= 0 && col-1 >= 0 && null != Towers[row-1, col-1])
+                    Towers[row-1, col-1].Health += healTower.Heal();
 
-            if (row-1 >= 0 && null !=  Towers[row-1, col])
-                Towers[row-1, col].Health += Towers[row, col].Heal();
+                if (row-1 >= 0 && null !=  Towers[row-1, col])
+                    Towers[row-1, col].Health += healTower.Heal();
 
-            if (row-1 >= 0 && col+1 < Cols && null != Towers[row-1, col+1])
-                Towers[row-1, col+1].Health += Towers[row, col].Heal();
+                if (row-1 >= 0 && col+1 < Cols && null != Towers[row-1, col+1])
+                    Towers[row-1, col+1].Health += healTower.Heal();
 
-            if (col-1 >= 0 && null !=  Towers[row, col-1])
-                Towers[row, col-1].Health += Towers[row, col].Heal();
+                if (col-1 >= 0 && null !=  Towers[row, col-1])
+                    Towers[row, col-1].Health += healTower.Heal();
 
-            if (col+1 < Cols && null !=  Towers[row, col+1])
-                Towers[row, col+1].Health += Towers[row, col].Heal();
+                if (col+1 < Cols && null !=  Towers[row, col+1])
+                    Towers[row, col+1].Health += healTower.Heal();
 
-            if (row+1 < Rows && col-1 >= 0 && null != Towers[row+1, col-1])
-                Towers[row+1, col-1].Health += Towers[row, col].Heal();
+                if (row+1 < Rows && col-1 >= 0 && null != Towers[row+1, col-1])
+                    Towers[row+1, col-1].Health += healTower.Heal();
 
-            if (row+1 < Rows && null != Towers[row+1, col])
-                Towers[row+1, col].Health += Towers[row, col].Heal();
+                if (row+1 < Rows && null != Towers[row+1, col])
+                    Towers[row+1, col].Health += healTower.Heal();
 
-            if (row+1 < Rows && col+1 < Cols && null !=  Towers[row+1, col+1])
-                Towers[row+1, col+1].Health += Towers[row, col].Heal();
+                if (row+1 < Rows && col+1 < Cols && null !=  Towers[row+1, col+1])
+                    Towers[row+1, col+1].Health += healTower.Heal();
+            }
         }
 
         /// <summary>
@@ -230,9 +240,11 @@ namespace SpaceVsInvaders.Model
                                 {
                                     Enemies[i+1,j] = new List<SVsIEnemy>();
                                 }
-                                Enemies[i+1,j].Add(Enemies[i,j][l]);
-                                Enemies[i,j].Remove(Enemies[i,j][l]);
-                                onEnemyMoved(j,i, j,i+1);
+
+                                //! turn back enemy moving
+                                // Enemies[i+1,j].Add(Enemies[i,j][l]);
+                                // Enemies[i,j].Remove(Enemies[i,j][l]);
+                                // onEnemyMoved(j,i, j,i+1);
                             }
                         }   
                     }
@@ -285,11 +297,21 @@ namespace SpaceVsInvaders.Model
         /// <summary>
         /// Ha a játékosnak van elég pénze, akkor a kiválasztot tornyot fejleszti.
         /// </summary>
-        public void UpgradeTower(int row, int col)
+        public bool UpgradeTower(int row, int col)
         {
-            if(Money >= 150 + Towers[row, col].Level * 50) // ezt is majd config fájlból át kell írni
-            Towers[row, col].Health += 10;
-            Towers[row,col].Level += 1;
+            var tower = Towers[row, col];
+            int upgradeCost = tower.Cost + tower.Level * 50;
+
+            if(Money >= upgradeCost)
+            {
+                Money -= upgradeCost;
+                tower.Health += 50;
+                tower.MaxHealth += 50;
+                tower.Level++;
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -297,30 +319,40 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         public bool PlaceTower(int row, int col, TowerType type)
         {
+            int damageCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
+            int goldCost   = Config.GetValue<TowerConfig>("GoldTower").Cost;
+            int healCost   = Config.GetValue<TowerConfig>("HealTower").Cost;
+
             switch(type)
             {
                 // TODO: a tornyoknal van kulon cost propertyjuk
                 case TowerType.Damage:
-                    if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                    if(Money >= damageCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
                     {
-                        Money -= 150;
+                        Money -= damageCost;
                         Towers[row,col] = new SVsIDamageTower();
                         return true;
-                    }else return false;
+                    }
+                    return false;
+
                 case TowerType.Gold:
-                    if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                    if(Money >= goldCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
                     {
-                        Money -= 150;
+                        Money -= goldCost;
                         Towers[row,col] = new SVsIGoldTower();
                         return true;
-                    }else return false;
+                    }
+                    return false;
+
                 case TowerType.Heal:
-                     if(Money >= 150) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
+                     if(Money >= healCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
                     {
-                        Money -= 150;
+                        Money -= healCost;
                         Towers[row,col] = new SVsIHealTower();
                         return true;
-                    }else return false;
+                    }
+                    return false;
+
                 default:
                     return false;
             }
@@ -349,14 +381,17 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         public bool UpgradeCastle()
         {
-            if(Money >= Castle.UpgradeCost)
+            int upgradeCost = Castle.UpgradeCost * Castle.Level;
+
+            if(Money >= upgradeCost)
             {
-                Money -= Castle.UpgradeCost;
-                Castle.UpgradeCost += Castle.Level * 100;
+                Money -= upgradeCost;
                 Castle.Level += 1;
                 Castle.Health += Castle.Level * 10;
                 return true;
-            }else return false;
+            }
+            
+            return false;
         }
 
        /*
@@ -390,22 +425,18 @@ namespace SpaceVsInvaders.Model
         ///<summary>
         /// Csak a teszteléshez kell.
         ///</summary>
-        public void PlaceEnemy(int row, int col, EnemyType type)
+        public void PlaceEnemy(int row, int col, EnemyType enemyType)
         {
-            if (null == Enemies[row,col])
-                Enemies[row,col] = new List<SVsIEnemy>();
-            switch(type)
+            Enemies[row,col] ??= new List<SVsIEnemy>();
+
+            SVsIEnemy enemyToPlace = enemyType switch
             {
-                case EnemyType.Buff:
-                     Enemies[row,col].Add(new SVsIBuffEnemy());
-                    break;
-                case EnemyType.Normal:
-                     Enemies[row,col].Add(new SVsINormalEnemy());
-                    break;
-                case EnemyType.Speedy:
-                     Enemies[row,col].Add(new SVsISpeedyEnemy());
-                    break;
-            }
+                EnemyType.Buff   => new SVsIBuffEnemy(),
+                EnemyType.Normal => new SVsINormalEnemy(),
+                EnemyType.Speedy => new SVsISpeedyEnemy()
+            };
+
+            Enemies[row,col].Add(enemyToPlace);
         }
     }
 }

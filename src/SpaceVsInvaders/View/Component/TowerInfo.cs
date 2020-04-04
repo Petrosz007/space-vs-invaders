@@ -7,33 +7,44 @@ namespace SpaceVsInvaders.View.Components
 {
     public class TowerInfo : Component
     {
-        StateManager stateManager;
-        SpriteFont font;
-        // int secondsElapsed;
-        public TowerInfo(Vector2 position, int height, int width, StateManager stateManager)
+        private StateManager stateManager;
+        private SVsIModel model;
+        private SVsITower tower;
+        private SpriteFont font;
+        public Button UpgradeButton { get; private set; }
+        public Button SellButton { get; private set; }
+        public TowerInfo(Vector2 position, int height, int width, StateManager stateManager, SVsIModel model)
             : base(position, height, width)
         {
             this.stateManager = stateManager;
+            this.model = model;
             font = ContentLoader.GetFont("Fonts/TowerInfoFont");
+
+            UpgradeButton = new Button(new Vector2(position.X + width - 100, position.Y + 50), 50, 100);
+            SellButton = new Button(new Vector2(position.X + width - 100, position.Y + 100), 50, 100);
         }
 
         public override void Update(GameTime gameTime)
         {
-            // secondsElapsed = (int)gameTime.TotalGameTime.TotalSeconds;
+            tower = model.Towers[stateManager.SelectedPos.Item1, stateManager.SelectedPos.Item2];
+            UpgradeButton.Update(gameTime);
+            SellButton.Update(gameTime);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            SVsITower tower = stateManager.SelectedTower;
 
             // TODO: panel keret
 
-            if(tower != null)
+            if (tower != null)
             {
                 spriteBatch.DrawString(font, $"Health: {tower.Health}", new Vector2(position.X, position.Y), Color.White);
                 spriteBatch.DrawString(font, $"Cost: {tower.Cost}", new Vector2(position.X, position.Y + 15), Color.White);
                 spriteBatch.DrawString(font, $"Level: {tower.Level}", new Vector2(position.X, position.Y + 30), Color.White);
                 spriteBatch.DrawString(font, $"Range: {tower.Range}", new Vector2(position.X, position.Y + 45), Color.White);
                 spriteBatch.DrawString(font, $"Cooldown: {tower.CoolDown}", new Vector2(position.X, position.Y + 60), Color.White);
+
+                UpgradeButton.Draw(spriteBatch);
+                SellButton.Draw(spriteBatch);
             }
             else
             {

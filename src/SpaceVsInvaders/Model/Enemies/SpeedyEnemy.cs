@@ -5,12 +5,8 @@ namespace SpaceVsInvaders.Model.Enemies
     public class SVsISpeedyEnemy : SVsIEnemy
     {
         public  SVsISpeedyEnemy() 
+            : base(Config.GetValue<EnemyConfig>("SpeedyEnemy"))
         { 
-            Health = 75;
-            Movement = 1;
-            Damage = 5;
-            TickTime = 3;
-            CoolDown = 0;
         }
         
     }

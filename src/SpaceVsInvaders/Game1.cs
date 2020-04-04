@@ -61,15 +61,15 @@ namespace SpaceVsInvaders
         protected override void LoadContent()
         {
             model = new SVsIModel();
-            model.NewGame(7, 5);
+            model.NewGame(Config.GetValue<int>("Rows"), Config.GetValue<int>("Cols"));
             
-            model.Money = 300;
+            model.Money = Config.GetValue<int>("StartingMoney");
 
-            // model.PlaceEnemy(0, 0, EnemyType.Normal);
-            // model.PlaceEnemy(0, 1, EnemyType.Buff);
-            // model.PlaceEnemy(1, 1, EnemyType.Buff);
-            // model.PlaceEnemy(2, 1, EnemyType.Buff);
-            // model.PlaceEnemy(0, 2, EnemyType.Speedy);
+            model.PlaceEnemy(0, 0, EnemyType.Normal);
+            model.PlaceEnemy(0, 1, EnemyType.Buff);
+            model.PlaceEnemy(1, 1, EnemyType.Buff);
+            model.PlaceEnemy(2, 1, EnemyType.Buff);
+            model.PlaceEnemy(0, 2, EnemyType.Speedy);
 
             int width = Window.ClientBounds.Width;
             int height = Window.ClientBounds.Height;
@@ -101,8 +101,11 @@ namespace SpaceVsInvaders
             board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
 
             InfoPanel infoPanel = new InfoPanel(new Vector2(width - 400, height - 400), 400, 400, model);
+            infoPanel.UpgradeCastleButton.LeftClicked += new EventHandler(stateManager.HandleCastleUpgradeClicked);
 
-            TowerInfo towerInfo = new TowerInfo(new Vector2(width - 400, 200), 400, 400, stateManager);
+            TowerInfo towerInfo = new TowerInfo(new Vector2(width - 400, 200), 400, 400, stateManager, model);
+            towerInfo.UpgradeButton.LeftClicked += new EventHandler(stateManager.HandleTowerUpgradeClicked);
+            towerInfo.SellButton.LeftClicked += new EventHandler(stateManager.HandleTowerSellClicked);
 
             UnderCursorTower underCursorTower = new UnderCursorTower(new Vector2(0,0), 50, 50, stateManager);
 

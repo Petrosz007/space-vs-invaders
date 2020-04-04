@@ -10,8 +10,12 @@ namespace SpaceVsInvaders.Tests
 {
     public class UnitTest1
     {
-
         private SVsIModel _model;
+
+        public UnitTest1()
+        {
+            Config.Initiate();
+        }
 
         [Fact]
         /// <summary>

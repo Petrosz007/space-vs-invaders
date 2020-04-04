@@ -39,6 +39,7 @@ namespace SpaceVsInvaders.Model
         public bool IsGameOver { get; private set; }
 
         public WaveSpawner WS;
+        public bool IsSpawningEnemies { get; private set; }
 
 #region Events
         public event EventHandler<SVsIEventArgs> EnemyMoved;
@@ -86,12 +87,18 @@ namespace SpaceVsInvaders.Model
 
         public SVsIModel()
         {
+            WS = new WaveSpawner();
+            IsSpawningEnemies = false;
         }
 
         public void HandleTick()
         {
             Money += 1;
             SecondsElapsed += 1;
+            if(SecondsElapsed % 10 == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
+            {
+                WS.SpawnEnemies(SecondsElapsed, Cols);
+            }
             HandleTowers();
             HandleEnemies();
             CheckGameOver();
@@ -201,6 +208,17 @@ namespace SpaceVsInvaders.Model
             }
         }
 
+        
+        /// <summary>
+        /// Kiemeltem a placeEnemy hívást
+        /// </summary>
+        public void WhichEnemy(EnemyType type, int i)
+        {
+            if(type is EnemyType.Normal) PlaceEnemy(0,i,EnemyType.Normal);
+            if(type is EnemyType.Buff) PlaceEnemy(0,i,EnemyType.Buff);
+            if(type is EnemyType.Speedy) PlaceEnemy(0,i,EnemyType.Speedy);
+        }
+
         /// <summary>
         /// Ellenségek lövésének, mozgatásának lekezelése.
         /// </summary>
@@ -238,12 +256,41 @@ namespace SpaceVsInvaders.Model
                                     Enemies[i+1,j] = new List<SVsIEnemy>();
                                 }
 
-                                Enemies[i+1,j].Add(Enemies[i,j][l]);
-                                Enemies[i,j].Remove(Enemies[i,j][l]);
-                                onEnemyMoved(j,i, j,i+1);
+                                //! turn back enemy moving
+                                 Enemies[i+1,j].Add(Enemies[i,j][l]);
+                                 Enemies[i,j].Remove(Enemies[i,j][l]);
+                                 onEnemyMoved(j,i, j,i+1);
                             }
                         }   
                     }
+            if(WS.AreEnemiesLeft() && SecondsElapsed % 3 == 0) // itt kell megadni, hány másodpercenként jelenjenek meg, hogy az előző adag elmozduljon, mire ez bejátszódik
+            {
+                List<EnemyType> tmp = new List<EnemyType>(); // ez innen eltűnik? xd
+                tmp = WS.GetSpawnedEnemies(Cols);
+
+                if(tmp.Count > Cols-1)
+                {
+                    int i = 0;
+                    while(tmp.Count > i && i < Cols)
+                    {
+                        WhichEnemy(tmp[i], i);
+                        i++;
+                    }
+                }else{
+                    HashSet<int> ind = new HashSet<int>();
+                    ind.Clear();
+                    for(int j = 0; j < Cols; j++) ind.Add(j);
+                    Random rnd = new Random();
+                    int i = 0;
+                    while(tmp.Count > i && i < Cols)
+                    {
+                        int szam = rnd.Next(ind.Count);
+                        WhichEnemy(tmp[i], szam);
+                        i++;
+                    }
+                }
+            }
+
         }
 
         public void NewGame(int rows, int cols) 

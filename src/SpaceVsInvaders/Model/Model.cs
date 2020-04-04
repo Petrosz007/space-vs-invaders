@@ -139,23 +139,20 @@ namespace SpaceVsInvaders.Model
         {
             for(int i = row-1; i >= 0; i--)
             {
-                if (Enemies[i,col] != null && Towers[row,col].Range >= i)
+                if (Enemies[i,col].Count != 0 && Towers[row,col].Range >= row-1-i)
                 {
-                    for (int k = 0; k < Enemies[i,col].Count; k++)
-                    {
-                        if(Towers[row, col] is SVsIDamageTower damageTower)
+                    if(Towers[row, col] is SVsIDamageTower damageTower)
                         {
-                            Enemies[i,col][k].Health -= damageTower.Damage();
+                            Enemies[i,col][0].Health -= damageTower.Damage();
                             onTowerHasAttacked(row, col, i, col);
                         
-                            if(Enemies[i,col][k].Health <= 0)
+                            if(Enemies[i,col][0].Health <= 0)
                             {
-                                Enemies[i,col].Remove(Enemies[i,col][k]);
+                                Enemies[i,col].Remove(Enemies[i,col][0]);
                                 onEnemyDead(i,col);
                             }
-                            break;
                         }
-                    }
+                    break;
                 }
             }
         }
@@ -241,10 +238,9 @@ namespace SpaceVsInvaders.Model
                                     Enemies[i+1,j] = new List<SVsIEnemy>();
                                 }
 
-                                //! turn back enemy moving
-                                // Enemies[i+1,j].Add(Enemies[i,j][l]);
-                                // Enemies[i,j].Remove(Enemies[i,j][l]);
-                                // onEnemyMoved(j,i, j,i+1);
+                                Enemies[i+1,j].Add(Enemies[i,j][l]);
+                                Enemies[i,j].Remove(Enemies[i,j][l]);
+                                onEnemyMoved(j,i, j,i+1);
                             }
                         }   
                     }

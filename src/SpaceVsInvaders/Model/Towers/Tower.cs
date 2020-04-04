@@ -18,6 +18,7 @@ namespace SpaceVsInvaders.Model.Towers
             Health = conf.Health;
             Cost = conf.Cost;
             TickTime = conf.TickTime;
+            Range = conf.Range;
 
             Level = 1;
             CoolDown = 0;

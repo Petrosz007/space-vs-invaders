@@ -88,7 +88,7 @@ namespace SpaceVsInvaders.Model
         public SVsIModel()
         {
             WS = new WaveSpawner();
-            IsSpawningEnemies = false;
+            IsSpawningEnemies = true;
         }
 
         public void HandleTick()

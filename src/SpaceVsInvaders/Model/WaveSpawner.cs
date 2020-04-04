@@ -32,7 +32,7 @@ namespace SpaceVsInvaders.Model
 
         public void SpawnEnemies(int time, int n) // határértékeket majd config fájlból
         {
-            int value = (time / 2)*3;
+            int value = time * 6 + 120;
             Random rnd = new Random();
             int number = 0;
 

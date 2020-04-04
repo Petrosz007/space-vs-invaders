@@ -65,12 +65,6 @@ namespace SpaceVsInvaders
             
             model.Money = Config.GetValue<int>("StartingMoney");
 
-            model.PlaceEnemy(0, 0, EnemyType.Normal);
-            model.PlaceEnemy(0, 1, EnemyType.Buff);
-            model.PlaceEnemy(1, 1, EnemyType.Buff);
-            model.PlaceEnemy(2, 1, EnemyType.Buff);
-            model.PlaceEnemy(0, 2, EnemyType.Speedy);
-
             int width = Window.ClientBounds.Width;
             int height = Window.ClientBounds.Height;
 

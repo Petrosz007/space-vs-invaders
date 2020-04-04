@@ -239,6 +239,8 @@ namespace SpaceVsInvaders.Model
                                     if (Towers[k,j] is SVsITower)
                                     {
                                         Towers[k,j].Health -= Enemies[i,j][l].Damage;
+                                        if (Towers[k,j].Health <= 0)
+                                            Towers[k,j] = null; // ne menjen minuszba a health
                                         break;
                                     }
                                 Enemies[i,j][l].CoolDown = Enemies[i,j][l].TickTime;
@@ -248,7 +250,7 @@ namespace SpaceVsInvaders.Model
                                 Enemies[i,j][l].CoolDown -= 1;
                             }
 
-                            if (SecondsElapsed % Enemies[i,j][l].Movement == 0 && i+1 < Rows)
+                            if (SecondsElapsed % Enemies[i,j][l].Movement == 0 && i+1 < Rows && null == Towers[i+1,j]) // ha a kovetkezo sorban torony van, akkor ne masszon ra
                             {
                                 if (null == Enemies[i+1,j])
                                 {

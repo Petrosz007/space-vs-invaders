@@ -101,8 +101,11 @@ namespace SpaceVsInvaders
             board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
 
             InfoPanel infoPanel = new InfoPanel(new Vector2(width - 400, height - 400), 400, 400, model);
+            infoPanel.UpgradeCastleButton.LeftClicked += new EventHandler(stateManager.HandleCastleUpgradeClicked);
 
-            TowerInfo towerInfo = new TowerInfo(new Vector2(width - 400, 200), 400, 400, stateManager);
+            TowerInfo towerInfo = new TowerInfo(new Vector2(width - 400, 200), 400, 400, stateManager, model);
+            towerInfo.UpgradeButton.LeftClicked += new EventHandler(stateManager.HandleTowerUpgradeClicked);
+            towerInfo.SellButton.LeftClicked += new EventHandler(stateManager.HandleTowerSellClicked);
 
             UnderCursorTower underCursorTower = new UnderCursorTower(new Vector2(0,0), 50, 50, stateManager);
 

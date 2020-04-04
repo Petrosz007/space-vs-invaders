@@ -295,11 +295,21 @@ namespace SpaceVsInvaders.Model
         /// <summary>
         /// Ha a játékosnak van elég pénze, akkor a kiválasztot tornyot fejleszti.
         /// </summary>
-        public void UpgradeTower(int row, int col)
+        public bool UpgradeTower(int row, int col)
         {
-            if(Money >= Towers[row, col].Cost + Towers[row, col].Level * 50) // ezt is majd config fájlból át kell írni
-            Towers[row, col].Health += 10;
-            Towers[row,col].Level += 1;
+            var tower = Towers[row, col];
+            int upgradeCost = tower.Cost + tower.Level * 50;
+
+            if(Money >= upgradeCost)
+            {
+                Money -= upgradeCost;
+                tower.Health += 50;
+                tower.MaxHealth += 50;
+                tower.Level++;
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

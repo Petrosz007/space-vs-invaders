@@ -13,6 +13,7 @@ namespace SpaceVsInvaders.View
         public TowerType TowerPlacingType { get; private set; }
 
         public SVsITower SelectedTower { get; private set; }
+        public (int, int) SelectedPos { get; private set; }
 
         public StateManager(SVsIModel model, ErrorDisplay errorDisplay)
         {
@@ -28,14 +29,15 @@ namespace SpaceVsInvaders.View
             TowerPlacingType = type;
         }
 
-        public void HandleTileClicked(object sender, (int,int) pos)
+        public void HandleTileClicked(object _, (int, int) pos)
         {
+            SelectedPos = pos;
             (int row, int col) = pos;
-            
-            if(PlacingTower)
+
+            if (PlacingTower)
             {
                 PlacingTower = false;
-                if(!model.PlaceTower(row, col, TowerPlacingType))
+                if (!model.PlaceTower(row, col, TowerPlacingType))
                 {
                     errorDisplay.AddError("No money REEEEEEEE");
                 }
@@ -51,6 +53,27 @@ namespace SpaceVsInvaders.View
         {
             PlacingTower = true;
             TowerPlacingType = towerType;
+        }
+
+        public void HandleTowerUpgradeClicked(object sender, EventArgs args)
+        {
+            if (!model.UpgradeTower(SelectedPos.Item1, SelectedPos.Item2))
+            {
+                errorDisplay.AddError("Not enough money for the upgrade.");
+            }
+        }
+
+        public void HandleTowerSellClicked(object sender, EventArgs args)
+        {
+            model.SellTower(SelectedPos.Item1, SelectedPos.Item2);
+        }
+
+        public void HandleCastleUpgradeClicked(object sender, EventArgs args)
+        {
+            if(!model.UpgradeCastle())
+            {
+                errorDisplay.AddError("No money for castle upgrade.");
+            }
         }
     }
 }

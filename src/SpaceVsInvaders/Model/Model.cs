@@ -39,6 +39,7 @@ namespace SpaceVsInvaders.Model
         public bool IsGameOver { get; private set; }
 
         public WaveSpawner WS;
+        public bool IsSpawningEnemies { get; private set; }
 
 #region Events
         public event EventHandler<SVsIEventArgs> EnemyMoved;
@@ -87,13 +88,14 @@ namespace SpaceVsInvaders.Model
         public SVsIModel()
         {
             WS = new WaveSpawner();
+            IsSpawningEnemies = false;
         }
 
         public void HandleTick()
         {
             Money += 1;
             SecondsElapsed += 1;
-            if(SecondsElapsed % 10 == 0 && SecondsElapsed != 0)
+            if(SecondsElapsed % 10 == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
             {
                 WS.SpawnEnemies(SecondsElapsed, Cols);
             }

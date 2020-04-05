@@ -93,6 +93,7 @@ namespace SpaceVsInvaders
             
             board = new Board(new Vector2(0, 0), height, height, model);
             board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
+            model.TowerHasAttacked += new EventHandler<SVsIEventArgs>(board.ShotAnimator.HandleNewShot);
 
             InfoPanel infoPanel = new InfoPanel(new Vector2(width - 400, height - 400), 400, 400, model);
             infoPanel.UpgradeCastleButton.LeftClicked += new EventHandler(stateManager.HandleCastleUpgradeClicked);

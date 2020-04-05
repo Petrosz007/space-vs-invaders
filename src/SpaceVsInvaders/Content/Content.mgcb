@@ -56,13 +56,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/EpicFont.spritefont
 
-#begin Fonts/EpicFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/EpicFont.spritefont
-
 #begin Fonts/TowerInfoFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

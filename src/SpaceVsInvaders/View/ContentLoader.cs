@@ -23,7 +23,7 @@ namespace SpaceVsInvaders.View
             "SvsI_SPrites/gold-tower",
             "SvsI_SPrites/heal-tower",
             "Backgrounds/background",
-            "Pixels/transparent-pixel"
+            "Pixels/transparent-pixel",
         };
 
         private static Dictionary<string, SpriteFont> fonts;

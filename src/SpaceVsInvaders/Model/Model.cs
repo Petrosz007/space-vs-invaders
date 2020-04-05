@@ -99,8 +99,11 @@ namespace SpaceVsInvaders.Model
             {
                 WS.SpawnEnemies(SecondsElapsed, Cols);
             }
-            HandleTowers();
+
+            //? Lehet hogy vissza kell cserélni a sorrendet ha bugos
             HandleEnemies();
+            HandleTowers();
+
             CheckGameOver();
         }
 

@@ -11,6 +11,7 @@ namespace SpaceVsInvaders.View.Board
     public class Board : Component
     {
         private SVsIModel model;
+        public ShotAnimator ShotAnimator { get; set; }
 
         private int colWidth;
         private int rowHeight;
@@ -31,6 +32,8 @@ namespace SpaceVsInvaders.View.Board
             colWidth = width / model.Cols;
             rowHeight = height / model.Rows;
             tiles = new Tile[model.Rows, model.Cols];
+
+            ShotAnimator = new ShotAnimator(position, height, width, colWidth, rowHeight);
         }
 
         private void HandleTileClick(object sender, EventArgs e)
@@ -47,6 +50,7 @@ namespace SpaceVsInvaders.View.Board
             {
                 tile.Draw(spriteBatch);
             }
+
 
             for (int i = 0; i < model.Cols + 1; ++i)
             {
@@ -71,10 +75,14 @@ namespace SpaceVsInvaders.View.Board
 
                 spriteBatch.Draw(divTexture, divRect, divColor * 0.5f);
             }
+
+            ShotAnimator.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gameTime)
         {
+            ShotAnimator.Update(gameTime);
+
             for (int i = 0; i < model.Rows; ++i)
             {
                 for (int j = 0; j < model.Cols; ++j)

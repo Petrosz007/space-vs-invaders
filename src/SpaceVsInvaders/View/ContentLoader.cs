@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using SpaceVsInvaders.Model;
 
 namespace SpaceVsInvaders.View
 {
@@ -78,21 +79,19 @@ namespace SpaceVsInvaders.View
             }
         }
 
-        public static Texture2D GetTexture(this TileType tile)
+        public static Texture2D GetTexture(this TowerType tile) =>  tile switch
         {
-            switch (tile)
-            {
-                case TileType.BuffEnemy: return GetTexture("SvsI_SPrites/big_enemy2");
-                case TileType.SpeedyEnemy: return GetTexture("SvsI_SPrites/fast_enemy");
-                case TileType.NormalEnemy: return GetTexture("SvsI_SPrites/normal_enemy");
-                case TileType.DamageTower: return GetTexture("SvsI_SPrites/shooter-tower");
-                case TileType.GoldTower: return GetTexture("SvsI_SPrites/gold-tower");
-                case TileType.HealTower: return GetTexture("SvsI_SPrites/heal-tower");
-                case TileType.Empty: return GetTexture("SvsI_SPrites/heal-tower");
-                default:
-                    throw new ArgumentException("No texture for tile: " + tile);
-            }
-        }
+            TowerType.Heal   => GetTexture("SvsI_SPrites/heal-tower"),
+            TowerType.Damage => GetTexture("SvsI_SPrites/shooter-tower"),
+            TowerType.Gold   => GetTexture("SvsI_SPrites/gold-tower")
+        };
+
+        public static Texture2D GetTexture(this EnemyType tile) =>  tile switch
+        {
+            EnemyType.Buff   => GetTexture("SvsI_SPrites/big_enemy2"),
+            EnemyType.Normal => GetTexture("SvsI_SPrites/normal_enemy"),
+            EnemyType.Speedy => GetTexture("SvsI_SPrites/fast_enemy")
+        };
 
         public static Texture2D CreateSolidtexture(Color color)
         {

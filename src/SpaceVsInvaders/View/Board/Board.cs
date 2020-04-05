@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -5,6 +6,7 @@ using SpaceVsInvaders.Model;
 using SpaceVsInvaders.Model.Towers;
 using SpaceVsInvaders.Model.Enemies;
 using SpaceVsInvaders.View.Components;
+using System.Collections.Generic;
 
 namespace SpaceVsInvaders.View.Board
 {
@@ -87,50 +89,94 @@ namespace SpaceVsInvaders.View.Board
             {
                 for (int j = 0; j < model.Cols; ++j)
                 {
-                    TileType tile = TileType.Empty;
                     int currHealth = 0;
                     int maxHealth = 0;
                     if (model.Towers[i, j] != null)
                     {
-                        tile = model.Towers[i, j] switch
+                        var tile = model.Towers[i, j] switch
                         {
-                            SVsIDamageTower _ => TileType.DamageTower,
-                            SVsIGoldTower _ => TileType.GoldTower,
-                            SVsIHealTower _ => TileType.HealTower,
+                            SVsIDamageTower _ => TowerType.Damage,
+                            SVsIGoldTower   _ => TowerType.Gold,
+                            SVsIHealTower   _ => TowerType.Heal,
                         };
                         currHealth = model.Towers[i, j].Health;
                         maxHealth = model.Towers[i, j].MaxHealth;
+
+                        tiles[i, j] = new TowerTile(
+                            new Vector2(position.X + colWidth * j, position.Y + rowHeight * i),
+                            rowHeight,
+                            colWidth,
+                            i,
+                            j,
+                            tile,
+                            currHealth,
+                            maxHealth
+                        );
                     }
                     else if(model.Enemies[i, j].Count > 0)
                     {
-                        tile = model.Enemies[i, j][0] switch {
-                            SVsIBuffEnemy _ => TileType.BuffEnemy,
-                            SVsINormalEnemy _ => TileType.NormalEnemy,
-                            SVsISpeedyEnemy _ => TileType.SpeedyEnemy,
-                        };
+                        // (int buff, int norm, int speedy) = (0,0,0); 
+                        // foreach(var enemy in model.Enemies[i, j])
+                        // {
+                        //     (buff, norm, speedy) = enemy switch {
+                        //         SVsIBuffEnemy   _ => (buff + 1, norm, speedy),
+                        //         SVsINormalEnemy _ => (buff, norm + 1, speedy),
+                        //         SVsISpeedyEnemy _ => (buff, norm, speedy + 1),
+                        //     };
+                        // }
+
+                        // var enemies = new List<(EnemyType, int)>();
+                        // if(buff > 0)   enemies.Add((EnemyType.Buff, buff));
+                        // if(norm > 0)   enemies.Add((EnemyType.Normal, norm));
+                        // if(speedy > 0) enemies.Add((EnemyType.Speedy, speedy));
+
+                        var enemies = new List<(EnemyType, int)>();
+                        foreach(var enemy in model.Enemies[i, j])
+                        {
+                            var enemyType = enemy switch {
+                                SVsIBuffEnemy   _ => EnemyType.Buff,
+                                SVsINormalEnemy _ => EnemyType.Normal,
+                                SVsISpeedyEnemy _ => EnemyType.Speedy,
+                            };
+                            if(enemies.Any(e => e.Item1 == enemyType))
+                                enemies = enemies.Select(e => (e.Item1, e.Item2 + ((e.Item1 == enemyType) ? 1 : 0))).ToList();
+                            else
+                                enemies.Add((enemyType, 1));
+                        }
 
                         currHealth  = model.Enemies[i, j][0].Health;
                         maxHealth = model.Enemies[i, j][0].MaxHealth;
-                    }
 
+                        tiles[i, j] = new EnemyTile(
+                            new Vector2(position.X + colWidth * j, position.Y + rowHeight * i),
+                            rowHeight,
+                            colWidth,
+                            i,
+                            j,
+                            enemies,
+                            currHealth,
+                            maxHealth
+                        );
+                    }
+                    else
+                    {
                         tiles[i, j] = new Tile(
                             new Vector2(position.X + colWidth * j, position.Y + rowHeight * i),
                             rowHeight,
                             colWidth,
-                            tile,
                             i,
-                            j,
-                            currHealth,
-                            maxHealth
-                            );
-                        tiles[i, j].LeftClicked += new EventHandler(HandleTileClick);
+                            j
+                        );
                     }
-                }
 
-                foreach (var tile in tiles)
-                {
-                    tile.Update(gameTime);
+                    tiles[i, j].LeftClicked += new EventHandler(HandleTileClick);
                 }
+            }
+
+            foreach (var tile in tiles)
+            {
+                tile.Update(gameTime);
             }
         }
     }
+}

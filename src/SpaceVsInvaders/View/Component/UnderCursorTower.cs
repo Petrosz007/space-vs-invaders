@@ -10,7 +10,6 @@ namespace SpaceVsInvaders.View.Board
 {
     public class UnderCursorTower : Component
     {
-        private TileType tile;
         private StateManager stateManager;
 
         public UnderCursorTower(Vector2 position, int height, int width, StateManager stateManager)
@@ -21,17 +20,11 @@ namespace SpaceVsInvaders.View.Board
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            TileType tile = TileType.Empty;
-            if(stateManager.TowerPlacingType == TowerType.Damage) tile = TileType.DamageTower;
-            else if(stateManager.TowerPlacingType == TowerType.Heal) tile = TileType.HealTower;
-            else if(stateManager.TowerPlacingType == TowerType.Gold) tile = TileType.GoldTower;
-
-            Texture2D texture = tile.GetTexture();
-
             if(stateManager.PlacingTower)
             {
                 Point cursor = Mouse.GetState().Position;
                 position = new Vector2(cursor.X, cursor.Y);
+                var texture = stateManager.TowerPlacingType.GetTexture();
                 spriteBatch.Draw(texture, area, new Rectangle(0, 0, texture.Width, texture.Height), Color.Pink);
             }
         }

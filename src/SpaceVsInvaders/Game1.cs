@@ -174,7 +174,7 @@ namespace SpaceVsInvaders
 
             spriteBatch.Draw(background,
                 new Rectangle(-panelsWidth, 0, Window.ClientBounds.Width + panelsWidth, Window.ClientBounds.Height),
-                new Rectangle(0,0, background.Width, background.Height), Color.Pink);
+                new Rectangle(0,0, background.Width, background.Height), Color.White);
 
             foreach(var component in components)
             {

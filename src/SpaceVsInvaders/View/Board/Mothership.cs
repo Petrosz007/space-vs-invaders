@@ -41,7 +41,7 @@ namespace SpaceVsInvaders.View.Board
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, new Rectangle((int) (position.X + currXOffset), (int) position.Y, scaledWidth, height), 
-                new Rectangle(0, 0, texture.Width, texture.Height), Color.Pink);
+                new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
         }
     }
 }

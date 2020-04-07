@@ -55,29 +55,31 @@ namespace SpaceVsInvaders.View.Board
                 tile.Draw(spriteBatch);
             }
 
-
-            for (int i = 0; i < model.Cols + 1; ++i)
+            if(stateManager.PlacingTower)
             {
-                Rectangle divRect = new Rectangle(
-                    (int)position.X + i * colWidth,
-                    (int)position.Y,
-                    divWidth,
-                    height
-                );
+                for (int i = 0; i < model.Cols + 1; ++i)
+                {
+                    Rectangle divRect = new Rectangle(
+                        (int)position.X + i * colWidth,
+                        (int)position.Y,
+                        divWidth,
+                        height
+                    );
 
-                spriteBatch.Draw(divTexture, divRect, divColor * 0.5f);
-            }
+                    spriteBatch.Draw(divTexture, divRect, divColor * 0.5f);
+                }
 
-            for (int i = 0; i < model.Rows + 1; ++i)
-            {
-                Rectangle divRect = new Rectangle(
-                    (int)position.X,
-                    (int)position.Y + i * rowHeight,
-                    width,
-                    divWidth
-                );
+                for (int i = 0; i < model.Rows + 1; ++i)
+                {
+                    Rectangle divRect = new Rectangle(
+                        (int)position.X,
+                        (int)position.Y + i * rowHeight,
+                        width,
+                        divWidth
+                    );
 
-                spriteBatch.Draw(divTexture, divRect, divColor * 0.5f);
+                    spriteBatch.Draw(divTexture, divRect, divColor * 0.5f);
+                }
             }
 
             ShotAnimator.Draw(spriteBatch);

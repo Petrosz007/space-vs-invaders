@@ -43,7 +43,7 @@ namespace SpaceVsInvaders.View.Board
                 int size = originalSize * 3/5;
                 var texture = enemies[2].Item1.GetTexture();
                 var rect = new Rectangle((int)position.X + (width - size)/2 - offsetAmount, (int)position.Y + (height - size)/2, size, size);
-                spriteBatch.Draw(texture, rect, new Rectangle(0, 0, texture.Width, texture.Height), Color.Pink);
+                spriteBatch.Draw(texture, rect, new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
 
                 if(enemies[2].Item2 > 1)
                 {
@@ -57,7 +57,7 @@ namespace SpaceVsInvaders.View.Board
                 int size = originalSize * 3/5;
                 var texture = enemies[1].Item1.GetTexture();
                 var rect = new Rectangle((int)position.X + (width - size)/2 + offsetAmount, (int)position.Y + (height - size)/2, size, size);
-                spriteBatch.Draw(texture, rect, new Rectangle(0, 0, texture.Width, texture.Height), Color.Pink);
+                spriteBatch.Draw(texture, rect, new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
 
                 if(enemies[1].Item2 > 1)
                 {
@@ -71,7 +71,7 @@ namespace SpaceVsInvaders.View.Board
                 int size = originalSize;
                 var texture = enemies[0].Item1.GetTexture();
                 var rect = new Rectangle((int)position.X + (width - size)/2, (int)position.Y + (height - size)/2, size, size);
-                spriteBatch.Draw(texture, rect, new Rectangle(0, 0, texture.Width, texture.Height), Color.Pink);
+                spriteBatch.Draw(texture, rect, new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
 
                 if(enemies[0].Item2 > 1)
                 {

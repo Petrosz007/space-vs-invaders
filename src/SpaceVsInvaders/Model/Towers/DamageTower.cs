@@ -10,6 +10,6 @@ namespace SpaceVsInvaders.Model.Towers
         }
 
         public int Damage() =>
-            Level * 5;
+            Level * 15;
     }
 }

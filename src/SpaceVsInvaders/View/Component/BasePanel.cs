@@ -36,7 +36,7 @@ namespace SpaceVsInvaders.View.Components
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(backgroundPanel, new Rectangle((int)position.X, (int)position.Y, width, height), 
-                new Rectangle(0,0,backgroundPanel.Width, backgroundPanel.Height), Color.Pink);
+                new Rectangle(0,0,backgroundPanel.Width, backgroundPanel.Height), Color.White);
         }
     }
 }

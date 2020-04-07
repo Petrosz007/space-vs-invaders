@@ -41,13 +41,13 @@ namespace SpaceVsInvaders.View.Components
             HealTowerButton.Draw(spriteBatch);
 
             spriteBatch.Draw(TowerType.Damage.GetTexture(), new Rectangle(PanelX, PanelY, 50, 50), 
-                new Rectangle(0,0,TowerType.Damage.GetTexture().Width,TowerType.Damage.GetTexture().Height), Color.Pink);
+                new Rectangle(0,0,TowerType.Damage.GetTexture().Width,TowerType.Damage.GetTexture().Height), Color.White);
 
             spriteBatch.Draw(TowerType.Gold.GetTexture(), new Rectangle(PanelX, PanelY + 60, 50, 50), 
-                new Rectangle(0,0,TowerType.Gold.GetTexture().Width,TowerType.Gold.GetTexture().Height), Color.Pink);
+                new Rectangle(0,0,TowerType.Gold.GetTexture().Width,TowerType.Gold.GetTexture().Height), Color.White);
 
             spriteBatch.Draw(TowerType.Heal.GetTexture(), new Rectangle(PanelX, PanelY + 120, 50, 50), 
-                new Rectangle(0,0,TowerType.Heal.GetTexture().Width,TowerType.Heal.GetTexture().Height), Color.Pink);
+                new Rectangle(0,0,TowerType.Heal.GetTexture().Width,TowerType.Heal.GetTexture().Height), Color.White);
         }
     }
 }

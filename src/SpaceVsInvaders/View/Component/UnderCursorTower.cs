@@ -25,7 +25,7 @@ namespace SpaceVsInvaders.View.Board
                 Point cursor = Mouse.GetState().Position;
                 position = new Vector2(cursor.X, cursor.Y);
                 var texture = stateManager.TowerPlacingType.GetTexture();
-                spriteBatch.Draw(texture, area, new Rectangle(0, 0, texture.Width, texture.Height), Color.Pink);
+                spriteBatch.Draw(texture, area, new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
             }
         }
 

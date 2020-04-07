@@ -25,13 +25,18 @@ namespace SpaceVsInvaders.View
             "SvsI_SPrites/heal-tower",
             "Backgrounds/background",
             "Pixels/transparent-pixel",
+            "Backgrounds/panel1",
+            "Buttons/button-edge",
+            "Buttons/button-middle",
         };
 
         private static Dictionary<string, SpriteFont> fonts;
 
         private static readonly string[] fontsPath = {
             "Fonts/EpicFont",
-            "Fonts/TowerInfoFont"
+            "Fonts/NumberFont",
+            "Fonts/ButtonFont",
+            "Fonts/InfoFont",
         };
 
         public static void AttachGraphicsDevice(GraphicsDevice gd)

@@ -24,10 +24,11 @@ namespace SpaceVsInvaders
         List<Component> components;
         Board board;
 
-        //! remove this
         Texture2D background;
 
         double prevSecond;
+        int boardWidth;
+        int panelsWidth;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -46,9 +47,11 @@ namespace SpaceVsInvaders
 
             this.IsMouseVisible = true;
             this.Window.Title = "Space Vs Invaders";
+            this.Window.IsBorderless = true;
 
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            
             graphics.ApplyChanges();
 
             base.Initialize();
@@ -68,6 +71,10 @@ namespace SpaceVsInvaders
             int width = Window.ClientBounds.Width;
             int height = Window.ClientBounds.Height;
 
+            boardWidth = width * 80 / 100;
+            panelsWidth = width * 20 / 100;
+            int spawnHeight = 100;
+
             
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -83,37 +90,36 @@ namespace SpaceVsInvaders
             background = ContentLoader.GetTexture("Backgrounds/background");
 
 
-            Button btn_heal = new Button(new Vector2(width - 110,5), 50, 100);
-            btn_heal.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Heal));
-            Button btn_gold = new Button(new Vector2(width - 220,5), 50, 100);
-            btn_gold.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Gold));
-            Button btn_damage = new Button(new Vector2(width-330,5), 50, 100);
-            btn_damage.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType( TowerType.Damage));
+            BuyPanel buyPanel = new BuyPanel(new Vector2(width - panelsWidth, 0), height / 3, panelsWidth);
+            buyPanel.DamageTowerButton.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Damage));
+            buyPanel.GoldTowerButton.LeftClicked   += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Gold));
+            buyPanel.HealTowerButton.LeftClicked   += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Heal));
 
             
-            board = new Board(new Vector2(0, 0), height, height, model);
+            board = new Board(new Vector2(0, spawnHeight), height - spawnHeight * 2, boardWidth, model, stateManager);
             board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
             model.TowerHasAttacked += new EventHandler<SVsIEventArgs>(board.ShotAnimator.HandleNewShot);
 
-            InfoPanel infoPanel = new InfoPanel(new Vector2(width - 400, height - 400), 400, 400, model);
+            InfoPanel infoPanel = new InfoPanel(new Vector2(width - panelsWidth, height * 2/3), height / 3, panelsWidth, model);
             infoPanel.UpgradeCastleButton.LeftClicked += new EventHandler(stateManager.HandleCastleUpgradeClicked);
 
-            TowerInfo towerInfo = new TowerInfo(new Vector2(width - 400, 200), 400, 400, stateManager, model);
+            TowerInfo towerInfo = new TowerInfo(new Vector2(width - panelsWidth, height * 1/3), height / 3, panelsWidth, stateManager, model);
             towerInfo.UpgradeButton.LeftClicked += new EventHandler(stateManager.HandleTowerUpgradeClicked);
             towerInfo.SellButton.LeftClicked += new EventHandler(stateManager.HandleTowerSellClicked);
 
             UnderCursorTower underCursorTower = new UnderCursorTower(new Vector2(0,0), 50, 50, stateManager);
 
+            Mothership mothership = new Mothership(new Vector2(0,0), spawnHeight, boardWidth);
+
             components = new List<Component>
             {
                 board,
-                btn_damage,
-                btn_heal,
-                btn_gold,
                 Err,
                 infoPanel,
                 towerInfo,
-                underCursorTower
+                mothership,
+                buyPanel,
+                underCursorTower,
             };            
         }
 
@@ -167,7 +173,7 @@ namespace SpaceVsInvaders
             spriteBatch.Begin();
 
             spriteBatch.Draw(background,
-                new Rectangle(0,0, Window.ClientBounds.Width, Window.ClientBounds.Height),
+                new Rectangle(-panelsWidth, 0, Window.ClientBounds.Width + panelsWidth, Window.ClientBounds.Height),
                 new Rectangle(0,0, background.Width, background.Height), Color.Pink);
 
             foreach(var component in components)

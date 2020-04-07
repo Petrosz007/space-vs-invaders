@@ -25,18 +25,21 @@
     "HealTower": {
         "Cost": 100,
         "Health": 50,
+        "MaxHealth": 100,
         "TickTime": 3
     },
     "GoldTower": {
         "Cost": 150,
         "Health": 75,
+        "MaxHealth": 150,
         "TickTime": 2
     },
     "DamageTower": {
         "Cost": 200,
         "Health": 100,
+        "MaxHealth": 200,
         "TickTime": 1,
-        "Range": 6
+        "Range": 8
     },
     "Castle": {
         "Health": 10,

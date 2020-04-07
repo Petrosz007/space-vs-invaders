@@ -12,6 +12,8 @@ namespace SpaceVsInvaders.Model
         public Coordinate To { get; private set; }
         public Coordinate Where { get; private set; }
         public bool GameOver { get; private set; }
+
+        public EnemyType Type { get; private set; }
         
         public SVsIEventArgs(int fromX, int fromY, int toX, int toY)
         {
@@ -27,5 +29,11 @@ namespace SpaceVsInvaders.Model
          {
             GameOver = true;
          }
+
+        public SVsIEventArgs(int whereX, int whereY, EnemyType type)
+        {
+            Where = new Coordinate(whereX, whereY);
+            Type = type;
+        }
     }
 }

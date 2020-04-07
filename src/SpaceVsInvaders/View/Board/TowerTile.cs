@@ -18,8 +18,8 @@ namespace SpaceVsInvaders.View.Board
         private int maxHealth;
 
 
-        public TowerTile(Vector2 position, int height, int width, int row, int col, TowerType tower, int currHealth, int maxHealth)
-            : base(position, height, width, row, col)
+        public TowerTile(Vector2 position, int height, int width, int row, int col, StateManager stateManager, TowerType tower, int currHealth, int maxHealth)
+            : base(position, height, width, row, col, stateManager)
         {
             this.tower = tower;
             this.texture = tower.GetTexture();

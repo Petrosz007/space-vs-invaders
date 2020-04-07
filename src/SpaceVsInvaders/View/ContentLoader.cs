@@ -25,6 +25,7 @@ namespace SpaceVsInvaders.View
             "SvsI_SPrites/heal-tower",
             "Backgrounds/background",
             "Pixels/transparent-pixel",
+            "Backgrounds/panel1"
         };
 
         private static Dictionary<string, SpriteFont> fonts;

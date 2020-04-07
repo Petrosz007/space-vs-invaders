@@ -18,8 +18,8 @@ namespace SpaceVsInvaders.View.Board
         private int maxHealth;
         private SpriteFont font;
 
-        public EnemyTile(Vector2 position, int height, int width, int row, int col, List<(EnemyType, int)> enemies, int currHealth, int maxHealth)
-            : base(position, height, width, row, col)
+        public EnemyTile(Vector2 position, int height, int width, int row, int col, StateManager stateManager, List<(EnemyType, int)> enemies, int currHealth, int maxHealth)
+            : base(position, height, width, row, col, stateManager)
         {
             this.enemies = enemies;
 

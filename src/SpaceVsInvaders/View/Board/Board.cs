@@ -13,6 +13,7 @@ namespace SpaceVsInvaders.View.Board
     public class Board : Component
     {
         private SVsIModel model;
+        private StateManager stateManager;
         public ShotAnimator ShotAnimator { get; set; }
 
         private int colWidth;
@@ -22,10 +23,11 @@ namespace SpaceVsInvaders.View.Board
         private int divWidth;
         private Color divColor;
         public event EventHandler<(int, int)> TileClicked;
-        public Board(Vector2 position, int height, int width, SVsIModel model)
+        public Board(Vector2 position, int height, int width, SVsIModel model, StateManager stateManager)
             : base(position, height, width)
         {
             this.model = model;
+            this.stateManager = stateManager;
 
             divColor = Color.White;
             divTexture = ContentLoader.CreateSolidtexture(Color.White);
@@ -108,6 +110,7 @@ namespace SpaceVsInvaders.View.Board
                             colWidth,
                             i,
                             j,
+                            stateManager,
                             tile,
                             currHealth,
                             maxHealth
@@ -115,21 +118,6 @@ namespace SpaceVsInvaders.View.Board
                     }
                     else if(model.Enemies[i, j].Count > 0)
                     {
-                        // (int buff, int norm, int speedy) = (0,0,0); 
-                        // foreach(var enemy in model.Enemies[i, j])
-                        // {
-                        //     (buff, norm, speedy) = enemy switch {
-                        //         SVsIBuffEnemy   _ => (buff + 1, norm, speedy),
-                        //         SVsINormalEnemy _ => (buff, norm + 1, speedy),
-                        //         SVsISpeedyEnemy _ => (buff, norm, speedy + 1),
-                        //     };
-                        // }
-
-                        // var enemies = new List<(EnemyType, int)>();
-                        // if(buff > 0)   enemies.Add((EnemyType.Buff, buff));
-                        // if(norm > 0)   enemies.Add((EnemyType.Normal, norm));
-                        // if(speedy > 0) enemies.Add((EnemyType.Speedy, speedy));
-
                         var enemies = new List<(EnemyType, int)>();
                         foreach(var enemy in model.Enemies[i, j])
                         {
@@ -153,6 +141,7 @@ namespace SpaceVsInvaders.View.Board
                             colWidth,
                             i,
                             j,
+                            stateManager,
                             enemies,
                             currHealth,
                             maxHealth
@@ -165,7 +154,8 @@ namespace SpaceVsInvaders.View.Board
                             rowHeight,
                             colWidth,
                             i,
-                            j
+                            j,
+                            stateManager
                         );
                     }
 

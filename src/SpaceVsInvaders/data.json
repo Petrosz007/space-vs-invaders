@@ -1,5 +1,5 @@
 {
-    "TickTime": 1,
+    "TickTime": 0.6,
     "StartingMoney": 40000,
     "Rows": 12,
     "Cols": 6,

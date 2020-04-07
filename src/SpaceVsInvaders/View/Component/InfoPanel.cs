@@ -17,9 +17,9 @@ namespace SpaceVsInvaders.View.Components
             : base(position, height, width)
         {
             this.model = model;
-            font = ContentLoader.GetFont("Fonts/EpicFont");
+            font = ContentLoader.GetFont("Fonts/InfoFont");
 
-            UpgradeCastleButton = new Button(new Vector2(PanelX, PanelY + 140), 50, 100);
+            UpgradeCastleButton = new Button(new Vector2(PanelX, PanelY + 140), 50, PanelWidth, $"Upgrade Castle $???");
         }
 
         public override void Update(GameTime gameTime)

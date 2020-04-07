@@ -17,11 +17,11 @@ namespace SpaceVsInvaders.View.Components
         public BuyPanel(Vector2 position, int height, int width)
             : base(position, height, width)
         {
-            font = ContentLoader.GetFont("Fonts/EpicFont");
+            font = ContentLoader.GetFont("Fonts/InfoFont");
 
-            DamageTowerButton = new Button(new Vector2(PanelX + 60, PanelY), 50, 100);
-            GoldTowerButton = new Button(new Vector2(PanelX + 60, PanelY + 60), 50, 100);
-            HealTowerButton = new Button(new Vector2(PanelX + 60, PanelY + 120), 50, 100);
+            DamageTowerButton = new Button(new Vector2(PanelX + 60, PanelY), 50, PanelWidth - 60, $"Damage ${Config.GetValue<TowerConfig>("DamageTower").Cost}");
+            GoldTowerButton = new Button(new Vector2(PanelX + 60, PanelY + 60), 50, PanelWidth - 60, $"Gold ${Config.GetValue<TowerConfig>("GoldTower").Cost}");
+            HealTowerButton = new Button(new Vector2(PanelX + 60, PanelY + 120), 50, PanelWidth - 60, $"Heal ${Config.GetValue<TowerConfig>("HealTower").Cost}");
         }
 
         public override void Update(GameTime gameTime)

@@ -117,9 +117,9 @@ namespace SpaceVsInvaders
                 Err,
                 infoPanel,
                 towerInfo,
-                underCursorTower,
                 mothership,
-                buyPanel
+                buyPanel,
+                underCursorTower,
             };            
         }
 

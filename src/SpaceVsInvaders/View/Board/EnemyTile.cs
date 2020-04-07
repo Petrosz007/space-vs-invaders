@@ -29,7 +29,7 @@ namespace SpaceVsInvaders.View.Board
             this.currHealth = currHealth;
             this.maxHealth = maxHealth;
 
-            font = ContentLoader.GetFont("Fonts/TowerInfoFont");
+            font = ContentLoader.GetFont("Fonts/NumberFont");
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -81,7 +81,7 @@ namespace SpaceVsInvaders.View.Board
                 }
             }
             
-            spriteBatch.DrawString(ContentLoader.GetFont("Fonts/TowerInfoFont"), $"{currHealth}/{maxHealth}", new Vector2(position.X + 4, position.Y + height - 20), Color.White);
+            spriteBatch.DrawString(font, $"{currHealth}/{maxHealth}", new Vector2(position.X + 4, position.Y + height - 20), Color.White);
 
             base.Draw(spriteBatch);
         }

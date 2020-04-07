@@ -189,33 +189,26 @@ namespace SpaceVsInvaders.Model
         /// <summary>
         /// Önnönmaga 3x3-as környezetében emeli minden torony Health-jét.
         /// </summary>
-        public void HandleHealTower(int row, int col) // hat ez eleg rondan nez ki =(
+        public void HandleHealTower(int row, int col)
         {
             if(Towers[row, col] is SVsIHealTower healTower)
             {
-                if (row-1 >= 0 && col-1 >= 0 && null != Towers[row-1, col-1] && Towers[row-1, col-1].Health < Towers[row-1, col-1].MaxHealth)
-                    Towers[row-1, col-1].Health += healTower.Heal();
+                int range = healTower.Range;
+                for(int i = row - range; i <= row + range; ++i)
+                {
+                    for(int j = col - range; j <= col + range; ++j)
+                    {
+                        if(i < 0 || j < 0 || i >= Rows || j >= Cols) continue;
 
-                if (row-1 >= 0 && null !=  Towers[row-1, col] && Towers[row-1, col].Health < Towers[row-1, col].MaxHealth)
-                    Towers[row-1, col].Health += healTower.Heal();
+                        var tower = Towers[i, j];
+                        if(tower != null)
+                        {
+                            int healedHealth = tower.Health + healTower.Heal();
+                            tower.Health = (healedHealth < tower.MaxHealth) ? healedHealth : tower.MaxHealth;
+                        }
+                    }
 
-                if (row-1 >= 0 && col+1 < Cols && null != Towers[row-1, col+1] && Towers[row-1, col+1].Health < Towers[row-1, col+1].MaxHealth)
-                    Towers[row-1, col+1].Health += healTower.Heal();
-
-                if (col-1 >= 0 && null !=  Towers[row, col-1] && Towers[row, col-1].Health < Towers[row, col-1].MaxHealth)
-                    Towers[row, col-1].Health += healTower.Heal();
-
-                if (col+1 < Cols && null !=  Towers[row, col+1] && Towers[row, col+1].Health < Towers[row, col+1].MaxHealth)
-                    Towers[row, col+1].Health += healTower.Heal();
-
-                if (row+1 < Rows && col-1 >= 0 && null != Towers[row+1, col-1] && Towers[row+1, col-1].Health < Towers[row+1, col-1].MaxHealth)
-                    Towers[row+1, col-1].Health += healTower.Heal();
-
-                if (row+1 < Rows && null != Towers[row+1, col] && Towers[row+1, col].Health < Towers[row+1, col].MaxHealth)
-                    Towers[row+1, col].Health += healTower.Heal();
-
-                if (row+1 < Rows && col+1 < Cols && null !=  Towers[row+1, col+1] && Towers[row+1, col+1].Health < Towers[row+1, col+1].MaxHealth)
-                    Towers[row+1, col+1].Health += healTower.Heal();
+                }
             }
         }
 

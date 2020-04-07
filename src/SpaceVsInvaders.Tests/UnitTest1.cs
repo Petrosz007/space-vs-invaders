@@ -153,7 +153,7 @@ namespace SpaceVsInvaders.Tests
 
             var healTower = (SVsIHealTower) _model.Towers[4, 3];
 
-            Assert.True(_model.Towers[4,3].Health == healTowerHealth);
+            Assert.True(_model.Towers[4,3].Health == healTowerHealth + healTower.Heal());
             Assert.True(_model.Towers[3,3].Health == damageTowerHealth + healTower.Heal());
             Assert.True(_model.Towers[5,3].Health == goldTowerHealth + healTower.Heal());
 

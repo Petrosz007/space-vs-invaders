@@ -26,7 +26,8 @@
         "Cost": 100,
         "Health": 50,
         "MaxHealth": 100,
-        "TickTime": 3
+        "TickTime": 3,
+        "Range": 1
     },
     "GoldTower": {
         "Cost": 150,

@@ -15,6 +15,8 @@ namespace SpaceVsInvaders.View
         public SVsITower SelectedTower { get; private set; }
         public (int, int) SelectedPos { get; private set; }
 
+        public event EventHandler OpenPauseMenu;
+
         public StateManager(SVsIModel model, ErrorDisplay errorDisplay)
         {
             this.model = model;
@@ -73,6 +75,18 @@ namespace SpaceVsInvaders.View
             if(!model.UpgradeCastle())
             {
                 errorDisplay.AddError("No money for castle upgrade.");
+            }
+        }
+
+        public void HandleEscapePressed(object sender, EventArgs args)
+        {
+            if(PlacingTower) 
+            {
+                PlacingTower = false;
+            }
+            else 
+            {
+                OpenPauseMenu?.Invoke(this, new EventArgs());
             }
         }
     }

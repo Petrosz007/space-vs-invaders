@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SpaceVsInvaders.Model;
 using SpaceVsInvaders.View.Components;
 
-namespace SpaceVsInvaders.View.Board
+namespace SpaceVsInvaders.View.Boards
 {
     public class EnemyTile : Tile
     {

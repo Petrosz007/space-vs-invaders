@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SpaceVsInvaders.View.Components;
 
-namespace SpaceVsInvaders.View.Board
+namespace SpaceVsInvaders.View.Boards
 {
     public class Mothership : Component
     {

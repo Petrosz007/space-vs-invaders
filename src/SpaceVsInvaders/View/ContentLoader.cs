@@ -28,6 +28,9 @@ namespace SpaceVsInvaders.View
             "Backgrounds/panel1",
             "Buttons/button-edge",
             "Buttons/button-middle",
+            "Backgrounds/pause-background",
+            "Cursors/normal",
+            "Cursors/normal2",
         };
 
         private static Dictionary<string, SpriteFont> fonts;

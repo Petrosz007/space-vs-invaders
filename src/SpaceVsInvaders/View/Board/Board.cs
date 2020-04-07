@@ -8,7 +8,7 @@ using SpaceVsInvaders.Model.Enemies;
 using SpaceVsInvaders.View.Components;
 using System.Collections.Generic;
 
-namespace SpaceVsInvaders.View.Board
+namespace SpaceVsInvaders.View.Boards
 {
     public class Board : Component
     {

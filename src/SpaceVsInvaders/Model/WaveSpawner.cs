@@ -30,9 +30,9 @@ namespace SpaceVsInvaders.Model
             return EnemiesToSpawn.Count != 0;
         }
 
-        public void SpawnEnemies(int time, int n) // határértékeket majd config fájlból
+        public void SpawnEnemies(int time, int col , int towercount, int towerupdates) // határértékeket majd config fájlból
         {
-            int value = time * 6;
+            int value = time * 5 + col * 50 + towercount*10 + towerupdates*5;
             Random rnd = new Random();
             int number = 0;
 

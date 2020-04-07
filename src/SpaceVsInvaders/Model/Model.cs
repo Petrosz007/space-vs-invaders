@@ -23,6 +23,8 @@ namespace SpaceVsInvaders.Model
     {
         public int Money { get; set; }
         public int SecondsElapsed { get; private set; }
+        public int TowerCounter { get; private set; }
+        public int TowerUpdates { get; private set; }
         
         public List<SVsIEnemy>[,] Enemies;
 
@@ -98,15 +100,16 @@ namespace SpaceVsInvaders.Model
         {
             WS = new WaveSpawner();
             IsSpawningEnemies = true;
+            TowerCounter = 0;
         }
 
         public void HandleTick()
         {
             Money += 1;
             SecondsElapsed += 1;
-            if(SecondsElapsed % 30 == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
+            if(SecondsElapsed % 20 == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
             {
-                WS.SpawnEnemies(SecondsElapsed, Cols);
+                WS.SpawnEnemies(SecondsElapsed, Cols, TowerCounter,TowerUpdates);
             }
 
             //? Lehet hogy vissza kell cserélni a sorrendet ha bugos
@@ -364,6 +367,7 @@ namespace SpaceVsInvaders.Model
 
             if(Money >= upgradeCost)
             {
+                TowerUpdates++;
                 Money -= upgradeCost;
                 tower.Health += 50;
                 tower.MaxHealth += 50;
@@ -389,6 +393,7 @@ namespace SpaceVsInvaders.Model
                 case TowerType.Damage:
                     if(Money >= damageCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
                     {
+                        TowerCounter++;
                         Money -= damageCost;
                         Towers[row,col] = new SVsIDamageTower();
                         return true;
@@ -398,6 +403,7 @@ namespace SpaceVsInvaders.Model
                 case TowerType.Gold:
                     if(Money >= goldCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
                     {
+                        TowerCounter++;
                         Money -= goldCost;
                         Towers[row,col] = new SVsIGoldTower();
                         return true;
@@ -407,6 +413,7 @@ namespace SpaceVsInvaders.Model
                 case TowerType.Heal:
                      if(Money >= healCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
                     {
+                        TowerCounter++;
                         Money -= healCost;
                         Towers[row,col] = new SVsIHealTower();
                         return true;
@@ -425,6 +432,7 @@ namespace SpaceVsInvaders.Model
         {
             Money += Towers[row, col].Cost/2;
             Towers[row, col] = null;
+            TowerCounter--;
         }
 
         /// <summary>
@@ -434,6 +442,7 @@ namespace SpaceVsInvaders.Model
         {
             Towers[row, col] = null;
             onTowerDestroyed(row, col);
+            TowerCounter--;
         }
     
         /// <summary>

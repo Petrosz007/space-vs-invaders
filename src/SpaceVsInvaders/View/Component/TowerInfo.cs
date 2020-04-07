@@ -18,10 +18,10 @@ namespace SpaceVsInvaders.View.Components
         {
             this.stateManager = stateManager;
             this.model = model;
-            font = ContentLoader.GetFont("Fonts/TowerInfoFont");
+            font = ContentLoader.GetFont("Fonts/InfoFont");
 
-            UpgradeButton = new Button(new Vector2(PanelX, PanelY + 100), 50, 100);
-            SellButton = new Button(new Vector2(PanelX, PanelY + 160), 50, 100);
+            UpgradeButton = new Button(new Vector2(PanelX, PanelY + 100), 50, PanelWidth, $" Upgrade $???");
+            SellButton = new Button(new Vector2(PanelX, PanelY + 160), 50, PanelWidth, $"Sell $???");
         }
 
         public override void Update(GameTime gameTime)

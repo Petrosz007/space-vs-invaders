@@ -95,7 +95,7 @@ namespace SpaceVsInvaders.Model
         {
             Money += 1;
             SecondsElapsed += 1;
-            if(SecondsElapsed % 10 == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
+            if(SecondsElapsed % 30 == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
             {
                 WS.SpawnEnemies(SecondsElapsed, Cols);
             }

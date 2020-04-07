@@ -24,7 +24,7 @@ namespace SpaceVsInvaders.View.Components
 
        public void AddError(string error)
        {
-           Errors.Add((error, 2));
+           Errors.Add((error, 0));
        }
 
         public override void Update(GameTime gameTime)
@@ -34,7 +34,7 @@ namespace SpaceVsInvaders.View.Components
                 LastSecond = gameTime.TotalGameTime.Seconds;
                 for(int i = 0; i < Errors.Count; i++)
                 {
-                    if( Errors[i].Item2 > 0)  Errors[i] = (Errors[i].Item1, Errors[i].Item2 -1);
+                    if( Errors[i].Item2 > 0)  Errors[i] = (Errors[i].Item1, Errors[i].Item2 - 1);
                     if(Errors[i].Item2 == 0) Errors.Remove(Errors[i]);
                 }
             }

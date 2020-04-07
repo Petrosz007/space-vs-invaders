@@ -16,13 +16,14 @@ namespace SpaceVsInvaders.Model.Towers
         protected SVsITower(TowerConfig conf) 
         {
             Health = conf.Health;
+            MaxHealth = conf.MaxHealth;
             Cost = conf.Cost;
             TickTime = conf.TickTime;
             Range = conf.Range;
 
             Level = 1;
             CoolDown = 0;
-            MaxHealth = Health;
+            //MaxHealth = Health;
         }
     }
 }

@@ -29,6 +29,7 @@ namespace SpaceVsInvaders
     public class TowerConfig
     {
         public int Health { get; set; }
+        public int MaxHealth { get; set; }
         public int Cost { get; set; }
         public int TickTime { get; set; }
         public int Range { get; set; }

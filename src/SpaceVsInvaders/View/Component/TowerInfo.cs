@@ -29,8 +29,11 @@ namespace SpaceVsInvaders.View.Components
             base.Update(gameTime);
 
             tower = model.Towers[stateManager.SelectedPos.Item1, stateManager.SelectedPos.Item2];
-            UpgradeButton.Update(gameTime);
-            SellButton.Update(gameTime);
+            if(tower != null)
+            {
+                UpgradeButton.Update(gameTime);
+                SellButton.Update(gameTime);
+            }
         }
         public override void Draw(SpriteBatch spriteBatch)
         {

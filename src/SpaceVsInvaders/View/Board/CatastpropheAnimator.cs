@@ -36,7 +36,7 @@ namespace SpaceVsInvaders.View.Boards
             this.colWidth = colWidth;
             this.rowHeight = rowHeight;
             texture = ContentLoader.GetTexture("SvsI_SPrites/enemybase");
-            //healingTexture = ContentLoader.GetTexture("SvsI_SPrites/green-cross-png");
+            healingTexture = ContentLoader.GetTexture("SvsI_SPrites/green-cross-png");
             catastrophes = new List<Catastrophe>();
         }
 
@@ -67,12 +67,12 @@ namespace SpaceVsInvaders.View.Boards
                 if (item.type == CatastropheType.Asteroid)
                 {
                     spriteBatch.Draw(texture, rect,
-                    new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
+                    new Rectangle(0, 0, texture.Width, texture.Height), Color.White*0.5f);
                 }
                 else
                 {
-                    spriteBatch.Draw(texture, rect,
-                     new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
+                    spriteBatch.Draw(healingTexture, rect,
+                     new Rectangle(0, 0, healingTexture.Width, healingTexture.Height), Color.White*0.5f);
                 }
                 
               
@@ -81,13 +81,13 @@ namespace SpaceVsInvaders.View.Boards
 
         public void HandleAsteroids(object sender, SVsIEventArgs args)
         {
-            Catastrophe tmp = new Catastrophe(CatastropheType.Asteroid, args.Where.X, args.Where.Y, 2);
+            Catastrophe tmp = new Catastrophe(CatastropheType.Asteroid, args.Where.X, args.Where.Y, 0);
             
             catastrophes.Add(tmp);
         }
          public void HandleHealing(object sender, SVsIEventArgs args)
         {
-            Catastrophe tmp = new Catastrophe(CatastropheType.Healing, args.Where.X, args.Where.Y, 2);
+            Catastrophe tmp = new Catastrophe(CatastropheType.Healing, args.Where.X, args.Where.Y, 0);
             
             catastrophes.Add(tmp);  
         }

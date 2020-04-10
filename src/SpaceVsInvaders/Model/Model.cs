@@ -492,25 +492,22 @@ namespace SpaceVsInvaders.Model
         {
             Random rnd = new Random();
             int szam = rnd.Next(200);
-            for (int i = 0; i < 3; i++)
+            if (szam < 15)
             {
-                if (szam < 15)
+                for (int j = 0; j < 3; j++)
                 {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        Coordinate tmp = generateCoordinates();
-                        HandleAsteroidCatastrophe(tmp.X, tmp.Y);
-                        onAsteroidCatastrophe(tmp.X, tmp.Y);
-                    }
+                    Coordinate tmp = generateCoordinates();
+                    HandleAsteroidCatastrophe(tmp.X, tmp.Y);
+                    onAsteroidCatastrophe(tmp.X, tmp.Y);
                 }
-                if (szam > 185)
+            }
+            if (szam > 185)
+            {
+                    for (int j = 0; j < 3; j++)
                 {
-                     for (int j = 0; j < 3; j++)
-                    {
-                        Coordinate tmp = generateCoordinates();
-                        HandleHealingCatastrophe(tmp.X, tmp.Y);
-                        onHealingCatastrophe(tmp.X, tmp.Y);
-                    }
+                    Coordinate tmp = generateCoordinates();
+                    HandleHealingCatastrophe(tmp.X, tmp.Y);
+                    onHealingCatastrophe(tmp.X, tmp.Y);
                 }
             }
         }

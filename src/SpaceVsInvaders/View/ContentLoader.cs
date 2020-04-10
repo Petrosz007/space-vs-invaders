@@ -18,6 +18,7 @@ namespace SpaceVsInvaders.View
             "SvsI_SPrites/enemybase",
             "SvsI_SPrites/fast_enemy",
             "SvsI_SPrites/normal_enemy",
+            "SvsI_SPrites/green-cross-png",
             "Buttons/clicked",
             "Buttons/notClicked",
             "SvsI_SPrites/shooter-tower",

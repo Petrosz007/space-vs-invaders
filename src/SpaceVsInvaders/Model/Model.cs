@@ -518,6 +518,14 @@ namespace SpaceVsInvaders.Model
         {
             if (null != Enemies[i,j])
             {
+                if (null != Towers[i,j])
+                {
+                    Towers[i,j].Health -= 20;
+                    if(Towers[i,j].Health <= 0)
+                    {
+                        DestroyTower(i,j);
+                    }
+                }
                 for( int k = 0; k < Enemies[i,j].Count; k++)
                 {
                     Enemies[i,j][k].Health -= 20;
@@ -533,10 +541,15 @@ namespace SpaceVsInvaders.Model
         {
             if (null != Towers[i,j])
             {
-                Towers[i,j].Health -= 20;
-                if(Towers[i,j].Health <= 0)
+                int healedHealth = Towers[i,j].Health + 20;
+                Towers[i,j].Health = (healedHealth < Towers[i,j].MaxHealth) ? healedHealth : Towers[i,j].MaxHealth;                
+            }
+            if (null != Enemies[i,j])
+            {
+                for( int k = 0; k < Enemies[i,j].Count; k++)
                 {
-                    DestroyTower(i,j);
+                    int healedHealth = Enemies[i,j][k].Health + 20;
+                    Enemies[i,j][k].Health = (healedHealth < Enemies[i,j][k].MaxHealth) ? healedHealth : Enemies[i,j][k].MaxHealth;    
                 }
             }
         }

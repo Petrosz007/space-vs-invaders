@@ -131,6 +131,7 @@ namespace SpaceVsInvaders.Model
             //? Lehet hogy vissza kell cserélni a sorrendet ha bugos
             HandleEnemies();
             HandleTowers();
+            Catastrophe();
             CheckGameOver();
         }
 
@@ -488,7 +489,7 @@ namespace SpaceVsInvaders.Model
             int szam = rnd.Next(200);
             for (int i = 0; i < 3; i++)
             {
-                if (szam < 50)
+                if (szam < 15)
                 {
                     for (int j = 0; j < 3; j++)
                     {
@@ -497,7 +498,7 @@ namespace SpaceVsInvaders.Model
                         onAsteroidCatastrophe(tmp.X, tmp.Y);
                     }
                 }
-                if (szam > 150)
+                if (szam > 185)
                 {
                      for (int j = 0; j < 3; j++)
                     {
@@ -537,8 +538,8 @@ namespace SpaceVsInvaders.Model
         public Coordinate generateCoordinates()
         {
             Random rnd = new Random();
-            int x = rnd.Next(0,Cols - 1); 
-            int y = rnd.Next(0,Rows - 1); 
+            int y = rnd.Next(0,Cols - 1); 
+            int x = rnd.Next(0,Rows - 1); 
             return new Coordinate(x,y);
         }
 

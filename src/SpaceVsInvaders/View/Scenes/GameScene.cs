@@ -70,6 +70,8 @@ namespace SpaceVsInvaders.View.Scenes
             board = new Board(new Vector2(0, spawnHeight), Height - spawnHeight * 2, boardWidth, model, stateManager);
             board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
             model.TowerHasAttacked += new EventHandler<SVsIEventArgs>(board.ShotAnimator.HandleNewShot);
+            model.AsteroidCatastrophe += new EventHandler<SVsIEventArgs>(board.CatastropheAnimator.HandleAsteroids);
+            model.HealingCatastrophe += new EventHandler<SVsIEventArgs>(board.CatastropheAnimator.HandleHealing);
 
             InfoPanel infoPanel = new InfoPanel(new Vector2(Width - panelsWidth, Height * 2/3), Height / 3, panelsWidth, model);
             infoPanel.UpgradeCastleButton.LeftClicked += new EventHandler(stateManager.HandleCastleUpgradeClicked);

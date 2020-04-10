@@ -25,7 +25,7 @@ namespace SpaceVsInvaders.View.Components
         public override void Draw(SpriteBatch spriteBatch)
         {
             double scale = height / (double) edgeTexture.Height;
-            Console.WriteLine($"{Math.Floor(edgeTexture.Width * scale)} {height}");
+            //Console.WriteLine($"{Math.Floor(edgeTexture.Width * scale)} {height}");
             spriteBatch.Draw(edgeTexture, new Rectangle((int)position.X, (int)position.Y, (int) Math.Floor(edgeTexture.Width * scale), height), 
                 new Rectangle(0,0,edgeTexture.Width, edgeTexture.Height), Color.White);
 

@@ -18,6 +18,11 @@ namespace SpaceVsInvaders.Model
         Normal,
         Speedy
     }
+    public enum CatastropheType
+    {
+        Healing,
+        Asteroid
+    }
 
     public class SVsIModel
     {
@@ -538,8 +543,8 @@ namespace SpaceVsInvaders.Model
         public Coordinate generateCoordinates()
         {
             Random rnd = new Random();
-            int y = rnd.Next(0,Cols - 1); 
-            int x = rnd.Next(0,Rows - 1); 
+            int y = rnd.Next(0,Cols); 
+            int x = rnd.Next(0,Rows); 
             return new Coordinate(x,y);
         }
 

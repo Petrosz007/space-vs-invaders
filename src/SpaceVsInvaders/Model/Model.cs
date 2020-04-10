@@ -50,6 +50,8 @@ namespace SpaceVsInvaders.Model
         public event EventHandler<SVsIEventArgs> TowerDestroyed;
         public event EventHandler<SVsIEventArgs> GameOver;
         public event EventHandler<SVsIEventArgs> EnemyMovedToCastle;
+        public event EventHandler<SVsIEventArgs> HealingCatastrophe;
+        public event EventHandler<SVsIEventArgs> AsteroidCatastrophe;
 
          public void onEnemyMoved(int fromX, int fromY, int toX, int toY)
         {
@@ -93,7 +95,21 @@ namespace SpaceVsInvaders.Model
                 EnemyMovedToCastle(this, new SVsIEventArgs(whereX, whereY, type));
             }
         }
+        public void onHealingCatastrophe(int whereX, int whereY)
+        {
+            if(HealingCatastrophe != null)
+            {
+                HealingCatastrophe(this, new SVsIEventArgs(whereX, whereY));
+            }
+        }
         
+        public void onAsteroidCatastrophe(int whereX, int whereY)
+        {
+            if(AsteroidCatastrophe != null)
+            {
+                AsteroidCatastrophe(this, new SVsIEventArgs(whereX, whereY));
+            }
+        }
 #endregion
 
         public SVsIModel()
@@ -461,6 +477,69 @@ namespace SpaceVsInvaders.Model
             }
             
             return false;
+        }
+
+         /// <summary>
+        ///  Katasztrófákat generál.
+        /// </summary>
+        public void Catastrophe()
+        {
+            Random rnd = new Random();
+            int szam = rnd.Next(200);
+            for (int i = 0; i < 3; i++)
+            {
+                if (szam < 50)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        Coordinate tmp = generateCoordinates();
+                        HandleAsteroidCatastrophe(tmp.X, tmp.Y);
+                        onAsteroidCatastrophe(tmp.X, tmp.Y);
+                    }
+                }
+                if (szam > 150)
+                {
+                     for (int j = 0; j < 3; j++)
+                    {
+                        Coordinate tmp = generateCoordinates();
+                        HandleHealingCatastrophe(tmp.X, tmp.Y);
+                        onHealingCatastrophe(tmp.X, tmp.Y);
+                    }
+                }
+            }
+        }
+        public void HandleAsteroidCatastrophe(int i, int j)
+        {
+            if (null != Enemies[i,j])
+            {
+                for( int k = 0; k < Enemies[i,j].Count; k++)
+                {
+                    Enemies[i,j][k].Health -= 20;
+                    if(Enemies[i,j][k].Health <= 0)
+                    {
+                        Enemies[i,j].Remove(Enemies[i,j][k]);
+                        onEnemyDead(i,j);
+                    }
+                }
+            }
+        }
+        public void HandleHealingCatastrophe(int i, int j)
+        {
+            if (null != Towers[i,j])
+            {
+                Towers[i,j].Health -= 20;
+                if(Towers[i,j].Health <= 0)
+                {
+                    DestroyTower(i,j);
+                }
+            }
+        }
+        public Coordinate generateCoordinates()
+        {
+            Random rnd = new Random();
+            int x = rnd.Next(0,Cols - 1); 
+            int y = rnd.Next(0,Rows - 1); 
+            return new Coordinate(x,y);
         }
 
        /*

@@ -492,32 +492,34 @@ namespace SpaceVsInvaders.Model
         {
             Random rnd = new Random();
             int szam = rnd.Next(200);
-            if (szam < 15)
+            if (szam < 10)
             {
                 for (int j = 0; j < 3; j++)
                 {
+                    int dmg = rnd.Next(20,50);
                     Coordinate tmp = generateCoordinates();
-                    HandleAsteroidCatastrophe(tmp.X, tmp.Y);
+                    HandleAsteroidCatastrophe(tmp.X, tmp.Y, dmg);
                     onAsteroidCatastrophe(tmp.X, tmp.Y);
                 }
             }
-            if (szam > 185)
+            else if (szam > 190)
             {
                     for (int j = 0; j < 3; j++)
                 {
+                    int heal = rnd.Next(20,50);
                     Coordinate tmp = generateCoordinates();
-                    HandleHealingCatastrophe(tmp.X, tmp.Y);
+                    HandleHealingCatastrophe(tmp.X, tmp.Y, heal);
                     onHealingCatastrophe(tmp.X, tmp.Y);
                 }
             }
         }
-        public void HandleAsteroidCatastrophe(int i, int j)
+        public void HandleAsteroidCatastrophe(int i, int j, int dmg)
         {
             if (null != Enemies[i,j])
             {
                 if (null != Towers[i,j])
                 {
-                    Towers[i,j].Health -= 20;
+                    Towers[i,j].Health -= dmg;
                     if(Towers[i,j].Health <= 0)
                     {
                         DestroyTower(i,j);
@@ -534,18 +536,18 @@ namespace SpaceVsInvaders.Model
                 }
             }
         }
-        public void HandleHealingCatastrophe(int i, int j)
+        public void HandleHealingCatastrophe(int i, int j, int heal)
         {
             if (null != Towers[i,j])
             {
-                int healedHealth = Towers[i,j].Health + 20;
+                int healedHealth = Towers[i,j].Health + heal;
                 Towers[i,j].Health = (healedHealth < Towers[i,j].MaxHealth) ? healedHealth : Towers[i,j].MaxHealth;                
             }
             if (null != Enemies[i,j])
             {
                 for( int k = 0; k < Enemies[i,j].Count; k++)
                 {
-                    int healedHealth = Enemies[i,j][k].Health + 20;
+                    int healedHealth = Enemies[i,j][k].Health + heal;
                     Enemies[i,j][k].Health = (healedHealth < Enemies[i,j][k].MaxHealth) ? healedHealth : Enemies[i,j][k].MaxHealth;    
                 }
             }

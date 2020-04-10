@@ -29,12 +29,14 @@ namespace SpaceVsInvaders.View.Boards
         private List<Catastrophe> catastrophes;
         private int LastSecond;
         private Texture2D texture;
+        private Texture2D healingTexture;
         public CatastropheAnimator(Vector2 position, int height, int width, int colWidth, int rowHeight)
             : base(position, height, width)
         {
             this.colWidth = colWidth;
             this.rowHeight = rowHeight;
             texture = ContentLoader.GetTexture("SvsI_SPrites/enemybase");
+            //healingTexture = ContentLoader.GetTexture("SvsI_SPrites/green-cross-png");
             catastrophes = new List<Catastrophe>();
         }
 
@@ -61,21 +63,30 @@ namespace SpaceVsInvaders.View.Boards
                     colWidth,
                     rowHeight
                 );
-               spriteBatch.Draw(texture, rect,
-                new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
+
+                if (item.type == CatastropheType.Asteroid)
+                {
+                    spriteBatch.Draw(texture, rect,
+                    new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
+                }
+                else
+                {
+                    spriteBatch.Draw(texture, rect,
+                     new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
+                }
+                
+              
             }
         }
 
         public void HandleAsteroids(object sender, SVsIEventArgs args)
         {
-            _ = args ?? throw new ArgumentNullException(nameof(args));
             Catastrophe tmp = new Catastrophe(CatastropheType.Asteroid, args.Where.X, args.Where.Y, 2);
             
             catastrophes.Add(tmp);
         }
          public void HandleHealing(object sender, SVsIEventArgs args)
         {
-            _ = args ?? throw new ArgumentNullException(nameof(args));
             Catastrophe tmp = new Catastrophe(CatastropheType.Healing, args.Where.X, args.Where.Y, 2);
             
             catastrophes.Add(tmp);  

@@ -26,8 +26,8 @@ namespace SpaceVsInvaders.View.Components
         {
             base.Update(gameTime);
 
-            minutesElapsed = (int)gameTime.TotalGameTime.TotalMinutes;
-            secondsElapsed = (int)gameTime.TotalGameTime.TotalSeconds;
+            minutesElapsed = (int)gameTime.TotalGameTime.Minutes;
+            secondsElapsed = (int)gameTime.TotalGameTime.Seconds;
 
             UpgradeCastleButton.Update(gameTime);
         }

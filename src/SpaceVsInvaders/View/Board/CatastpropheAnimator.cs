@@ -27,7 +27,7 @@ namespace SpaceVsInvaders.View.Boards
         private int colWidth;
         private int rowHeight;
         private List<Catastrophe> catastrophes;
-        private int LastSecond;
+        private double LastSecond;
         private Texture2D texture;
         private Texture2D healingTexture;
         public CatastropheAnimator(Vector2 position, int height, int width, int colWidth, int rowHeight)
@@ -42,14 +42,18 @@ namespace SpaceVsInvaders.View.Boards
 
         public override void Update(GameTime gameTime)
         {
-            if(gameTime.TotalGameTime.Seconds > LastSecond + 1)
+            if(gameTime.TotalGameTime.TotalSeconds > LastSecond + 1)
             {
-                LastSecond = gameTime.TotalGameTime.Seconds;
+                LastSecond = gameTime.TotalGameTime.TotalSeconds;
+
+                var toBeRemoved = new List<Catastrophe>();
                 for(int i = 0; i < catastrophes.Count; i++)
                 {
-                    if( catastrophes[i].SecRemaining > 0)  catastrophes[i].SecRemaining--;
-                    if(catastrophes[i].SecRemaining == 0) catastrophes.Remove(catastrophes[i]);
+                    if(catastrophes[i].SecRemaining > 0)  catastrophes[i].SecRemaining--;
+                    else toBeRemoved.Add(catastrophes[i]);
                 }
+                
+                catastrophes.RemoveAll(c => toBeRemoved.Contains(c));
             }
         }
 

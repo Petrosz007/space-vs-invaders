@@ -11,7 +11,7 @@ namespace SpaceVsInvaders.View.Components
         
         private Texture2D Texture;
         public List<(string, int)> Errors;
-        private int LastSecond;
+        private double LastSecond;
         private SpriteFont Font;
         public ErrorDisplay(Vector2 position, int height, int width)
             : base(position, height, width)
@@ -24,19 +24,23 @@ namespace SpaceVsInvaders.View.Components
 
        public void AddError(string error)
        {
-           Errors.Add((error, 0));
+           Errors.Add((error, 2));
        }
 
         public override void Update(GameTime gameTime)
         {
-            if(gameTime.TotalGameTime.Seconds > LastSecond + 1)
+            if(gameTime.TotalGameTime.TotalSeconds > LastSecond + 1)
             {
-                LastSecond = gameTime.TotalGameTime.Seconds;
+                LastSecond = gameTime.TotalGameTime.TotalSeconds;
+
+                var toBeRemoved = new List<(string, int)>();
                 for(int i = 0; i < Errors.Count; i++)
                 {
                     if( Errors[i].Item2 > 0)  Errors[i] = (Errors[i].Item1, Errors[i].Item2 - 1);
-                    if(Errors[i].Item2 == 0) Errors.Remove(Errors[i]);
+                    else toBeRemoved.Add(Errors[i]);
                 }
+
+                Errors.RemoveAll(e => toBeRemoved.Contains(e));
             }
         }
         public override void Draw(SpriteBatch spriteBatch)

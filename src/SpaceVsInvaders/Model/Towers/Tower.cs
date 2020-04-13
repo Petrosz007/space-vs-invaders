@@ -13,9 +13,11 @@ namespace SpaceVsInvaders.Model.Towers
         public int Range { get; set; }
 
         public int UpgradeCost {
-            get {
-                return Cost + Level * 50;
-            }
+            get => Cost + Level * 50;
+        }
+
+        public int SellCost {
+            get => Cost / 2;
         }
         
         public SVsITower() { }

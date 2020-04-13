@@ -38,5 +38,8 @@ namespace SpaceVsInvaders.View.Components
             var measure = font.MeasureString(text);
             spriteBatch.DrawString(font, text, new Vector2(position.X + (width - measure.X)/2, position.Y + (height - measure.Y)/2), Color.Green);
         }
+
+        public void UpdateText(string newText) => 
+            text = newText;
     }
 }

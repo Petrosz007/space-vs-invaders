@@ -19,7 +19,7 @@ namespace SpaceVsInvaders.View.Components
             this.model = model;
             font = ContentLoader.GetFont("Fonts/InfoFont");
 
-            UpgradeCastleButton = new Button(new Vector2(PanelX, PanelY + 140), 50, PanelWidth, $"Upgrade Castle $???");
+            UpgradeCastleButton = new Button(new Vector2(PanelX, PanelY + 140), 50, PanelWidth, "Upgrade Castle $0");
         }
 
         public override void Update(GameTime gameTime)
@@ -29,6 +29,7 @@ namespace SpaceVsInvaders.View.Components
             minutesElapsed = (int)gameTime.TotalGameTime.Minutes;
             secondsElapsed = (int)gameTime.TotalGameTime.Seconds;
 
+            UpgradeCastleButton.UpdateText($"Upgrade Castle ${model.Castle.CurrentUpgradeCost}");
             UpgradeCastleButton.Update(gameTime);
         }
         public override void Draw(SpriteBatch spriteBatch)

@@ -11,8 +11,6 @@ namespace SpaceVsInvaders.View.Boards
     {
         private TowerType tower;
         private Texture2D texture;
-        public int Row { get; private set; }
-        public int Col { get; private set; }
 
         private int currHealth;
         private int maxHealth;

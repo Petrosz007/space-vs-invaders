@@ -7,8 +7,6 @@ namespace SpaceVsInvaders.View.Components
     public class BuyPanel : BasePanel
     {
         private SpriteFont font;
-        private int minutesElapsed;
-        private int secondsElapsed;
 
         public Button DamageTowerButton { get; private set; }
         public Button GoldTowerButton { get; private set; }

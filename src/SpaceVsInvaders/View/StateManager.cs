@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework.Input;
 using SpaceVsInvaders.Model;
 using SpaceVsInvaders.Model.Towers;
 using SpaceVsInvaders.View.Components;
@@ -23,6 +24,7 @@ namespace SpaceVsInvaders.View
             this.errorDisplay = errorDisplay;
 
             PlacingTower = false;
+            SelectedPos = (0,0);
         }
 
         public void HandleNewTowerType(TowerType type)
@@ -31,7 +33,7 @@ namespace SpaceVsInvaders.View
             TowerPlacingType = type;
         }
 
-        public void HandleTileClicked(object _, (int, int) pos)
+        public void HandleTileClicked(object sender, (int, int) pos)
         {
             SelectedPos = pos;
             (int row, int col) = pos;
@@ -39,14 +41,16 @@ namespace SpaceVsInvaders.View
             if (PlacingTower)
             {
                 PlacingTower = false;
-                if (!model.PlaceTower(row, col, TowerPlacingType))
+                try {
+                    model.PlaceTower(row, col, TowerPlacingType);
+                }
+                catch(SVsIModelException error)
                 {
-                    errorDisplay.AddError("No money REEEEEEEE");
+                    errorDisplay.AddError(error.Message);
                 }
             }
             else
             {
-                // TODO: implement tower info showing
                 SelectedTower = model.Towers[row, col];
             }
         }
@@ -59,22 +63,34 @@ namespace SpaceVsInvaders.View
 
         public void HandleTowerUpgradeClicked(object sender, EventArgs args)
         {
-            if (!model.UpgradeTower(SelectedPos.Item1, SelectedPos.Item2))
+            try {
+                model.UpgradeTower(SelectedPos.Item1, SelectedPos.Item2);
+            }
+            catch(SVsIModelException error)
             {
-                errorDisplay.AddError("Not enough money for the upgrade.");
+                errorDisplay.AddError(error.Message);
             }
         }
 
         public void HandleTowerSellClicked(object sender, EventArgs args)
         {
-            model.SellTower(SelectedPos.Item1, SelectedPos.Item2);
+            try {
+                model.SellTower(SelectedPos.Item1, SelectedPos.Item2);
+            }
+            catch(SVsIModelException error)
+            {
+                errorDisplay.AddError(error.Message);
+            }
         }
 
         public void HandleCastleUpgradeClicked(object sender, EventArgs args)
         {
-            if(!model.UpgradeCastle())
+            try {
+                model.UpgradeCastle();
+            }
+            catch(SVsIModelException error)
             {
-                errorDisplay.AddError("No money for castle upgrade.");
+                errorDisplay.AddError(error.Message);
             }
         }
 
@@ -87,6 +103,28 @@ namespace SpaceVsInvaders.View
             else 
             {
                 OpenPauseMenu?.Invoke(this, new EventArgs());
+            }
+        }
+
+        public void HandleMoveKeysPressed(object sender, Keys key)
+        {
+            (int row, int col) = key switch{
+                Keys.Up    => (SelectedPos.Item1 - 1, SelectedPos.Item2),
+                Keys.Down  => (SelectedPos.Item1 + 1, SelectedPos.Item2),
+                Keys.Left  => (SelectedPos.Item1, SelectedPos.Item2 - 1),
+                Keys.Right => (SelectedPos.Item1, SelectedPos.Item2 + 1),
+            };
+
+            if(row < 0 || col < 0 || row >= model.Rows || col >= model.Rows) return;
+
+            SelectedPos = (row, col);
+        }
+
+        public void HandleEnterPressed(object sender, EventArgs args)
+        {
+            if(PlacingTower)
+            {
+                HandleTileClicked(this, SelectedPos);
             }
         }
     }

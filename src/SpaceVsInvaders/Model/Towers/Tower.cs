@@ -11,6 +11,12 @@ namespace SpaceVsInvaders.Model.Towers
         public int TickTime { get; set; }
         public int CoolDown { get; set; }
         public int Range { get; set; }
+
+        public int UpgradeCost {
+            get {
+                return Cost + Level * 50;
+            }
+        }
         
         public SVsITower() { }
         protected SVsITower(TowerConfig conf) 
@@ -24,6 +30,13 @@ namespace SpaceVsInvaders.Model.Towers
             Level = 1;
             CoolDown = 0;
             //MaxHealth = Health;
+        }
+
+        public void Upgrade()
+        {
+            Health += 50;
+            MaxHealth += 100;
+            Level++;
         }
     }
 }

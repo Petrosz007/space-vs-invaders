@@ -10,10 +10,6 @@ namespace SpaceVsInvaders.View.Boards
     public class EnemyTile : Tile
     {
         private  List<(EnemyType, int)> enemies;
-        // private Texture2D texture;
-        public int Row { get; private set; }
-        public int Col { get; private set; }
-
         private int currHealth;
         private int maxHealth;
         private SpriteFont font;

@@ -22,11 +22,11 @@ namespace SpaceVsInvaders.View.Scenes
         private StateManager stateManager;
         private List<Component> components;
         private Board board;
+        private KeyboardHandler keyboardHandler;
 
         private Texture2D background;
 
         private double prevSecond;
-        private bool prevEscapeState;
         private int boardWidth;
         private int panelsWidth;
         public GameScene(int width, int height)
@@ -41,7 +41,6 @@ namespace SpaceVsInvaders.View.Scenes
         public override void LoadContent()
         {
             prevSecond = 0;
-            prevEscapeState = false;
 
             model = new SVsIModel();
             model.NewGame(Config.GetValue<int>("Rows"), Config.GetValue<int>("Cols"));
@@ -93,7 +92,10 @@ namespace SpaceVsInvaders.View.Scenes
                 mothership,
                 buyPanel,
                 underCursorTower,
-            };            
+            };
+      
+            keyboardHandler = new KeyboardHandler();
+            keyboardHandler.KeyPressed += new EventHandler<Keys>(HandleKeyPress);
         }
 
         /// <summary>
@@ -112,12 +114,7 @@ namespace SpaceVsInvaders.View.Scenes
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape) != prevEscapeState && !prevEscapeState)
-            {
-                stateManager.HandleEscapePressed(this, new EventArgs());
-            }
-            prevEscapeState = Keyboard.GetState().IsKeyDown(Keys.Escape);
-
+            keyboardHandler.Update(gameTime);
 
             HandleTick(gameTime.TotalGameTime.TotalSeconds);
 
@@ -154,6 +151,52 @@ namespace SpaceVsInvaders.View.Scenes
                 // TODO: call this when it isn't buggy
                 model.HandleTick();
                 prevSecond = currentSeconds;
+            }
+        }
+
+        private void HandleKeyPress(object sender, Keys key)
+        {
+            switch(key)
+            {
+                case Keys.Escape:
+                    stateManager.HandleEscapePressed(this, new EventArgs());
+                break;
+
+                case Keys.D1:
+                    stateManager.HandleTowerBuyClicked(this, TowerType.Damage);
+                break;
+
+                case Keys.D2:
+                    stateManager.HandleTowerBuyClicked(this, TowerType.Gold);
+                break;
+
+                case Keys.D3:
+                    stateManager.HandleTowerBuyClicked(this, TowerType.Heal);
+                break;
+
+                case Keys.U:
+                    stateManager.HandleTowerUpgradeClicked(this, new EventArgs());
+                break;
+
+                case Keys.S:
+                    stateManager.HandleTowerSellClicked(this, new EventArgs());
+                break;
+
+                case Keys.C:
+                    stateManager.HandleCastleUpgradeClicked(this, new EventArgs());
+                break;
+
+                case Keys.Enter:
+                    stateManager.HandleEnterPressed(this, new EventArgs());
+                break;
+
+                case Keys.Up:    stateManager.HandleMoveKeysPressed(this, Keys.Up);    break;
+                case Keys.Down:  stateManager.HandleMoveKeysPressed(this, Keys.Down);  break;
+                case Keys.Left:  stateManager.HandleMoveKeysPressed(this, Keys.Left);  break;
+                case Keys.Right: stateManager.HandleMoveKeysPressed(this, Keys.Right); break;
+
+                default:
+                break;
             }
         }
     }

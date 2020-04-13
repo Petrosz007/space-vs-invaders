@@ -31,13 +31,13 @@ namespace SpaceVsInvaders.Tests
             int healTowerCost = Config.GetValue<TowerConfig>("HealTower").Cost;
            
             //  Nem sikerült a torony beszúrása, mert a játékosnak nincs elég pénze.
-            Assert.False(_model.PlaceTower(1,1, TowerType.Damage));
-            Assert.False(_model.PlaceTower(1,1, TowerType.Gold));
-            Assert.False(_model.PlaceTower(1,1, TowerType.Heal));
+            Assert.Throws<SVsIModelException>(() => _model.PlaceTower(1,1, TowerType.Damage));
+            Assert.Throws<SVsIModelException>(() => _model.PlaceTower(1,1, TowerType.Gold));
+            Assert.Throws<SVsIModelException>(() => _model.PlaceTower(1,1, TowerType.Heal));
 
             // Támadó torony beszúrása sikeres.
             _model.Money = damageTowerCost;
-            Assert.True(_model.PlaceTower(1,1, TowerType.Damage));
+            _model.PlaceTower(1,1, TowerType.Damage);
             Assert.True(_model.Towers[1,1] is SVsIDamageTower);
 
             // Termelő torony beszúrása sikeres.

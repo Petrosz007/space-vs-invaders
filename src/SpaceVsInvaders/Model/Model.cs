@@ -5,6 +5,12 @@ using SpaceVsInvaders.Model.Enemies;
 
 namespace SpaceVsInvaders.Model
 {
+    public class SVsIModelException : Exception 
+    {
+        public SVsIModelException(string message)
+            : base(message) 
+        {}
+    }
     public enum TowerType
     {
         Damage,
@@ -382,68 +388,46 @@ namespace SpaceVsInvaders.Model
         /// <summary>
         /// Ha a játékosnak van elég pénze, akkor a kiválasztot tornyot fejleszti.
         /// </summary>
-        public bool UpgradeTower(int row, int col)
+        public void UpgradeTower(int row, int col)
         {
-            var tower = Towers[row, col];
-            int upgradeCost = tower.Cost + tower.Level * 50;
+            var tower = Towers[row, col] ?? throw new SVsIModelException("No tower selected.");
 
-            if(Money >= upgradeCost)
+            if(Money >= tower.UpgradeCost)
             {
                 TowerUpdates++;
-                Money -= upgradeCost;
-                tower.Health += 50;
-                tower.MaxHealth += 50;
-                tower.Level++;
-                return true;
+                Money -= tower.UpgradeCost;
+                tower.Upgrade();
             }
-
-            return false;
+            else
+            {
+                throw new SVsIModelException("No money for the upgrade.");
+            }
         }
 
         /// <summary>
         /// Ha a játékosnak van elég pénze, akkor lerak egy előre kiválaszott típusú tornyot a kiválasztott mezőre.
         /// </summary>
-        public bool PlaceTower(int row, int col, TowerType type)
+        public void PlaceTower(int row, int col, TowerType type)
         {
-            int damageCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
-            int goldCost   = Config.GetValue<TowerConfig>("GoldTower").Cost;
-            int healCost   = Config.GetValue<TowerConfig>("HealTower").Cost;
+            if(Towers[row, col] != null) 
+                throw new SVsIModelException("Tower already there.");
 
-            switch(type)
+            SVsITower tower = type switch
             {
-                // TODO: a tornyoknal van kulon cost propertyjuk
-                case TowerType.Damage:
-                    if(Money >= damageCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
-                    {
-                        TowerCounter++;
-                        Money -= damageCost;
-                        Towers[row,col] = new SVsIDamageTower();
-                        return true;
-                    }
-                    return false;
+                TowerType.Damage => new SVsIDamageTower(),
+                TowerType.Gold   => new SVsIGoldTower(),
+                TowerType.Heal   => new SVsIHealTower(),
+            };
 
-                case TowerType.Gold:
-                    if(Money >= goldCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
-                    {
-                        TowerCounter++;
-                        Money -= goldCost;
-                        Towers[row,col] = new SVsIGoldTower();
-                        return true;
-                    }
-                    return false;
-
-                case TowerType.Heal:
-                     if(Money >= healCost) // ezt majd ki kell cserélni a config-ből kiolvasott értékekre!!!
-                    {
-                        TowerCounter++;
-                        Money -= healCost;
-                        Towers[row,col] = new SVsIHealTower();
-                        return true;
-                    }
-                    return false;
-
-                default:
-                    return false;
+            if(Money >= tower.Cost)
+            {
+                TowerCounter++;
+                Money -= tower.Cost;
+                Towers[row,col] = tower;
+            }
+            else
+            {
+                throw new SVsIModelException("Not enough money for new tower.");
             }
         }
 
@@ -452,7 +436,9 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         public void SellTower(int row, int col)
         {
-            Money += Towers[row, col].Cost/2;
+            var tower = Towers[row, col] ?? throw new SVsIModelException("No tower selected.");
+
+            Money += tower.Cost/2;
             Towers[row, col] = null;
             TowerCounter--;
         }
@@ -470,19 +456,19 @@ namespace SpaceVsInvaders.Model
         /// <summary>
         /// Ha van elég pénze a játékosnak, akkor fejleszti a kastélyt. (Ha sikeres a fejlesztés akkor igazat ad vissza.)
         /// </summary>
-        public bool UpgradeCastle()
+        public void UpgradeCastle()
         {
             int upgradeCost = Castle.UpgradeCost * Castle.Level;
 
-            if(Money >= upgradeCost)
+            if(Money >= Castle.CurrentUpgradeCost)
             {
-                Money -= upgradeCost;
-                Castle.Level += 1;
-                Castle.Health += Castle.Level * 10;
-                return true;
+                Money -= Castle.CurrentUpgradeCost;
+                Castle.Upgrade();
             }
-            
-            return false;
+            else
+            {
+                throw new SVsIModelException("No money for castle upgrade.");
+            }
         }
 
          /// <summary>

@@ -52,7 +52,7 @@ namespace SpaceVsInvaders.Model
         public bool IsGameOver { get; private set; }
 
         public WaveSpawner WS;
-        public bool IsSpawningEnemies { get; private set; }
+        public bool IsSpawningEnemies { get; set; }
 
 #region Events
         public event EventHandler<SVsIEventArgs> EnemyMoved;
@@ -188,7 +188,7 @@ namespace SpaceVsInvaders.Model
         {
             for(int i = row-1; i >= 0; i--)
             {
-                if (Enemies[i,col].Count != 0 && Towers[row,col].Range >= row-1-i)
+                if (Enemies[i,col].Count != 0 && Towers[row,col].Range > row-1-i)
                 {
                     if(Towers[row, col] is SVsIDamageTower damageTower)
                         {
@@ -343,7 +343,7 @@ namespace SpaceVsInvaders.Model
 
         public void NewGame(int rows, int cols) 
         {
-            Money = 0;
+            //Money = 0;
             SecondsElapsed = 0;
             Castle = new SVsICastle();
             Rows = rows;
@@ -364,24 +364,17 @@ namespace SpaceVsInvaders.Model
             /// Amikor a var eletereje 0-ra csokkent mar
             /// </remarks>
             if (Castle.Health == 0)
+            {
                 IsGameOver = true;
+                onGameOver();
+            }
 
             /// <remarks>
-            /// Amikor az ellenseg kozvetlenul a var elott van, es a kovetkezo lepesevel belepne a varba
+            /// Amikor lejart az ido
             /// </remarks>
-            for (int j = 0; j < Cols; j++)
+            if (SecondsElapsed * Config.GetValue<double>("TickTime") ==  Config.GetValue<double>("RoundTime"))
             {
-                if (Enemies[Rows-1,j] != null)
-                {
-                    foreach(SVsIEnemy e in Enemies[Rows-1,j])
-                    {
-                        if (SecondsElapsed % e.Movement == 0)
-                        {
-                            IsGameOver = true;
-                            onGameOver();
-                        }
-                    }
-                }
+                onGameOver();
             }
         }
 
@@ -590,5 +583,8 @@ namespace SpaceVsInvaders.Model
 
             Enemies[row,col].Add(enemyToPlace);
         }
+
+
+
     }
 }

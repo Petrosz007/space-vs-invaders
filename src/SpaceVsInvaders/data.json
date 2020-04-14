@@ -1,6 +1,7 @@
 {
+    "RoundTime": 3,
     "TickTime": 0.6,
-    "StartingMoney": 40000,
+    "StartingMoney": 1500,
     "Rows": 12,
     "Cols": 6,
     "ShotSpeed": 0.3,

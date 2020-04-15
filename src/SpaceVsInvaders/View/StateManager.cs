@@ -15,6 +15,8 @@ namespace SpaceVsInvaders.View
 
         public SVsITower SelectedTower { get; private set; }
         public (int, int) SelectedPos { get; private set; }
+        public bool GameOver { get; private set; }
+        public bool Victory { get; private set; }
 
         public event EventHandler OpenPauseMenu;
 
@@ -25,6 +27,8 @@ namespace SpaceVsInvaders.View
 
             PlacingTower = false;
             SelectedPos = (0,0);
+            GameOver = false;
+            Victory = false;
         }
 
         public void HandleNewTowerType(TowerType type)
@@ -126,6 +130,12 @@ namespace SpaceVsInvaders.View
             {
                 HandleTileClicked(this, SelectedPos);
             }
+        }
+
+        public void HandleGameOver(object sender, bool victory)
+        {
+            GameOver = true;
+            Victory = victory;
         }
     }
 }

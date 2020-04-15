@@ -6,15 +6,18 @@ namespace SpaceVsInvaders.View.Components
 {
     public class BuyPanel : BasePanel
     {
+        private StateManager stateManager;
         private SpriteFont font;
 
         public Button DamageTowerButton { get; private set; }
         public Button GoldTowerButton { get; private set; }
         public Button HealTowerButton { get; private set; }
 
-        public BuyPanel(Vector2 position, int height, int width)
+        public BuyPanel(Vector2 position, int height, int width, StateManager stateManager)
             : base(position, height, width)
         {
+            this.stateManager = stateManager;
+
             font = ContentLoader.GetFont("Fonts/InfoFont");
 
             DamageTowerButton = new Button(new Vector2(PanelX + 60, PanelY), 50, PanelWidth - 60, $"Damage ${Config.GetValue<TowerConfig>("DamageTower").Cost}");
@@ -24,6 +27,8 @@ namespace SpaceVsInvaders.View.Components
 
         public override void Update(GameTime gameTime)
         {
+            if(stateManager.GameOver) return;
+
             base.Update(gameTime);
 
             DamageTowerButton.Update(gameTime);

@@ -15,6 +15,7 @@ namespace SpaceVsInvaders
     {
         Game,
         Pause,
+        MainMenu,
     }
     /// <summary>
     /// This is the main type for your game.
@@ -65,21 +66,28 @@ namespace SpaceVsInvaders
             ContentLoader.AttachGraphicsDevice(GraphicsDevice);
             ContentLoader.LoadContent(Content);
 
+            var mainMenuScene = new MainMenuScene(Window.ClientBounds.Width, Window.ClientBounds.Height);
+            mainMenuScene.NewGame += new EventHandler<Difficulty>(HandleNewGame);
+            mainMenuScene.Exit += new EventHandler((o, e) => Exit());
             
             var gameScene = new GameScene(Window.ClientBounds.Width, Window.ClientBounds.Height);
             gameScene.OpenPauseMenu += new EventHandler((o, e) => activeScene = SceneType.Pause);
+            gameScene.ExitToMainMenu += new EventHandler((o, e) => activeScene = SceneType.MainMenu);
+            gameScene.NewGame(Difficulty.Normal);
 
             var pauseScene = new PauseScene(Window.ClientBounds.Width, Window.ClientBounds.Height);
             pauseScene.Resume += new EventHandler((o, e) => activeScene = SceneType.Game);
+            pauseScene.ExitToMainMenu += new EventHandler((o, e) => activeScene = SceneType.MainMenu);
             pauseScene.Exit += new EventHandler((o, e) => Exit());
 
             scenes = new Dictionary<SceneType, Scene>
             {
+                { SceneType.MainMenu, mainMenuScene },
                 { SceneType.Game, gameScene },
                 { SceneType.Pause, pauseScene },
             };
 
-            activeScene = SceneType.Game;
+            activeScene = SceneType.MainMenu;
 
             cursor = new Cursor(new Vector2(0,0), 35, 35);
 
@@ -134,9 +142,10 @@ namespace SpaceVsInvaders
             base.Draw(gameTime);
         }
 
-        private void HandleOpenPauseMenu(object sender, EventArgs args)
+        private void HandleNewGame(object sender, Difficulty difficulty)
         {
-            activeScene = SceneType.Pause;
+            ((GameScene) scenes[SceneType.Game]).NewGame(difficulty);
+            activeScene = SceneType.Game;
         }
     }
 }

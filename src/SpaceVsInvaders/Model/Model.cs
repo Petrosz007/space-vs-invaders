@@ -59,7 +59,7 @@ namespace SpaceVsInvaders.Model
         public event EventHandler<SVsIEventArgs> TowerHasAttacked;
         public event EventHandler<SVsIEventArgs> EnemyDead;
         public event EventHandler<SVsIEventArgs> TowerDestroyed;
-        public event EventHandler<SVsIEventArgs> GameOver;
+        public event EventHandler<bool> GameOver;
         public event EventHandler<SVsIEventArgs> EnemyMovedToCastle;
         public event EventHandler<SVsIEventArgs> HealingCatastrophe;
         public event EventHandler<SVsIEventArgs> AsteroidCatastrophe;
@@ -92,11 +92,12 @@ namespace SpaceVsInvaders.Model
                 EnemyDead(this, new SVsIEventArgs(whereX, whereY));
             }
         }
-        public void onGameOver()
+        public void onGameOver(bool victory)
         {
+            IsGameOver = true;
             if(GameOver != null)
             {
-                GameOver(this, new SVsIEventArgs(true));
+                GameOver(this, victory);
             }
         }
         public void onEnemyMovedToCastle(int whereX, int whereY, EnemyType type)
@@ -363,18 +364,18 @@ namespace SpaceVsInvaders.Model
             /// <remarks>
             /// Amikor a var eletereje 0-ra csokkent mar
             /// </remarks>
-            if (Castle.Health == 0)
+            if (Castle.Health <= 0)
             {
-                IsGameOver = true;
-                onGameOver();
+                // IsGameOver = true;
+                onGameOver(false);
             }
 
             /// <remarks>
             /// Amikor lejart az ido
             /// </remarks>
-            if (SecondsElapsed * Config.GetValue<double>("TickTime") ==  Config.GetValue<double>("RoundTime"))
+            if (SecondsElapsed * Config.GetValue<double>("TickTime") >=  Config.GetValue<double>("RoundTime"))
             {
-                onGameOver();
+                onGameOver(true);
             }
         }
 

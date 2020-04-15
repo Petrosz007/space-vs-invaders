@@ -7,27 +7,36 @@ namespace SpaceVsInvaders.View.Components
     public class InfoPanel : BasePanel
     {
         private SVsIModel model;
+        private StateManager stateManager;
         private SpriteFont font;
-        private int minutesElapsed;
-        private int secondsElapsed;
+        private double secondsElapsed;
+        private int seconds;
+        private int minutes;
 
         public Button UpgradeCastleButton { get; private set; }
 
-        public InfoPanel(Vector2 position, int height, int width, SVsIModel model)
+        public InfoPanel(Vector2 position, int height, int width, SVsIModel model, StateManager stateManager)
             : base(position, height, width)
         {
             this.model = model;
+            this.stateManager = stateManager;
             font = ContentLoader.GetFont("Fonts/InfoFont");
 
             UpgradeCastleButton = new Button(new Vector2(PanelX, PanelY + 140), 50, PanelWidth, "Upgrade Castle $0");
+
+            secondsElapsed = 0;
         }
 
         public override void Update(GameTime gameTime)
         {
+            if(stateManager.GameOver) return;
+            
             base.Update(gameTime);
 
-            minutesElapsed = (int)gameTime.TotalGameTime.Minutes;
-            secondsElapsed = (int)gameTime.TotalGameTime.Seconds;
+            secondsElapsed += gameTime.ElapsedGameTime.TotalSeconds;
+
+            seconds = (int) secondsElapsed % 60;
+            minutes = (int) (secondsElapsed / 60) % 60;
 
             UpgradeCastleButton.UpdateText($"Upgrade Castle ${model.Castle.CurrentUpgradeCost}");
             UpgradeCastleButton.Update(gameTime);
@@ -36,7 +45,7 @@ namespace SpaceVsInvaders.View.Components
         {
             base.Draw(spriteBatch);
 
-            spriteBatch.DrawString(font, $"Time: {minutesElapsed.ToString().PadLeft(2, '0')}:{secondsElapsed.ToString().PadLeft(2, '0')}", 
+            spriteBatch.DrawString(font, $"Time: {minutes.ToString().PadLeft(2, '0')}:{seconds.ToString().PadLeft(2, '0')}", 
                 new Vector2(PanelX, PanelY), Color.White);
             spriteBatch.DrawString(font, $"Money: {model.Money}", new Vector2(PanelX, PanelY + 30), Color.White);
             spriteBatch.DrawString(font, $"Castle Level: {model.Castle.Level}", new Vector2(PanelX, PanelY + 60), Color.White);

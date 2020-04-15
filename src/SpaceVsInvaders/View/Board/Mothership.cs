@@ -6,19 +6,24 @@ namespace SpaceVsInvaders.View.Boards
 {
     public class Mothership : Component
     {
+        private StateManager stateManager;
         private Texture2D texture;
         private double currXOffset;
         private bool goingRight;
         private int scaledWidth;
-        public Mothership(Vector2 position, int height, int width)
+        public Mothership(Vector2 position, int height, int width, StateManager stateManager)
             : base(position, height, width)
         {
+            this.stateManager = stateManager;
+
             texture = ContentLoader.GetTexture("SvsI_SPrites/enemybase");
             scaledWidth = (int) (texture.Width * (height / (double) texture.Height));
         }
 
         public override void Update(GameTime gameTime)
         {
+            if(stateManager.GameOver) return;
+            
             const int pixelPerSec = 400;
             double currMove = pixelPerSec * gameTime.ElapsedGameTime.TotalSeconds;
             if(!goingRight) currMove = -1 * currMove;

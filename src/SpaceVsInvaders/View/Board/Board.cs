@@ -54,7 +54,7 @@ namespace SpaceVsInvaders.View.Boards
         {
             foreach (var tile in tiles)
             {
-                tile.Draw(spriteBatch);
+                tile?.Draw(spriteBatch);
             }
 
             if(stateManager.PlacingTower)
@@ -90,6 +90,8 @@ namespace SpaceVsInvaders.View.Boards
 
         public override void Update(GameTime gameTime)
         {
+            if(stateManager.GameOver) return;
+            
             ShotAnimator.Update(gameTime);
             CatastropheAnimator.Update(gameTime);
 

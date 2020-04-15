@@ -11,12 +11,15 @@ using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Scenes
 {
+    public enum Difficulty { Normal, Hard }
+
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
     public class GameScene : Scene
-    {
+    {        
         public event EventHandler OpenPauseMenu;
+        public event EventHandler ExitToMainMenu;
         private readonly double TickTime = Config.GetValue<double>("TickTime");
         private SVsIModel model;
         private StateManager stateManager;
@@ -34,11 +37,7 @@ namespace SpaceVsInvaders.View.Scenes
         {
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        public override void LoadContent()
+        public void NewGame(Difficulty difficulty)
         {
             prevSecond = 0;
 
@@ -57,10 +56,7 @@ namespace SpaceVsInvaders.View.Scenes
             stateManager = new StateManager(model, Err);
             stateManager.OpenPauseMenu += new EventHandler((o, e) => OpenPauseMenu?.Invoke(o, e));
 
-            background = ContentLoader.GetTexture("Backgrounds/background");
-
-
-            BuyPanel buyPanel = new BuyPanel(new Vector2(Width - panelsWidth, 0), Height / 3, panelsWidth);
+            BuyPanel buyPanel = new BuyPanel(new Vector2(Width - panelsWidth, 0), Height / 3, panelsWidth, stateManager);
             buyPanel.DamageTowerButton.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Damage));
             buyPanel.GoldTowerButton.LeftClicked   += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Gold));
             buyPanel.HealTowerButton.LeftClicked   += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Heal));
@@ -71,8 +67,9 @@ namespace SpaceVsInvaders.View.Scenes
             model.TowerHasAttacked += new EventHandler<SVsIEventArgs>(board.ShotAnimator.HandleNewShot);
             model.AsteroidCatastrophe += new EventHandler<SVsIEventArgs>(board.CatastropheAnimator.HandleAsteroids);
             model.HealingCatastrophe += new EventHandler<SVsIEventArgs>(board.CatastropheAnimator.HandleHealing);
+            model.GameOver += new EventHandler<bool>(stateManager.HandleGameOver);
 
-            InfoPanel infoPanel = new InfoPanel(new Vector2(Width - panelsWidth, Height * 2/3), Height / 3, panelsWidth, model);
+            InfoPanel infoPanel = new InfoPanel(new Vector2(Width - panelsWidth, Height * 2/3), Height / 3, panelsWidth, model, stateManager);
             infoPanel.UpgradeCastleButton.LeftClicked += new EventHandler(stateManager.HandleCastleUpgradeClicked);
 
             TowerInfo towerInfo = new TowerInfo(new Vector2(Width - panelsWidth, Height * 1/3), Height / 3, panelsWidth, stateManager, model);
@@ -81,7 +78,10 @@ namespace SpaceVsInvaders.View.Scenes
 
             UnderCursorTower underCursorTower = new UnderCursorTower(new Vector2(0,0), 50, 50, stateManager);
 
-            Mothership mothership = new Mothership(new Vector2(0,0), spawnHeight, boardWidth);
+            Mothership mothership = new Mothership(new Vector2(0,0), spawnHeight, boardWidth, stateManager);
+
+            GameOverPanel gameOverPanel = new GameOverPanel(new Vector2((Width - 300)/2, (Height - 300)/2), 300, 300, stateManager);
+            gameOverPanel.MainMenuButton.LeftClicked += new EventHandler((o, e) => ExitToMainMenu?.Invoke(o, e));
 
             components = new List<Component>
             {
@@ -91,11 +91,83 @@ namespace SpaceVsInvaders.View.Scenes
                 towerInfo,
                 mothership,
                 buyPanel,
+                gameOverPanel,
                 underCursorTower,
             };
       
             keyboardHandler = new KeyboardHandler();
             keyboardHandler.KeyPressed += new EventHandler<Keys>(HandleKeyPress);
+        }
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        public override void LoadContent()
+        {
+            background = ContentLoader.GetTexture("Backgrounds/background");
+
+            // prevSecond = 0;
+
+            // model = new SVsIModel();
+            // model.NewGame(Config.GetValue<int>("Rows"), Config.GetValue<int>("Cols"));
+            
+            // model.Money = Config.GetValue<int>("StartingMoney");
+
+            // boardWidth = Width * 80 / 100;
+            // panelsWidth = Width * 20 / 100;
+            // int spawnHeight = 100;
+
+
+            // ErrorDisplay Err = new ErrorDisplay(new Vector2(Width/2-200, 100),300,500);
+
+            // stateManager = new StateManager(model, Err);
+            // stateManager.OpenPauseMenu += new EventHandler((o, e) => OpenPauseMenu?.Invoke(o, e));
+
+            // background = ContentLoader.GetTexture("Backgrounds/background");
+
+
+            // BuyPanel buyPanel = new BuyPanel(new Vector2(Width - panelsWidth, 0), Height / 3, panelsWidth, stateManager);
+            // buyPanel.DamageTowerButton.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Damage));
+            // buyPanel.GoldTowerButton.LeftClicked   += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Gold));
+            // buyPanel.HealTowerButton.LeftClicked   += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Heal));
+
+            
+            // board = new Board(new Vector2(0, spawnHeight), Height - spawnHeight * 2, boardWidth, model, stateManager);
+            // board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
+            // model.TowerHasAttacked += new EventHandler<SVsIEventArgs>(board.ShotAnimator.HandleNewShot);
+            // model.AsteroidCatastrophe += new EventHandler<SVsIEventArgs>(board.CatastropheAnimator.HandleAsteroids);
+            // model.HealingCatastrophe += new EventHandler<SVsIEventArgs>(board.CatastropheAnimator.HandleHealing);
+            // model.GameOver += new EventHandler<bool>(stateManager.HandleGameOver);
+
+            // InfoPanel infoPanel = new InfoPanel(new Vector2(Width - panelsWidth, Height * 2/3), Height / 3, panelsWidth, model, stateManager);
+            // infoPanel.UpgradeCastleButton.LeftClicked += new EventHandler(stateManager.HandleCastleUpgradeClicked);
+
+            // TowerInfo towerInfo = new TowerInfo(new Vector2(Width - panelsWidth, Height * 1/3), Height / 3, panelsWidth, stateManager, model);
+            // towerInfo.UpgradeButton.LeftClicked += new EventHandler(stateManager.HandleTowerUpgradeClicked);
+            // towerInfo.SellButton.LeftClicked += new EventHandler(stateManager.HandleTowerSellClicked);
+
+            // UnderCursorTower underCursorTower = new UnderCursorTower(new Vector2(0,0), 50, 50, stateManager);
+
+            // Mothership mothership = new Mothership(new Vector2(0,0), spawnHeight, boardWidth, stateManager);
+
+            // GameOverPanel gameOverPanel = new GameOverPanel(new Vector2((Width - 300)/2, (Height - 300)/2), 300, 300, stateManager);
+            // gameOverPanel.MainMenuButton.LeftClicked += new EventHandler((o, e) => ExitToMainMenu?.Invoke(o, e));
+
+            // components = new List<Component>
+            // {
+            //     board,
+            //     Err,
+            //     infoPanel,
+            //     towerInfo,
+            //     mothership,
+            //     buyPanel,
+            //     gameOverPanel,
+            //     underCursorTower,
+            // };
+      
+            // keyboardHandler = new KeyboardHandler();
+            // keyboardHandler.KeyPressed += new EventHandler<Keys>(HandleKeyPress);
         }
 
         /// <summary>
@@ -146,9 +218,8 @@ namespace SpaceVsInvaders.View.Scenes
 
         private void HandleTick(double currentSeconds)
         {
-            if (currentSeconds > prevSecond + TickTime)
+            if (currentSeconds > prevSecond + TickTime && !stateManager.GameOver)
             {
-                // TODO: call this when it isn't buggy
                 model.HandleTick();
                 prevSecond = currentSeconds;
             }
@@ -156,6 +227,8 @@ namespace SpaceVsInvaders.View.Scenes
 
         private void HandleKeyPress(object sender, Keys key)
         {
+            if(stateManager.GameOver) return;
+
             switch(key)
             {
                 case Keys.Escape:

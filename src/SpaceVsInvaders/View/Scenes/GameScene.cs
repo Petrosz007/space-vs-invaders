@@ -39,6 +39,11 @@ namespace SpaceVsInvaders.View.Scenes
 
         public void NewGame(Difficulty difficulty)
         {
+            var configPath = difficulty switch {
+                Difficulty.Normal => "normal.json",
+                Difficulty.Hard => "hard.json",
+            };
+            Config.Initiate(configPath);
             prevSecond = 0;
 
             model = new SVsIModel();

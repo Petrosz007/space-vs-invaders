@@ -14,7 +14,7 @@ namespace SpaceVsInvaders.Tests
 
         public UnitTest1()
         {
-            Config.Initiate();
+            Config.Initiate("normal.json");
         }
 
         [Fact]
@@ -228,17 +228,17 @@ namespace SpaceVsInvaders.Tests
 
             var healTower = (SVsIHealTower) _model.Towers[4, 3];
 
-            Assert.True(_model.Towers[4,3].Health == healTowerHealth + healTower.Heal());
-            Assert.True(_model.Towers[3,3].Health == damageTowerHealth + healTower.Heal());
-            Assert.True(_model.Towers[5,3].Health == goldTowerHealth + healTower.Heal());
+            Assert.True(_model.Towers[4,3].Health == healTowerHealth + healTower.Heal() || _model.Towers[4,3].Health == _model.Towers[4,3].MaxHealth);
+            Assert.True(_model.Towers[3,3].Health == damageTowerHealth + healTower.Heal() || _model.Towers[3,3].Health == _model.Towers[3,3].MaxHealth);
+            Assert.True(_model.Towers[5,3].Health == goldTowerHealth + healTower.Heal() || _model.Towers[5,3].Health == _model.Towers[5,3].MaxHealth);
 
             // Négy időegységenként gyógyít.
             _model.HandleTick();
             _model.HandleTick();
             _model.HandleTick();
             _model.HandleTick();
-            Assert.True(_model.Towers[3,3].Health == damageTowerHealth + 2 * healTower.Heal());
-            Assert.True(_model.Towers[5,3].Health == goldTowerHealth + 2 * healTower.Heal());
+            Assert.True(_model.Towers[3,3].Health == damageTowerHealth + 2 * healTower.Heal() || _model.Towers[3,3].Health == _model.Towers[3,3].MaxHealth);
+            Assert.True(_model.Towers[5,3].Health == goldTowerHealth + 2 * healTower.Heal() || _model.Towers[5,3].Health == _model.Towers[5,3].MaxHealth);
 
 
             // Mindenkit meggyógyít önmaga 3x3-as környezetében.
@@ -256,14 +256,14 @@ namespace SpaceVsInvaders.Tests
             healTower = (SVsIHealTower) _model.Towers[6, 6];
             
             _model.HandleTick();
-            Assert.True(_model.Towers[5,5].Health == damageTowerHealth + healTower.Heal());
-            Assert.True(_model.Towers[5,6].Health == damageTowerHealth + healTower.Heal());
-            Assert.True(_model.Towers[5,7].Health == goldTowerHealth + healTower.Heal());
-            Assert.True(_model.Towers[6,5].Health == damageTowerHealth + healTower.Heal());
-            Assert.True(_model.Towers[6,7].Health == damageTowerHealth + healTower.Heal());
-            Assert.True(_model.Towers[7,5].Health == goldTowerHealth + healTower.Heal());
-            Assert.True(_model.Towers[7,6].Health == damageTowerHealth + healTower.Heal());
-            Assert.True(_model.Towers[7,7].Health == damageTowerHealth + healTower.Heal());
+            Assert.True(_model.Towers[5,5].Health == damageTowerHealth + healTower.Heal() || _model.Towers[5,5].Health == _model.Towers[5,5].MaxHealth);
+            Assert.True(_model.Towers[5,6].Health == damageTowerHealth + healTower.Heal() || _model.Towers[5,6].Health == _model.Towers[5,6].MaxHealth);
+            Assert.True(_model.Towers[5,7].Health == goldTowerHealth + healTower.Heal()   || _model.Towers[5,7].Health == _model.Towers[5,7].MaxHealth);
+            Assert.True(_model.Towers[6,5].Health == damageTowerHealth + healTower.Heal() || _model.Towers[6,5].Health == _model.Towers[6,5].MaxHealth);
+            Assert.True(_model.Towers[6,7].Health == damageTowerHealth + healTower.Heal() || _model.Towers[6,7].Health == _model.Towers[6,7].MaxHealth);
+            Assert.True(_model.Towers[7,5].Health == goldTowerHealth + healTower.Heal()   || _model.Towers[7,5].Health == _model.Towers[7,5].MaxHealth);
+            Assert.True(_model.Towers[7,6].Health == damageTowerHealth + healTower.Heal() || _model.Towers[7,6].Health == _model.Towers[7,6].MaxHealth);
+            Assert.True(_model.Towers[7,7].Health == damageTowerHealth + healTower.Heal() || _model.Towers[7,7].Health == _model.Towers[7,7].MaxHealth);
             
 
             // Egy tornyot több különböző torony is tud gyógyítani egyszerre.
@@ -280,7 +280,8 @@ namespace SpaceVsInvaders.Tests
 
             _model.PlaceTower(0,6, TowerType.Gold);
             _model.HandleTick();
-            Assert.True(_model.Towers[0,6].Health == goldTowerHealth + healTower1.Heal() + healTower2.Heal() + healTower3.Heal());
+            Assert.True(_model.Towers[0,6].Health == goldTowerHealth + healTower1.Heal() + healTower2.Heal() + healTower3.Heal() ||
+                _model.Towers[0,6].Health == _model.Towers[0,6].MaxHealth);
         }
 
         [Fact]

@@ -8,10 +8,12 @@ namespace SpaceVsInvaders
     public static class Config
     {
         public static IConfiguration Configuration { get; set; }
-        public static void Initiate()
+        public static void Initiate(string file)
         {
+            var dataDir = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "data");
+
             Configuration = new ConfigurationBuilder()
-                .AddJsonFile(Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "data.json"))
+                .AddJsonFile(Path.Combine(dataDir, file))
                 .Build();
         }
         public static T GetValue<T>(string key) =>

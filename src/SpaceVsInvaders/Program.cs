@@ -12,7 +12,7 @@ namespace SpaceVsInvaders
         [STAThread]
         static void Main()
         {
-            Config.Initiate();
+            Config.Initiate("normal.json");
 
 
             EnemyConfig enemy = Config.GetValue<EnemyConfig>("BuffEnemy");

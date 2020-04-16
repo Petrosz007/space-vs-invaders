@@ -22,6 +22,8 @@ namespace SpaceVsInvaders.View.Components
 
         public override void Update(GameTime gameTime)
         {
+            if(!stateManager.GameOver) return;
+            
             MainMenuButton.Update(gameTime);
         }
 

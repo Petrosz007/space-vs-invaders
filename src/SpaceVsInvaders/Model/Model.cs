@@ -139,7 +139,7 @@ namespace SpaceVsInvaders.Model
             SecondsElapsed += 1;
             if(SecondsElapsed % 20 == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
             {
-                WS.SpawnEnemies(SecondsElapsed, Cols, TowerCounter,TowerUpdates);
+                WS.SpawnEnemies(SecondsElapsed, Cols, TowerCounter,TowerUpdates,ThreeMinutesPassed);
             }
             if (SecondsElapsed % 180 == 0)
             {

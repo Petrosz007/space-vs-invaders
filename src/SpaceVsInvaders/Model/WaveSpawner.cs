@@ -30,9 +30,9 @@ namespace SpaceVsInvaders.Model
             return EnemiesToSpawn.Count != 0;
         }
 
-        public void SpawnEnemies(int time, int col , int towercount, int towerupdates) // határértékeket majd config fájlból
+        public void SpawnEnemies(int time, int col , int towercount, int towerupdates, int threeminutes) // határértékeket majd config fájlból
         {
-            int value = time * 5 + col * 50 + towercount*10 + towerupdates*5;
+            int value = time * 5 + col * 50 + towercount*10 + towerupdates*5 + 550*threeminutes;
             Random rnd = new Random();
             int number = 0;
 
@@ -45,28 +45,28 @@ namespace SpaceVsInvaders.Model
                     if(number <= 10) EnemiesToSpawn.Enqueue(EnemyType.Normal);
                     if(number > 10 && number <= 55) EnemiesToSpawn.Enqueue(EnemyType.Buff);
                     if(number > 55) EnemiesToSpawn.Enqueue(EnemyType.Speedy);
-                    value -= 800;
+                    value -= 600;
                 }
                 else if(value >= 5000)
                 {
                     if(number <= 30) EnemiesToSpawn.Enqueue(EnemyType.Normal);
                     if(number > 30 && number <= 65) EnemiesToSpawn.Enqueue(EnemyType.Buff);
                     if(number > 65) EnemiesToSpawn.Enqueue(EnemyType.Speedy);
-                    value -= 700;
+                    value -= 500;
                 }
                 else if(value >= 2500)
                 {
                     if(number <= 50) EnemiesToSpawn.Enqueue(EnemyType.Normal);
                     if(number > 50 && number <= 75) EnemiesToSpawn.Enqueue(EnemyType.Buff);
                     if(number > 75) EnemiesToSpawn.Enqueue(EnemyType.Speedy);
-                    value -= 500;
+                    value -= 400;
                 }
                 else if(value >= 1000)
                 {
                     if(number <= 75) EnemiesToSpawn.Enqueue(EnemyType.Normal);
                     if(number > 75 && number <= 86) EnemiesToSpawn.Enqueue(EnemyType.Buff);
                     if(number > 86) EnemiesToSpawn.Enqueue(EnemyType.Speedy);
-                    value -= 250;
+                    value -= 200;
                 }
                 else if(value >= 100)
                 {

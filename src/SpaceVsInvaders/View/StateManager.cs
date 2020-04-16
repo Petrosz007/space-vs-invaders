@@ -119,7 +119,7 @@ namespace SpaceVsInvaders.View
                 Keys.Right => (SelectedPos.Item1, SelectedPos.Item2 + 1),
             };
 
-            if(row < 0 || col < 0 || row >= model.Rows || col >= model.Rows) return;
+            if(row < 0 || col < 0 || row >= model.Rows || col >= model.Cols) return;
 
             SelectedPos = (row, col);
         }

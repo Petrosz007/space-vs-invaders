@@ -34,6 +34,7 @@ namespace SpaceVsInvaders.Model
     {
         public int Money { get; set; }
         public int SecondsElapsed { get; private set; }
+        public int ThreeMinutesPassed { get; private set; }
         public int TowerCounter { get; private set; }
         public int TowerUpdates { get; private set; }
         
@@ -129,6 +130,7 @@ namespace SpaceVsInvaders.Model
             WS = new WaveSpawner();
             IsSpawningEnemies = true;
             TowerCounter = 0;
+            ThreeMinutesPassed = 0;
         }
 
         public void HandleTick()
@@ -138,6 +140,10 @@ namespace SpaceVsInvaders.Model
             if(SecondsElapsed % 20 == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
             {
                 WS.SpawnEnemies(SecondsElapsed, Cols, TowerCounter,TowerUpdates);
+            }
+            if (SecondsElapsed % 180 == 0)
+            {
+                ThreeMinutesPassed++;
             }
 
             //? Lehet hogy vissza kell cserélni a sorrendet ha bugos
@@ -312,30 +318,33 @@ namespace SpaceVsInvaders.Model
                             }
                         }   
                     }
-            if(WS.AreEnemiesLeft() && SecondsElapsed % 3 == 0) // itt kell megadni, hány másodpercenként jelenjenek meg, hogy az előző adag elmozduljon, mire ez bejátszódik
+            for(int k = 0; k < 1 + ThreeMinutesPassed; k++)
             {
-                List<EnemyType> tmp = new List<EnemyType>(); // ez innen eltűnik? xd
-                tmp = WS.GetSpawnedEnemies(Cols);
-
-                if(tmp.Count > Cols-1)
+                if(WS.AreEnemiesLeft() && SecondsElapsed % 3 == 0) // itt kell megadni, hány másodpercenként jelenjenek meg, hogy az előző adag elmozduljon, mire ez bejátszódik
                 {
-                    int i = 0;
-                    while(tmp.Count > i && i < Cols)
+                    List<EnemyType> tmp = new List<EnemyType>(); // ez innen eltűnik? xd
+                    tmp = WS.GetSpawnedEnemies(Cols);
+
+                    if(tmp.Count > Cols-1)
                     {
-                        WhichEnemy(tmp[i], i);
-                        i++;
-                    }
-                }else{
-                    HashSet<int> ind = new HashSet<int>();
-                    ind.Clear();
-                    for(int j = 0; j < Cols; j++) ind.Add(j);
-                    Random rnd = new Random();
-                    int i = 0;
-                    while(tmp.Count > i && i < Cols)
-                    {
-                        int szam = rnd.Next(ind.Count);
-                        WhichEnemy(tmp[i], szam);
-                        i++;
+                        int i = 0;
+                        while(tmp.Count > i && i < Cols)
+                        {
+                            WhichEnemy(tmp[i], i);
+                            i++;
+                        }
+                    }else{
+                        HashSet<int> ind = new HashSet<int>();
+                        ind.Clear();
+                        for(int j = 0; j < Cols; j++) ind.Add(j);
+                        Random rnd = new Random();
+                        int i = 0;
+                        while(tmp.Count > i && i < Cols)
+                        {
+                            int szam = rnd.Next(ind.Count);
+                            WhichEnemy(tmp[i], szam);
+                            i++;
+                        }
                     }
                 }
             }
@@ -472,7 +481,7 @@ namespace SpaceVsInvaders.Model
         {
             Random rnd = new Random();
             int szam = rnd.Next(200);
-            if (szam < 10)
+            if (szam < 4)
             {
                 for (int j = 0; j < 3; j++)
                 {
@@ -482,7 +491,7 @@ namespace SpaceVsInvaders.Model
                     onAsteroidCatastrophe(tmp.X, tmp.Y);
                 }
             }
-            else if (szam > 190)
+            else if (szam > 196)
             {
                     for (int j = 0; j < 3; j++)
                 {

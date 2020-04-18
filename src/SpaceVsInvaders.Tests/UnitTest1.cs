@@ -307,6 +307,7 @@ namespace SpaceVsInvaders.Tests
             _model.HandleTick();
             _model.HandleTick();
 
+            // a BuffEnemy és a NormalEnemy is mozgott előre
             Assert.True(_model.Enemies[0,0].Count == 0);
             Assert.True(_model.Enemies[1,0].Count == 1);
 
@@ -326,9 +327,194 @@ namespace SpaceVsInvaders.Tests
             Assert.True(_model.Castle.Health == castleHealth-1);
             _model.HandleTick();
             _model.HandleTick();
-             Assert.True(_model.Castle.Health == castleHealth-3);
+            Assert.True(_model.Castle.Health == castleHealth-3);
+
+            // Miután sebezték elérték az utolsó sort, sebzik a várat, majd meghalnak.
+            Assert.True(_model.Enemies[7,4].Count == 0);
+            Assert.True(_model.Enemies[7,5].Count == 0);
+            Assert.True(_model.Enemies[7,6].Count == 0);
+
+            // Előfordulhat, hogy egy bizonyos mezőre több ellenség is kerül.
+            _model.PlaceEnemy(3,4, EnemyType.Buff);
+            _model.HandleTick();
+            _model.HandleTick();
+            _model.HandleTick();
+
+            _model.PlaceEnemy(3,4, EnemyType.Speedy);
+            _model.HandleTick();
+
+            _model.PlaceEnemy(4,4, EnemyType.Normal);
+
+            Assert.True(_model.Enemies[4,4].Count == 3);
+
+            // De ezek mozgása teljesen független egymástól, nem többedmagukkal fognak továbbhaladni.
+            _model.HandleTick();
+            _model.HandleTick();
+            // a NormalEnemy ottmaradt
+            Assert.True(_model.Enemies[4,4].Count == 1);
+            // a BuffEnemy továbblépett 1-et
+            Assert.True(_model.Enemies[5,4].Count == 1);
+            // a SpeedyEnemy továbblépett 2-t
+            Assert.True(_model.Enemies[6,4].Count == 1);
+                    
         }
 
+        [Fact]
+        /// <summary>
+        /// Ellenségek mozgásának tesztelése 2
+        /// </summary>
+        public void EnemyMovement2()
+        {
+            _model = new SVsIModel();
+            _model.NewGame(8,8);
+
+            // Több ugyanolyan fajta ellenség is kerülhet ugyanarra a mezőre.
+
+            _model.PlaceEnemy(3,3, EnemyType.Buff);
+            _model.PlaceEnemy(3,3, EnemyType.Buff);
+            _model.PlaceEnemy(3,3, EnemyType.Buff);
+            Assert.True(_model.Enemies[3,3].Count == 3);
+
+            _model.PlaceEnemy(2,2, EnemyType.Normal);
+            _model.PlaceEnemy(2,2, EnemyType.Normal);
+            _model.PlaceEnemy(2,2, EnemyType.Normal);
+            _model.PlaceEnemy(2,2, EnemyType.Normal);
+            _model.PlaceEnemy(2,2, EnemyType.Normal);
+            Assert.True(_model.Enemies[2,2].Count == 5);
+
+            _model.PlaceEnemy(1,1, EnemyType.Speedy);
+            _model.PlaceEnemy(1,1, EnemyType.Speedy);
+            _model.PlaceEnemy(1,1, EnemyType.Speedy);
+            _model.PlaceEnemy(1,1, EnemyType.Speedy);
+            Assert.True(_model.Enemies[1,1].Count == 4);
+
+            // A nulladik sorban is kerülhetnek egy mezőre.
+            _model.PlaceEnemy(0,0, EnemyType.Buff);
+            _model.PlaceEnemy(0,0, EnemyType.Normal);
+            _model.PlaceEnemy(0,0, EnemyType.Speedy);
+            Assert.True(_model.Enemies[0,0].Count == 3);
+
+            _model.PlaceEnemy(0,4, EnemyType.Speedy);
+            _model.PlaceEnemy(0,4, EnemyType.Speedy);
+            Assert.True(_model.Enemies[0,4].Count == 2);
+
+            _model.PlaceEnemy(0,7, EnemyType.Normal);
+            _model.PlaceEnemy(0,7, EnemyType.Normal);
+            _model.PlaceEnemy(0,7, EnemyType.Buff);
+            _model.PlaceEnemy(0,7, EnemyType.Speedy);
+            Assert.True(_model.Enemies[0,7].Count == 4);
+            
+        }
+        [Fact]
+        /// <summary>
+        /// Ellenségek sebzésének tesztelése
+        /// </summary>
+        public void EnemyDamage()
+        {
+            _model = new SVsIModel();
+            _model.NewGame(10,10);
+
+            // Amíg nem ér a várig, addig egyik ellenség sem sebez, de amikor már odaért, akkor igen.
+            int castleHealth = Config.GetValue<TowerConfig>("Castle").Health;   
+
+            _model.PlaceEnemy(0,0, EnemyType.Speedy);
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.True(_model.Castle.Health == castleHealth);
+                _model.HandleTick();
+            }
+
+            Assert.True(_model.Castle.Health == castleHealth-1);
+
+
+            _model.NewGame(10,10);
+            _model.PlaceEnemy(0,5, EnemyType.Normal);
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.True(_model.Castle.Health == castleHealth);
+                _model.HandleTick();
+                _model.HandleTick();
+                _model.HandleTick();
+            }
+            Assert.True(_model.Castle.Health == castleHealth-1);
+
+            
+            _model.NewGame(10,10);
+            _model.PlaceEnemy(0,2, EnemyType.Buff);
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.True(_model.Castle.Health == castleHealth);
+                _model.HandleTick();
+                _model.HandleTick();
+                _model.HandleTick();
+            }
+            Assert.True(_model.Castle.Health == castleHealth-1);
+
+            // Amíg nem ér el a megegyező oszlopban levő toronyig, addig egyik ellenség sem támad.
+            _model.NewGame(10,10);
+            int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
+            int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
+            int healTowerCost = Config.GetValue<TowerConfig>("HealTower").Cost;
+
+            int damageTowerHealth = Config.GetValue<TowerConfig>("DamageTower").Health;
+            int goldTowerHealth = Config.GetValue<TowerConfig>("GoldTower").Health;
+            int healTowerHealth = Config.GetValue<TowerConfig>("HealTower").Health;
+
+            _model.Money = damageTowerCost + goldTowerCost + healTowerCost;
+            /*
+            //_model.PlaceTower(3,2, TowerType.Gold);
+
+            _model.PlaceTower(3,1, TowerType.Damage);
+            _model.PlaceEnemy(0,1, EnemyType.Buff);
+            var buffEnemy = (SVsIBuffEnemy) _model.Enemies[0, 1][0];
+            for (int i = 0; i < 2; i++)
+            {
+                 Assert.True(_model.Towers[3,1].Health == damageTowerHealth);
+                 _model.HandleTick();
+                 _model.HandleTick();
+                 _model.HandleTick();
+            }
+           // for (int i = 0; i < buffEnemy.TickTime; i++)
+             //   _model.HandleTick();
+
+            Assert.True(_model.Towers[3,1].Health == damageTowerHealth - buffEnemy.Damage);
+
+
+            //_model.PlaceEnemy(0,2, EnemyType.Normal);
+            */
+
+            _model.PlaceTower(3,8, TowerType.Heal);
+            _model.PlaceEnemy(0,8, EnemyType.Speedy);
+            var speedyEnemy = (SVsISpeedyEnemy) _model.Enemies[0, 8][0];
+            for (int i = 0; i < 2; i++)
+            {
+                 Assert.True(_model.Towers[3,8].Health == healTowerHealth);
+                 _model.HandleTick();
+            }
+           
+           for (int i = 0; i < speedyEnemy.TickTime; i++)
+                _model.HandleTick();
+
+            Assert.True(_model.Towers[3,8].Health == healTowerHealth - speedyEnemy.Damage);
+
+
+
+            /*
+
+             var buffEnemy = (SVsIBuffEnemy) _model.Enemies[0, 1][0];
+             var normalEnemy = (SVsINormalEnemy) _model.Enemies[0, 2][0];
+
+
+            _model.HandleTick();
+            _model.HandleTick();
+            Assert.True(_model.Towers[3,1].Health == damageTowerHealth);
+            Assert.True(_model.Towers[3,2].Health == goldTowerHealth);
+            Assert.True(_model.Towers[3,8].Health == healTowerHealth);
+
+            Assert.True(_model.Towers[3,1].Health == damageTowerHealth);
+            Assert.True(_model.Towers[3,2].Health == goldTowerHealth);
+            */
+        }
     }
 }
 

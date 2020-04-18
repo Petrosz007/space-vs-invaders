@@ -236,7 +236,7 @@ namespace SpaceVsInvaders.Model
                 {
                     for(int j = col - range; j <= col + range; ++j)
                     {
-                        if(i < 0 || j < 0 || i >= Rows || j >= Cols) continue;
+                        if(i < 0 || j < 0 || i >= Rows || j >= Cols || i == row || j == col) continue;
 
                         var tower = Towers[i, j];
                         if(tower != null)
@@ -276,7 +276,7 @@ namespace SpaceVsInvaders.Model
                             if (Enemies[i,j][k].CoolDown == 0 && i+1 < Rows)
                             {
 
-                                  if (Towers[i+1,j] is SVsITower)
+                                if (Towers[i+1,j] is SVsITower)
                                 {
                                     Towers[i+1,j].Health -= Enemies[i,j][k].Damage;
                                     if (Towers[i+1,j].Health <= 0)
@@ -548,34 +548,6 @@ namespace SpaceVsInvaders.Model
             int x = rnd.Next(0,Rows); 
             return new Coordinate(x,y);
         }
-
-       /*
-        public void GenerateEnemy()
-        {
-            if (SecondsElapsed % 3 == 0) // fontos, hogy ezt most csak a teszt vegett raktam ennyire, ez a valosagban inkabb 7-15 mp
-            {
-                Random rnd = new Random();
-                int number = rnd.Next(0,3);
-                int col = rnd.Next(0, Cols);
-                if (Enemies[0,col] == null)
-                {
-                    Enemies[0,col] = new List<SVsIEnemy>();
-                    if (number == 0)
-                    {
-                        Enemies[0,col].Add(new SVsIBuffEnemy());
-                    }
-                    if (number == 1)
-                    {
-                        Enemies[0,col].Add(new SVsINormalEnemy());
-                    }
-                    if (number == 2)
-                    {
-                        Enemies[0,col].Add(new SVsISpeedyEnemy());
-                    }
-                }
-            }
-        }
-        */
 
         ///<summary>
         /// Csak a teszteléshez kell.

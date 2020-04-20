@@ -169,6 +169,24 @@
 /processorParam:TextureFormat=Color
 /build:../../../images/shooter-tower.png;SvsI_SPrites/shooter-tower.png
 
+#begin ../../../sounds/AllMusic.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:../../../sounds/AllMusic.mp3;Sounds/AllMusic.mp3
+
+#begin ../../../sounds/GameMusic.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:../../../sounds/GameMusic.mp3;Sounds/GameMusic.mp3
+
+#begin ../../../sounds/MenuMusic.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:../../../sounds/MenuMusic.mp3;Sounds/MenuMusic.mp3
+
 #begin Backgrounds/background.png
 /importer:TextureImporter
 /processor:TextureProcessor

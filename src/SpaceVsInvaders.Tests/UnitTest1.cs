@@ -228,7 +228,7 @@ namespace SpaceVsInvaders.Tests
 
             var healTower = (SVsIHealTower) _model.Towers[4, 3];
 
-            Assert.True(_model.Towers[4,3].Health == healTowerHealth + healTower.Heal() || _model.Towers[4,3].Health == _model.Towers[4,3].MaxHealth);
+            Assert.True(_model.Towers[4,3].Health == healTowerHealth || _model.Towers[4,3].Health == _model.Towers[4,3].MaxHealth);
             Assert.True(_model.Towers[3,3].Health == damageTowerHealth + healTower.Heal() || _model.Towers[3,3].Health == _model.Towers[3,3].MaxHealth);
             Assert.True(_model.Towers[5,3].Health == goldTowerHealth + healTower.Heal() || _model.Towers[5,3].Health == _model.Towers[5,3].MaxHealth);
 
@@ -514,6 +514,7 @@ namespace SpaceVsInvaders.Tests
             Assert.True(_model.Towers[3,1].Health == damageTowerHealth);
             Assert.True(_model.Towers[3,2].Health == goldTowerHealth);
             */
+
         }
     }
 }

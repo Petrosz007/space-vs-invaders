@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using SpaceVsInvaders.Model;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace SpaceVsInvaders.View
 {
@@ -32,6 +34,8 @@ namespace SpaceVsInvaders.View
             "Backgrounds/pause-background",
             "Cursors/normal",
             "Cursors/normal2",
+            "SvsI_SPrites/logo",
+            "Backgrounds/end-tile",
         };
 
         private static Dictionary<string, SpriteFont> fonts;
@@ -41,6 +45,24 @@ namespace SpaceVsInvaders.View
             "Fonts/NumberFont",
             "Fonts/ButtonFont",
             "Fonts/InfoFont",
+            "Fonts/TitleFont",
+        };
+
+        private static Dictionary<string, Song> songs;
+
+        private static readonly string[] songsPath = {
+            "Sounds/AllMusic",
+            "Sounds/MenuMusic",
+            "Sounds/GameMusic",
+        };
+
+        private static Dictionary<string, SoundEffect> soundEffects;
+
+        private static readonly string[] soundEffectsPath = {
+            "Sounds/btn_click",
+            "Sounds/btn_hover",
+            "Sounds/laser",
+            "Sounds/error",
         };
 
         public static void AttachGraphicsDevice(GraphicsDevice gd)
@@ -60,6 +82,18 @@ namespace SpaceVsInvaders.View
             foreach(string path in fontsPath)
             {
                 fonts.Add(path, content.Load<SpriteFont>(path));
+            }
+
+            songs = new Dictionary<string, Song>();
+            foreach(string path in songsPath)
+            {
+                songs.Add(path, content.Load<Song>(path));
+            }
+
+            soundEffects = new Dictionary<string, SoundEffect>();
+            foreach(string path in soundEffectsPath)
+            {
+                soundEffects.Add(path, content.Load<SoundEffect>(path));
             }
         }
 
@@ -84,7 +118,33 @@ namespace SpaceVsInvaders.View
             }
             else
             {
-                throw new ArgumentException("Could not find texture: " + path);
+                throw new ArgumentException("Could not find font: " + path);
+            }
+        }
+
+        public static Song GetSong(string path)
+        {
+            Song sound;
+            if (songs.TryGetValue(path, out sound))
+            {
+                return sound;
+            }
+            else
+            {
+                throw new ArgumentException("Could not find song: " + path);
+            }
+        }
+
+        public static SoundEffect GetSoundEffect(string path)
+        {
+            SoundEffect sound;
+            if (soundEffects.TryGetValue(path, out sound))
+            {
+                return sound;
+            }
+            else
+            {
+                throw new ArgumentException("Could not find soundeffect: " + path);
             }
         }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 using SpaceVsInvaders.Model;
 using SpaceVsInvaders.View.Components;
 
@@ -22,6 +23,7 @@ namespace SpaceVsInvaders.View.Boards
         private int colWidth;
         private int rowHeight;
         private List<Shot> shots;
+        private SoundEffectInstance soundEffectInstance;
         public ShotAnimator(Vector2 position, int height, int width, int colWidth, int rowHeight)
             : base(position, height, width)
         {
@@ -29,6 +31,9 @@ namespace SpaceVsInvaders.View.Boards
             this.rowHeight = rowHeight;
 
             shots = new List<Shot>();
+
+            soundEffectInstance = ContentLoader.GetSoundEffect("Sounds/laser").CreateInstance();
+            soundEffectInstance.Volume = 0.6f;
         }
 
         public override void Update(GameTime gameTime)
@@ -71,6 +76,8 @@ namespace SpaceVsInvaders.View.Boards
             };
 
             shots.Add(shot);
+
+            soundEffectInstance.Play();
         }
     }
 }

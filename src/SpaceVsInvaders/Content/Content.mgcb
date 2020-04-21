@@ -73,6 +73,18 @@
 /processorParam:TextureFormat=Color
 /build:../../../images/Cursors/normal2.png;Cursors/normal2.png
 
+#begin ../../../images/end-tile.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../images/end-tile.png;Backgrounds/end-tile.png
+
 #begin ../../../images/enemybase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -175,11 +187,35 @@
 /processorParam:Quality=Best
 /build:../../../sounds/AllMusic.mp3;Sounds/AllMusic.mp3
 
+#begin ../../../sounds/btn_click.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../sounds/btn_click.mp3;Sounds/btn_click.mp3
+
+#begin ../../../sounds/btn_hover.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../sounds/btn_hover.mp3;Sounds/btn_hover.mp3
+
+#begin ../../../sounds/error.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../sounds/error.mp3;Sounds/error.mp3
+
 #begin ../../../sounds/GameMusic.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:../../../sounds/GameMusic.mp3;Sounds/GameMusic.mp3
+
+#begin ../../../sounds/laser.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../sounds/laser.mp3;Sounds/laser.mp3
 
 #begin ../../../sounds/MenuMusic.mp3
 /importer:Mp3Importer
@@ -250,6 +286,13 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Fonts/NumberFont.spritefont
+
+#begin Fonts/TitleFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/TitleFont.spritefont
 
 #begin GameSprites/LUL.png
 /importer:TextureImporter

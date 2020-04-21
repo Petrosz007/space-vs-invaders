@@ -7,6 +7,7 @@ namespace SpaceVsInvaders.View.Components
     {
         private StateManager stateManager;
         private SpriteFont font;
+        private Texture2D background;
         public Button MainMenuButton { get; private set; }
         public GameOverPanel(Vector2 position, int height, int width, StateManager stateManager)
             : base(position, height, width)
@@ -14,6 +15,7 @@ namespace SpaceVsInvaders.View.Components
             this.stateManager = stateManager;
 
             font = ContentLoader.GetFont("Fonts/InfoFont");
+            background = ContentLoader.GetTexture("Backgrounds/end-tile");
 
             const int btnHeight = 75;
             const int btnWidth = 200;
@@ -30,8 +32,10 @@ namespace SpaceVsInvaders.View.Components
         public override void Draw(SpriteBatch spriteBatch)
         {
             if(!stateManager.GameOver) return;
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(Color.Black), 
-                new Rectangle((int)position.X, (int)position.Y, width, height), Color.White);
+            spriteBatch.Draw(background, 
+                new Rectangle((int)position.X, (int)position.Y, width, height), 
+                new Rectangle(0,0, background.Width, background.Height),
+                Color.White);
 
             var text = stateManager.Victory ? "Victory!" : "Defeat.";
             var measure = font.MeasureString(text);

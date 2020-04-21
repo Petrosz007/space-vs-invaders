@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace SpaceVsInvaders.View.Components
 {
@@ -11,6 +12,8 @@ namespace SpaceVsInvaders.View.Components
         private Texture2D middleTexture;
         private SpriteFont font;
         private string text;
+        private SoundEffectInstance hoverSoundInstance;
+        private SoundEffectInstance clickSoundInstance;
 
         public Button(Vector2 position, int height, int width, string text = "NO TEXT")
             : base(position, height, width)
@@ -20,7 +23,20 @@ namespace SpaceVsInvaders.View.Components
             this.middleTexture = ContentLoader.GetTexture("Buttons/button-middle");
 
             this.font = ContentLoader.GetFont("Fonts/ButtonFont");
+
+            this.hoverSoundInstance = ContentLoader.GetSoundEffect("Sounds/btn_hover").CreateInstance();
+            this.clickSoundInstance = ContentLoader.GetSoundEffect("Sounds/btn_click").CreateInstance();
+
+            // this.MouseEnter += new EventHandler((o, e) => hoverSoundInstance.Play());
+            this.LeftClicked += new EventHandler((o, e) => clickSoundInstance.Play());
+            this.RightClicked += new EventHandler((o, e) => clickSoundInstance.Play());
         }
+
+        // public override void Update(GameTime gameTime)
+        // {
+        //     base.Update(gameTime);
+
+        // }
 
         public override void Draw(SpriteBatch spriteBatch)
         {

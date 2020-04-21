@@ -9,14 +9,17 @@ namespace SpaceVsInvaders.View.Components
     {
         private ButtonState prevLeftButtonState;
         private ButtonState prevRightButtonState;
+        private bool wasMouseOver;
         public event EventHandler LeftClicked;
         public event EventHandler RightClicked;
+        public event EventHandler MouseEnter;
 
         protected bool CurrentlyClicked { get; private set; }
 
         public Clickable(Vector2 position, int height, int width)
             : base(position, height, width)
         {
+            wasMouseOver = false;
         }
 
         protected bool isMouseOver()
@@ -48,10 +51,16 @@ namespace SpaceVsInvaders.View.Components
                 {
                     CurrentlyClicked = true;
                 }
+
+                if(!wasMouseOver)
+                {
+                    MouseEnter?.Invoke(this, new EventArgs());
+                }
             }
 
             prevLeftButtonState = mouseState.LeftButton;
             prevRightButtonState = mouseState.RightButton;
+            wasMouseOver = isMouseOver();
         }
     }
 }

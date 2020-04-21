@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
+using Microsoft.Xna.Framework.Audio;
 
 namespace SpaceVsInvaders.View.Components
 {
@@ -13,18 +14,22 @@ namespace SpaceVsInvaders.View.Components
         public List<(string, int)> Errors;
         private double LastSecond;
         private SpriteFont Font;
+        private SoundEffectInstance soundEffectInstance;
         public ErrorDisplay(Vector2 position, int height, int width)
             : base(position, height, width)
         {
             Errors = new List<(string, int)>();
             LastSecond = 0;
             Texture = ContentLoader.CreateSolidtexture(Color.Beige);
-            Font = ContentLoader.GetFont("Fonts/EpicFont");
+            Font = ContentLoader.GetFont("Fonts/InfoFont");
+
+            soundEffectInstance = ContentLoader.GetSoundEffect("Sounds/error").CreateInstance();
         }
 
        public void AddError(string error)
        {
            Errors.Add((error, 2));
+           soundEffectInstance.Play();
        }
 
         public override void Update(GameTime gameTime)
@@ -54,10 +59,11 @@ namespace SpaceVsInvaders.View.Components
 
             spriteBatch.Draw(Texture, divRect, Color.Black*0.5f); 
             int i = 0;
-            while(Errors.Count>0 && i < Errors.Count){
-            int StringHalf = (int)Font.MeasureString(Errors[i].Item1).X / 2;
-            spriteBatch.DrawString(Font,Errors[i].Item1, new Vector2(position.X+width/2-StringHalf, position.Y+30*i),Color.Red);
-            i++;
+            while(Errors.Count>0 && i < Errors.Count)
+            {
+                var measure = Font.MeasureString(Errors[i].Item1);
+                spriteBatch.DrawString(Font,Errors[i].Item1, new Vector2(position.X + (width - measure.X)/2, position.Y + (measure.Y / 2) + (35 * i)),Color.Red);
+                i++;
             }
             
         }

@@ -8,6 +8,7 @@ using SpaceVsInvaders.Model;
 using SpaceVsInvaders.View;
 using SpaceVsInvaders.View.Boards;
 using SpaceVsInvaders.View.Components;
+using Microsoft.Xna.Framework.Media;
 
 namespace SpaceVsInvaders.View.Scenes
 {
@@ -102,6 +103,9 @@ namespace SpaceVsInvaders.View.Scenes
       
             keyboardHandler = new KeyboardHandler();
             keyboardHandler.KeyPressed += new EventHandler<Keys>(HandleKeyPress);
+
+            MediaPlayer.Stop();
+            MediaPlayer.Play(ContentLoader.GetSong("Sounds/GameMusic"));
         }
 
         /// <summary>
@@ -111,68 +115,6 @@ namespace SpaceVsInvaders.View.Scenes
         public override void LoadContent()
         {
             background = ContentLoader.GetTexture("Backgrounds/background");
-
-            // prevSecond = 0;
-
-            // model = new SVsIModel();
-            // model.NewGame(Config.GetValue<int>("Rows"), Config.GetValue<int>("Cols"));
-            
-            // model.Money = Config.GetValue<int>("StartingMoney");
-
-            // boardWidth = Width * 80 / 100;
-            // panelsWidth = Width * 20 / 100;
-            // int spawnHeight = 100;
-
-
-            // ErrorDisplay Err = new ErrorDisplay(new Vector2(Width/2-200, 100),300,500);
-
-            // stateManager = new StateManager(model, Err);
-            // stateManager.OpenPauseMenu += new EventHandler((o, e) => OpenPauseMenu?.Invoke(o, e));
-
-            // background = ContentLoader.GetTexture("Backgrounds/background");
-
-
-            // BuyPanel buyPanel = new BuyPanel(new Vector2(Width - panelsWidth, 0), Height / 3, panelsWidth, stateManager);
-            // buyPanel.DamageTowerButton.LeftClicked += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Damage));
-            // buyPanel.GoldTowerButton.LeftClicked   += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Gold));
-            // buyPanel.HealTowerButton.LeftClicked   += new EventHandler((o, e) => stateManager.HandleNewTowerType(TowerType.Heal));
-
-            
-            // board = new Board(new Vector2(0, spawnHeight), Height - spawnHeight * 2, boardWidth, model, stateManager);
-            // board.TileClicked += new EventHandler<(int, int)>(stateManager.HandleTileClicked);
-            // model.TowerHasAttacked += new EventHandler<SVsIEventArgs>(board.ShotAnimator.HandleNewShot);
-            // model.AsteroidCatastrophe += new EventHandler<SVsIEventArgs>(board.CatastropheAnimator.HandleAsteroids);
-            // model.HealingCatastrophe += new EventHandler<SVsIEventArgs>(board.CatastropheAnimator.HandleHealing);
-            // model.GameOver += new EventHandler<bool>(stateManager.HandleGameOver);
-
-            // InfoPanel infoPanel = new InfoPanel(new Vector2(Width - panelsWidth, Height * 2/3), Height / 3, panelsWidth, model, stateManager);
-            // infoPanel.UpgradeCastleButton.LeftClicked += new EventHandler(stateManager.HandleCastleUpgradeClicked);
-
-            // TowerInfo towerInfo = new TowerInfo(new Vector2(Width - panelsWidth, Height * 1/3), Height / 3, panelsWidth, stateManager, model);
-            // towerInfo.UpgradeButton.LeftClicked += new EventHandler(stateManager.HandleTowerUpgradeClicked);
-            // towerInfo.SellButton.LeftClicked += new EventHandler(stateManager.HandleTowerSellClicked);
-
-            // UnderCursorTower underCursorTower = new UnderCursorTower(new Vector2(0,0), 50, 50, stateManager);
-
-            // Mothership mothership = new Mothership(new Vector2(0,0), spawnHeight, boardWidth, stateManager);
-
-            // GameOverPanel gameOverPanel = new GameOverPanel(new Vector2((Width - 300)/2, (Height - 300)/2), 300, 300, stateManager);
-            // gameOverPanel.MainMenuButton.LeftClicked += new EventHandler((o, e) => ExitToMainMenu?.Invoke(o, e));
-
-            // components = new List<Component>
-            // {
-            //     board,
-            //     Err,
-            //     infoPanel,
-            //     towerInfo,
-            //     mothership,
-            //     buyPanel,
-            //     gameOverPanel,
-            //     underCursorTower,
-            // };
-      
-            // keyboardHandler = new KeyboardHandler();
-            // keyboardHandler.KeyPressed += new EventHandler<Keys>(HandleKeyPress);
         }
 
         /// <summary>

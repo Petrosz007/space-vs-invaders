@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
+    <ApplicationIcon>Content\icon.ico</ApplicationIcon>
     <!-- <GenerateAssemblyInfo>false</GenerateAssemblyInfo> -->
     <!-- <PublishTrimmed>true</PublishTrimmed> -->
     <!-- <PublishReadyToRun>true</PublishReadyToRun> -->
@@ -28,8 +29,24 @@
   <ItemGroup>
     <Content Include="data/*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <ExcludeFromSingleFile>false</ExcludeFromSingleFile>
     </Content> 
+    <Content Include="Content/icon.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>false</ExcludeFromSingleFile>
+    </Content> 
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Content/icon.ico">
+      <LogicalName>Icon.ico</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Content/icon.bmp">
+      <LogicalName>Icon.bmp</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

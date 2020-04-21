@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using SpaceVsInvaders.Model;
 using SpaceVsInvaders.View;
 using SpaceVsInvaders.View.Boards;
@@ -16,6 +17,7 @@ namespace SpaceVsInvaders
         Game,
         Pause,
         MainMenu,
+        Logo,
     }
     /// <summary>
     /// This is the main type for your game.
@@ -80,14 +82,18 @@ namespace SpaceVsInvaders
             pauseScene.ExitToMainMenu += new EventHandler((o, e) => activeScene = SceneType.MainMenu);
             pauseScene.Exit += new EventHandler((o, e) => Exit());
 
+            var logoScene = new LogoScene(Window.ClientBounds.Width, Window.ClientBounds.Height);
+            logoScene.End += new EventHandler((o, e) => activeScene = SceneType.MainMenu);
+
             scenes = new Dictionary<SceneType, Scene>
             {
                 { SceneType.MainMenu, mainMenuScene },
                 { SceneType.Game, gameScene },
                 { SceneType.Pause, pauseScene },
+                { SceneType.Logo, logoScene },
             };
 
-            activeScene = SceneType.MainMenu;
+            activeScene = SceneType.Logo;
 
             cursor = new Cursor(new Vector2(0,0), 35, 35);
 

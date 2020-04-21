@@ -35,8 +35,10 @@ namespace SpaceVsInvaders.View.Components
 
             secondsElapsed += gameTime.ElapsedGameTime.TotalSeconds;
 
-            seconds = (int) secondsElapsed % 60;
-            minutes = (int) (secondsElapsed / 60) % 60;
+            int remainingSeconds = Config.GetValue<int>("RoundTime") - (int) secondsElapsed;
+
+            seconds = remainingSeconds % 60;
+            minutes = (remainingSeconds / 60) % 60;
 
             UpgradeCastleButton.UpdateText($"Upgrade Castle ${model.Castle.CurrentUpgradeCost}");
             UpgradeCastleButton.Update(gameTime);

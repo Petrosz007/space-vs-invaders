@@ -236,7 +236,7 @@ namespace SpaceVsInvaders.Model
                 {
                     for(int j = col - range; j <= col + range; ++j)
                     {
-                        if(i < 0 || j < 0 || i >= Rows || j >= Cols || i == row || j == col) continue;
+                        if(i < 0 || j < 0 || i >= Rows || j >= Cols || (i == row && j == col)) continue;
 
                         var tower = Towers[i, j];
                         if(tower != null)

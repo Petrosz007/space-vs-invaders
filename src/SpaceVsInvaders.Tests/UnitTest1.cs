@@ -450,7 +450,7 @@ namespace SpaceVsInvaders.Tests
             }
             Assert.True(_model.Castle.Health == castleHealth-1);
 
-            // Amíg nem ér el a megegyező oszlopban levő toronyig, addig egyik ellenség sem támad.
+            // Amíg nem ér el a megegyező oszlopban levő toronyig, addig egyik ellenség sem sebez.
             _model.NewGame(10,10);
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
@@ -461,8 +461,6 @@ namespace SpaceVsInvaders.Tests
             int healTowerHealth = Config.GetValue<TowerConfig>("HealTower").Health;
 
             _model.Money = damageTowerCost + goldTowerCost + healTowerCost;
-            /*
-            //_model.PlaceTower(3,2, TowerType.Gold);
 
             _model.PlaceTower(3,1, TowerType.Damage);
             _model.PlaceEnemy(0,1, EnemyType.Buff);
@@ -474,14 +472,14 @@ namespace SpaceVsInvaders.Tests
                  _model.HandleTick();
                  _model.HandleTick();
             }
-           // for (int i = 0; i < buffEnemy.TickTime; i++)
-             //   _model.HandleTick();
+           
+           int ticksleft = _model.Enemies[2,1][0].CoolDown;
+
+           for (int i = 0; i <= ticksleft; i++)
+               _model.HandleTick();
 
             Assert.True(_model.Towers[3,1].Health == damageTowerHealth - buffEnemy.Damage);
-
-
-            //_model.PlaceEnemy(0,2, EnemyType.Normal);
-            */
+            
 
             _model.PlaceTower(3,8, TowerType.Heal);
             _model.PlaceEnemy(0,8, EnemyType.Speedy);
@@ -491,29 +489,152 @@ namespace SpaceVsInvaders.Tests
                  Assert.True(_model.Towers[3,8].Health == healTowerHealth);
                  _model.HandleTick();
             }
+
+            ticksleft = _model.Enemies[2,8][0].CoolDown;
            
-           for (int i = 0; i < speedyEnemy.TickTime; i++)
+           for (int i = 0; i <= ticksleft; i++)
                 _model.HandleTick();
 
             Assert.True(_model.Towers[3,8].Health == healTowerHealth - speedyEnemy.Damage);
 
 
 
-            /*
+            _model.PlaceTower(3,2, TowerType.Gold);
+            _model.PlaceEnemy(0,2, EnemyType.Normal);
+            var normalEnemy = (SVsINormalEnemy) _model.Enemies[0, 2][0];
+            for (int i = 0; i < 2; i++)
+            {
+                Assert.True(_model.Towers[3,2].Health == goldTowerHealth);
+                _model.HandleTick();
+                _model.HandleTick();
+                _model.HandleTick();
+            }
 
-             var buffEnemy = (SVsIBuffEnemy) _model.Enemies[0, 1][0];
-             var normalEnemy = (SVsINormalEnemy) _model.Enemies[0, 2][0];
+            ticksleft = _model.Enemies[2,2][0].CoolDown;
+           
+           for (int i = 0; i <= ticksleft; i++)
+                _model.HandleTick();
 
+            Assert.True(_model.Towers[3,2].Health == goldTowerHealth - normalEnemy.Damage);
+        }
 
+        [Fact]
+        /// <summary>
+        /// Ellenségek sebzésének tesztelése
+        /// </summary>
+        public void EnemyDamage2()
+        {
+            // Létrejöttükkor egyből támadnak, ha van kit.
+            _model = new SVsIModel();
+            _model.NewGame(10,10);          
+
+            int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
+            int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
+            int healTowerCost = Config.GetValue<TowerConfig>("HealTower").Cost;
+
+            int damageTowerHealth = Config.GetValue<TowerConfig>("DamageTower").Health;
+            int goldTowerHealth = Config.GetValue<TowerConfig>("GoldTower").Health;
+            int healTowerHealth = Config.GetValue<TowerConfig>("HealTower").Health;
+
+            _model.Money = damageTowerCost + goldTowerCost + healTowerCost;
+            _model.PlaceTower(9,9, TowerType.Damage);
+            _model.PlaceEnemy(8,9, EnemyType.Buff);
             _model.HandleTick();
-            _model.HandleTick();
-            Assert.True(_model.Towers[3,1].Health == damageTowerHealth);
-            Assert.True(_model.Towers[3,2].Health == goldTowerHealth);
-            Assert.True(_model.Towers[3,8].Health == healTowerHealth);
+            Assert.True(_model.Towers[9,9].Health == damageTowerHealth - _model.Enemies[8,9][0].Damage);
 
-            Assert.True(_model.Towers[3,1].Health == damageTowerHealth);
-            Assert.True(_model.Towers[3,2].Health == goldTowerHealth);
-            */
+            _model.PlaceTower(1,1, TowerType.Gold);
+            _model.PlaceEnemy(0,1, EnemyType.Normal);
+            _model.HandleTick();
+            Assert.True(_model.Towers[1,1].Health == goldTowerHealth - _model.Enemies[0,1][0].Damage);
+
+            _model.PlaceTower(5,6, TowerType.Heal);
+            _model.PlaceEnemy(4,6, EnemyType.Normal);
+            _model.HandleTick();
+            Assert.True(_model.Towers[5,6].Health == healTowerHealth - _model.Enemies[4,6][0].Damage);
+
+            // Ha több ellenség kerül ugyanarra a torony előtti mezőre, akkor csak az sebzi a tornyot, aki leghamarabb odaért és tüzelőképes.
+            _model.NewGame(8,8);
+            _model.Money = damageTowerCost + goldTowerCost + healTowerCost;
+
+            // 1. "egyszerre rakódtak le"
+            _model.PlaceTower(3,3, TowerType.Damage);
+            _model.PlaceEnemy(2,3, EnemyType.Buff);
+            _model.PlaceEnemy(2,3, EnemyType.Buff);
+            _model.HandleTick();
+            var buffEnemy = (SVsIBuffEnemy) _model.Enemies[2, 3][0];
+            Assert.True(_model.Towers[3,3].Health == damageTowerHealth - buffEnemy.Damage);
+
+            _model.PlaceTower(5,1, TowerType.Heal);
+            _model.PlaceEnemy(4,1, EnemyType.Normal);
+            _model.PlaceEnemy(4,1, EnemyType.Buff);
+            _model.PlaceEnemy(4,1, EnemyType.Speedy);
+            _model.HandleTick();
+            var normalEnemy = (SVsINormalEnemy) _model.Enemies[4, 1][0];
+            Assert.True(_model.Towers[5,1].Health == healTowerHealth - normalEnemy.Damage);
+
+            _model.PlaceTower(4,7, TowerType.Gold);
+            _model.PlaceEnemy(3,7, EnemyType.Speedy);
+            _model.PlaceEnemy(3,7, EnemyType.Normal);
+            _model.PlaceEnemy(3,7, EnemyType.Buff);
+            _model.HandleTick();
+            var speedyEnemy = (SVsISpeedyEnemy) _model.Enemies[3, 7][0];
+            Assert.True(_model.Towers[4,7].Health == goldTowerHealth - speedyEnemy.Damage);
+
+            // 2. utolérték egymást, de aki leghamarabb volt ott, az nem tüzelőképes (akkor még nem volt ott torony)
+            _model.NewGame(10,10);
+            _model.Money = 2 * damageTowerCost;
+
+            _model.PlaceEnemy(4,5, EnemyType.Normal);
+            _model.PlaceEnemy(4,5, EnemyType.Buff);
+            _model.HandleTick();
+            _model.PlaceTower(5,5, TowerType.Damage);
+            _model.PlaceEnemy(4,5, EnemyType.Speedy);
+            speedyEnemy = (SVsISpeedyEnemy) _model.Enemies[4, 5][2];
+            _model.HandleTick();
+            Assert.True(_model.Towers[5,5].Health == damageTowerHealth - speedyEnemy.Damage);
+
+            // Bármilyen típusú ellenség sebez bármilyen típusú tornyot.
+            // buff
+            _model.NewGame(8,8);
+            _model.Money = damageTowerCost + goldTowerCost + healTowerCost;
+            _model.PlaceTower(1,1, TowerType.Damage);
+            _model.PlaceTower(1,2, TowerType.Gold);
+            _model.PlaceTower(1,6, TowerType.Heal);
+            _model.PlaceEnemy(0,1, EnemyType.Buff);
+            _model.PlaceEnemy(0,2, EnemyType.Buff);
+            _model.PlaceEnemy(0,6, EnemyType.Buff);
+            _model.HandleTick();
+            Assert.True(_model.Towers[1,1].Health == damageTowerHealth - _model.Enemies[0,1][0].Damage);
+            Assert.True(_model.Towers[1,2].Health == goldTowerHealth - _model.Enemies[0,2][0].Damage);
+            Assert.True(_model.Towers[1,6].Health == healTowerHealth - _model.Enemies[0,6][0].Damage);
+
+            // normal
+            _model.NewGame(8,8);
+            _model.Money = damageTowerCost + goldTowerCost + healTowerCost;
+            _model.PlaceTower(1,1, TowerType.Damage);
+            _model.PlaceTower(1,2, TowerType.Gold);
+            _model.PlaceTower(1,6, TowerType.Heal);
+            _model.PlaceEnemy(0,1, EnemyType.Normal);
+            _model.PlaceEnemy(0,2, EnemyType.Normal);
+            _model.PlaceEnemy(0,6, EnemyType.Normal);
+            _model.HandleTick();
+            Assert.True(_model.Towers[1,1].Health == damageTowerHealth - _model.Enemies[0,1][0].Damage);
+            Assert.True(_model.Towers[1,2].Health == goldTowerHealth - _model.Enemies[0,2][0].Damage);
+            Assert.True(_model.Towers[1,6].Health == healTowerHealth - _model.Enemies[0,6][0].Damage);
+
+            //speedy
+            _model.NewGame(8,8);
+            _model.Money = damageTowerCost + goldTowerCost + healTowerCost;
+            _model.PlaceTower(1,1, TowerType.Damage);
+            _model.PlaceTower(1,2, TowerType.Gold);
+            _model.PlaceTower(1,6, TowerType.Heal);
+            _model.PlaceEnemy(0,1, EnemyType.Speedy);
+            _model.PlaceEnemy(0,2, EnemyType.Speedy);
+            _model.PlaceEnemy(0,6, EnemyType.Speedy);
+            _model.HandleTick();
+            Assert.True(_model.Towers[1,1].Health == damageTowerHealth - _model.Enemies[0,1][0].Damage);
+            Assert.True(_model.Towers[1,2].Health == goldTowerHealth - _model.Enemies[0,2][0].Damage);
+            Assert.True(_model.Towers[1,6].Health == healTowerHealth - _model.Enemies[0,6][0].Damage);
 
         }
     }

@@ -1,0 +1,75 @@
+SF:C:\Users\Petrosz\source\repos\MyGame\MyGame\Game1.cs
+FN:19,System.Void MyGame.Game1::Initialize()
+FNDA:0,System.Void MyGame.Game1::Initialize()
+DA:20,0
+DA:23,0
+DA:24,0
+FN:26,System.Void MyGame.Game1::LoadContent()
+FNDA:0,System.Void MyGame.Game1::LoadContent()
+DA:27,0
+DA:28,0
+DA:31,0
+FN:33,System.Void MyGame.Game1::Update(Microsoft.Xna.Framework.GameTime)
+FNDA:0,System.Void MyGame.Game1::Update(Microsoft.Xna.Framework.GameTime)
+DA:34,0
+DA:35,0
+DA:36,0
+DA:40,0
+DA:41,0
+BRDA:35,24,0,0
+BRDA:35,24,1,0
+BRDA:35,46,0,0
+BRDA:35,46,1,0
+FN:43,System.Void MyGame.Game1::Draw(Microsoft.Xna.Framework.GameTime)
+FNDA:0,System.Void MyGame.Game1::Draw(Microsoft.Xna.Framework.GameTime)
+DA:44,0
+DA:45,0
+DA:49,0
+DA:50,0
+FN:11,System.Void MyGame.Game1::.ctor()
+FNDA:0,System.Void MyGame.Game1::.ctor()
+DA:12,0
+DA:13,0
+DA:14,0
+DA:15,0
+DA:16,0
+DA:17,0
+LF:21
+LH:0
+BRF:4
+BRH:0
+FNF:5
+FNH:0
+end_of_record
+SF:C:\Users\Petrosz\source\repos\MyGame\MyGame\Program.cs
+FN:8,System.Void MyGame.Program::Main()
+FNDA:0,System.Void MyGame.Program::Main()
+DA:9,0
+DA:10,0
+DA:11,0
+DA:12,0
+LF:4
+LH:0
+BRF:0
+BRH:0
+FNF:1
+FNH:0
+end_of_record
+SF:C:\Users\Petrosz\source\repos\MyGame\MyGame\ToBeTested.cs
+FN:3,System.Int32 MyGame.ToBeTested::AddOne(System.Int32)
+FNDA:1,System.Int32 MyGame.ToBeTested::AddOne(System.Int32)
+DA:4,1
+DA:5,2
+DA:6,1
+DA:7,0
+DA:8,0
+DA:10,1
+BRDA:5,10,0,1
+BRDA:5,10,1,0
+LF:6
+LH:4
+BRF:2
+BRH:1
+FNF:1
+FNH:1
+end_of_record

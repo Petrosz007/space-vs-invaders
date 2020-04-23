@@ -54,6 +54,7 @@ namespace SpaceVsInvaders.Model
 
         public WaveSpawner WS;
         public bool IsSpawningEnemies { get; set; }
+        public bool IsCatastrophe { get; set; }
 
 #region Events
         public event EventHandler<SVsIEventArgs> EnemyMoved;
@@ -129,6 +130,7 @@ namespace SpaceVsInvaders.Model
         {
             WS = new WaveSpawner();
             IsSpawningEnemies = true;
+            IsCatastrophe = true;
             TowerCounter = 0;
             ThreeMinutesPassed = 0;
         }
@@ -149,7 +151,10 @@ namespace SpaceVsInvaders.Model
             //? Lehet hogy vissza kell cserélni a sorrendet ha bugos
             HandleEnemies();
             HandleTowers();
-            Catastrophe();
+            if(IsCatastrophe)
+            {
+                Catastrophe();
+            }
             CheckGameOver();
         }
 

@@ -22,7 +22,7 @@ namespace SpaceVsInvaders
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class MainGame : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -31,7 +31,7 @@ namespace SpaceVsInvaders
         private SceneType activeScene;
         private Cursor cursor;
 
-        public Game1()
+        public MainGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -148,6 +148,11 @@ namespace SpaceVsInvaders
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// Handles the new game event
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="difficulty">Difficulty of the new game</param>
         private void HandleNewGame(object sender, Difficulty difficulty)
         {
             ((GameScene) scenes[SceneType.Game]).NewGame(difficulty);

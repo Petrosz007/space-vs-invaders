@@ -78,6 +78,7 @@ namespace SpaceVsInvaders.Tests
             _model = new SVsIModel();
             _model.NewGame(20,20);
             _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
 
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int buffEnemyHealth = Config.GetValue<TowerConfig>("BuffEnemy").Health;   
@@ -121,6 +122,7 @@ namespace SpaceVsInvaders.Tests
             _model = new SVsIModel();
             _model.NewGame(20,20);
             _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
 
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int buffEnemyHealth = Config.GetValue<TowerConfig>("BuffEnemy").Health;   
@@ -165,10 +167,13 @@ namespace SpaceVsInvaders.Tests
             int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
             
             _model = new SVsIModel();
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
 
             _model.NewGame(8,8);
             _model.Money = goldTowerCost;
             _model.PlaceTower(1,1, TowerType.Gold);
+
 
             var goldTower = (SVsIGoldTower) _model.Towers[1, 1];
 
@@ -209,6 +214,9 @@ namespace SpaceVsInvaders.Tests
         {
             _model = new SVsIModel();
             _model.NewGame(8,8);
+
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
 
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
@@ -293,6 +301,9 @@ namespace SpaceVsInvaders.Tests
             _model = new SVsIModel();
             _model.NewGame(8,8);
 
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
+
             _model.PlaceEnemy(0,0, EnemyType.Buff);
             _model.PlaceEnemy(0,1, EnemyType.Normal);
             _model.PlaceEnemy(0,2, EnemyType.Speedy);
@@ -368,6 +379,9 @@ namespace SpaceVsInvaders.Tests
             _model = new SVsIModel();
             _model.NewGame(8,8);
 
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
+
             // Több ugyanolyan fajta ellenség is kerülhet ugyanarra a mezőre.
 
             _model.PlaceEnemy(3,3, EnemyType.Buff);
@@ -414,6 +428,9 @@ namespace SpaceVsInvaders.Tests
             _model = new SVsIModel();
             _model.NewGame(10,10);
 
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
+
             // Amíg nem ér a várig, addig egyik ellenség sem sebez, de amikor már odaért, akkor igen.
             int castleHealth = Config.GetValue<TowerConfig>("Castle").Health;   
 
@@ -440,6 +457,7 @@ namespace SpaceVsInvaders.Tests
 
             
             _model.NewGame(10,10);
+
             _model.PlaceEnemy(0,2, EnemyType.Buff);
             for (int i = 0; i < 10; i++)
             {
@@ -452,6 +470,7 @@ namespace SpaceVsInvaders.Tests
 
             // Amíg nem ér el a megegyező oszlopban levő toronyig, addig egyik ellenség sem sebez.
             _model.NewGame(10,10);
+
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
             int healTowerCost = Config.GetValue<TowerConfig>("HealTower").Cost;
@@ -526,7 +545,9 @@ namespace SpaceVsInvaders.Tests
         {
             // Létrejöttükkor egyből támadnak, ha van kit.
             _model = new SVsIModel();
-            _model.NewGame(10,10);          
+            _model.NewGame(10,10);
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;          
 
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;

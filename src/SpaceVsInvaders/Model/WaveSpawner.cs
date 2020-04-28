@@ -6,6 +6,9 @@ using SpaceVsInvaders.Model.Enemies;
 
 namespace SpaceVsInvaders.Model
 {
+    /// <summary>
+    /// Controls the distribution of enemies to the field.
+    /// </summary>
     public class WaveSpawner
     {
         private Queue EnemiesToSpawn;
@@ -14,6 +17,11 @@ namespace SpaceVsInvaders.Model
         {
             EnemiesToSpawn = new Queue();
         }
+        /// <summary>
+        /// Provides as many enemies, as the count of coloumns of the game
+        /// </summary>
+        /// <param name="n">Number of coloumns</param>
+        /// <returns>List of EnemyTypes</returns>
         public List<EnemyType> GetSpawnedEnemies(int n)
         {
             List<EnemyType> tmp = new List<EnemyType>();
@@ -24,12 +32,22 @@ namespace SpaceVsInvaders.Model
             }
             return tmp;
         }
-
+        /// <summary>
+        /// Determines whether there are enemies left in the spawner's queue
+        /// </summary>
+        /// <returns>Bool</returns>
         public bool AreEnemiesLeft()
         {
             return EnemiesToSpawn.Count != 0;
         }
-
+        /// <summary>
+        /// Creates the EnemyTypes to be spawned
+        /// </summary>
+        /// <param name="time">Time elapsed ingame</param>
+        /// <param name="col">Number of cols</param>
+        /// <param name="towercount">Number of towers</param>
+        /// <param name="towerupdates">Count of updates of the towers</param>
+        /// <param name="threeminutes">How many times has 3 minutes passed</param>
         public void SpawnEnemies(int time, int col , int towercount, int towerupdates, int threeminutes) // határértékeket majd config fájlból
         {
             int value = time * 5 + col * 50 + towercount*10 + towerupdates*5 + 550*threeminutes;

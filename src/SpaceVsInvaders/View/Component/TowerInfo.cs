@@ -28,7 +28,7 @@ namespace SpaceVsInvaders.View.Components
         {
             if(stateManager.GameOver) return;
             
-            base.Update(gameTime);
+            // base.Update(gameTime);
 
             tower = model.Towers[stateManager.SelectedPos.Item1, stateManager.SelectedPos.Item2];
             if(tower != null)

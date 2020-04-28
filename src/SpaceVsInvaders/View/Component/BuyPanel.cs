@@ -29,7 +29,7 @@ namespace SpaceVsInvaders.View.Components
         {
             if(stateManager.GameOver) return;
 
-            base.Update(gameTime);
+            // base.Update(gameTime);
 
             DamageTowerButton.Update(gameTime);
             GoldTowerButton.Update(gameTime);

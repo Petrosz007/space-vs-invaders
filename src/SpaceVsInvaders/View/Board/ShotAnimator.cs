@@ -9,6 +9,9 @@ using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Boards
 {
+    /// <summary>
+    /// Data of a shot
+    /// </summary>
     public class Shot
     {
         public int X { get; set; }
@@ -17,6 +20,9 @@ namespace SpaceVsInvaders.View.Boards
         public int ToY { get; set; }
         public double SecRemaining { get; set; }
     }
+    /// <summary>
+    /// Shot Animator component
+    /// </summary>
     public class ShotAnimator : Component
     {
         private readonly double ShotSpeed = Config.GetValue<double>("ShotSpeed");
@@ -24,6 +30,15 @@ namespace SpaceVsInvaders.View.Boards
         private int rowHeight;
         private List<Shot> shots;
         private SoundEffectInstance soundEffectInstance;
+
+        /// <summary>
+        /// Constructor of <c>ShotAnimator</c>
+        /// </summary>
+        /// <param name="position">Position of the board to overlay on</param>
+        /// <param name="height">Height of the board to overlay on</param>
+        /// <param name="width">Width of the board to overlay on</param>
+        /// <param name="colWidth">Column width</param>
+        /// <param name="rowHeight">Row height</param>
         public ShotAnimator(Vector2 position, int height, int width, int colWidth, int rowHeight)
             : base(position, height, width)
         {
@@ -36,6 +51,10 @@ namespace SpaceVsInvaders.View.Boards
             soundEffectInstance.Volume = 0.6f;
         }
 
+        /// <summary>
+        /// Update each shot's location
+        /// </summary>
+        /// <param name="gameTime">Gametime</param>
         public override void Update(GameTime gameTime)
         {
             double elapsedSec = gameTime.ElapsedGameTime.TotalSeconds;
@@ -50,6 +69,10 @@ namespace SpaceVsInvaders.View.Boards
             }
         }
 
+        /// <summary>
+        /// Draw each shot to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             foreach(var shot in shots)
@@ -64,6 +87,11 @@ namespace SpaceVsInvaders.View.Boards
             }
         }
 
+        /// <summary>
+        /// Handles the addition of a enw shot
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="args">Event args</param>
         public void HandleNewShot(object sender, SVsIEventArgs args)
         {
             var shot = new Shot

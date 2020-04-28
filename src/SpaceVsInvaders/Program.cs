@@ -5,8 +5,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace SpaceVsInvaders
 {
-
-
     public static class Program
     {
         [STAThread]

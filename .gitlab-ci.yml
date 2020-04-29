@@ -1,5 +1,11 @@
 image: andipeter/monogame-test:0.4
 
+stages:
+    - build
+    - test
+    - generate-docs
+    - deploy
+
 build:
     stage: build
     script:
@@ -15,7 +21,7 @@ test:
             - coveragereport
 
 generate-docs:
-    stage: deploy
+    stage: generate-docs
     script:
         - mono /opt/docsfx.exe build $PWD/docs/webdocs/docfx.json
     artifacts:
@@ -29,9 +35,9 @@ pages:
         - cp -r docs/webdocs/_site/ public/docs/
     needs:
         - job: test
-            artifacts: true
+          artifacts: true
         - job: generate-docs
-            artifacts: true
+          artifacts: true
     artifacts:
         paths:
             - public

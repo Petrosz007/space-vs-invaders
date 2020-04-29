@@ -56,4 +56,7 @@ RUN apt-get remove -y wget gpg curl git sudo locales unzip \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Copy the necessary fonts
+COPY ./fonts /usr/share/fonts
+
 CMD [ "bash" ]

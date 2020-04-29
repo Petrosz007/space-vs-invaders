@@ -1,4 +1,4 @@
-image: andipeter/monogame-test:0.3
+image: andipeter/monogame-test:0.4
 
 build:
     stage: build
@@ -12,5 +12,27 @@ test:
         - reportgenerator "-reports:src/SpaceVsInvaders.Tests/lcov.info" "-targetdir:coveragereport" -reporttypes:Html
     artifacts:
         paths:
-        - coveragereport
+            - coveragereport
+
+generate-docs:
+    stage: deploy
+    script:
+        - mono /opt/docsfx.exe build $PWD/docs/webdocs/docfx.json
+    artifacts:
+        paths:
+            - docs/webdocs/_site
+
+pages:
+    stage: deploy
+    script:
+        - cp -r coveragereport/ public/coveragereport/
+        - cp -r docs/webdocs/_site/ public/docs/
+    needs:
+        - job: test
+            artifacts: true
+        - job: generate-docs
+            artifacts: true
+    artifacts:
+        paths:
+            - public
     

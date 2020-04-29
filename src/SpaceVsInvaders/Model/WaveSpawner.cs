@@ -13,10 +13,14 @@ namespace SpaceVsInvaders.Model
     {
         private Queue EnemiesToSpawn;
 
+        /// <summary>
+        /// Constructor of the class WaveSpawner
+        /// </summary>
         public WaveSpawner()
         {
             EnemiesToSpawn = new Queue();
         }
+
         /// <summary>
         /// Provides as many enemies, as the count of coloumns of the game
         /// </summary>

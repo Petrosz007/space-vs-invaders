@@ -23,7 +23,7 @@ test:
 generate-docs:
     stage: generate-docs
     script:
-        - mono /opt/docsfx.exe build $PWD/docs/webdocs/docfx.json
+        - mono /opt/docfx/docsfx.exe build $PWD/docs/webdocs/docfx.json
     artifacts:
         paths:
             - docs/webdocs/_site

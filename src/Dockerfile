@@ -37,19 +37,6 @@ RUN dotnet tool install -g dotnet-reportgenerator-globaltool
 ENV PATH="/root/.dotnet/tools/:${PATH}" 
 
 
-# Install mono
-RUN apt-get update && \
-    apt-get install -y gnupg ca-certificates && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
-    echo "deb https://download.mono-project.com/repo/debian stable-buster main" | tee /etc/apt/sources.list.d/mono-official-stable.list && \
-    apt-get update && \
-    apt-get install -y mono-devel mono-complete
-
-# Install DocFX
-RUN apt-get update && \
-    apt-get install -y wget unzip && \
-    wget https://github.com/dotnet/docfx/releases/download/v$DOCFX_VERSION/docfx.zip -O /tmp/docfx.zip && \
-    unzip /tmp/docfx.zip -d /opt/docfx/
 
 # Remove the install tools
 RUN apt-get remove -y wget gpg curl git sudo locales unzip \

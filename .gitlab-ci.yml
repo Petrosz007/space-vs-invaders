@@ -31,6 +31,8 @@ generate-docs:
 pages:
     stage: deploy
     script:
+        - mkdir -p public/coveragereport/
+        - mkdir -p public/docs/
         - cp -r coveragereport/ public/coveragereport/
         - cp -r docs/webdocs/_site/ public/docs/
     needs:

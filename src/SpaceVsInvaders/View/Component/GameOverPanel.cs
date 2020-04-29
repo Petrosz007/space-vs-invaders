@@ -3,12 +3,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SpaceVsInvaders.View.Components
 {
+    /// <summary>
+    /// Game over panel component
+    /// </summary>
     public class GameOverPanel : Component
     {
         private StateManager stateManager;
         private SpriteFont font;
         private Texture2D background;
         public Button MainMenuButton { get; private set; }
+
+        /// <summary>
+        /// Constructor of <c>GameOverPanel</c>
+        /// </summary>
+        /// <param name="position">Position</param>
+        /// <param name="height">Height</param>
+        /// <param name="width">Width</param>
+        /// <param name="stateManager">StateManager to get the state from</param>
         public GameOverPanel(Vector2 position, int height, int width, StateManager stateManager)
             : base(position, height, width)
         {
@@ -22,6 +33,10 @@ namespace SpaceVsInvaders.View.Components
             MainMenuButton = new Button(position + new Vector2((width - btnWidth)/2, height - btnHeight - 50), btnHeight, btnWidth, "Main Menu");
         }
 
+        /// <summary>
+        /// Updates whether the game is over and the panel should be drawn
+        /// </summary>
+        /// <param name="gameTime">Game time</param>
         public override void Update(GameTime gameTime)
         {
             if(!stateManager.GameOver) return;
@@ -29,6 +44,10 @@ namespace SpaceVsInvaders.View.Components
             MainMenuButton.Update(gameTime);
         }
 
+        /// <summary>
+        /// Draws the game over panel to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch to draw to</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             if(!stateManager.GameOver) return;

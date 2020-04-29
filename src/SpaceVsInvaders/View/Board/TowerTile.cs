@@ -7,6 +7,9 @@ using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Boards
 {
+    /// <summary>
+    /// Tower tile used in the Game Board
+    /// </summary>
     public class TowerTile : Tile
     {
         private TowerType tower;
@@ -16,7 +19,18 @@ namespace SpaceVsInvaders.View.Boards
         private int maxHealth;
         private SpriteFont font;
 
-
+        /// <summary>
+        /// Constructor of <c>TowerTile</c>
+        /// </summary>
+        /// <param name="position">Position</param>
+        /// <param name="height">Height</param>
+        /// <param name="width">Width</param>
+        /// <param name="row">Row of the tile</param>
+        /// <param name="col">Column of the tile</param>
+        /// <param name="stateManager">State manager to get the state from</param>
+        /// <param name="tower">Tower type of the tile</param>
+        /// <param name="currHealth">Current health</param>
+        /// <param name="maxHealth">Max health</param>
         public TowerTile(Vector2 position, int height, int width, int row, int col, StateManager stateManager, TowerType tower, int currHealth, int maxHealth)
             : base(position, height, width, row, col, stateManager)
         {
@@ -32,6 +46,10 @@ namespace SpaceVsInvaders.View.Boards
             font = ContentLoader.GetFont("Fonts/NumberFont");
         }
 
+        /// <summary>
+        /// Draw the tower tile to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             int size = (width > height) ? height : width;
@@ -40,21 +58,15 @@ namespace SpaceVsInvaders.View.Boards
             var rect = new Rectangle((int)position.X + (width - size)/2, (int)position.Y + (height - size)/2, size, size);
             spriteBatch.Draw(texture, rect, new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
 
-            // spriteBatch.DrawString(ContentLoader.GetFont("Fonts/NumberFont"), $"{currHealth}/{maxHealth}", new Vector2(position.X + 4, position.Y + height - 20), Color.White);
             DrawHpBar(spriteBatch);
            
            base.Draw(spriteBatch);
         }
         
-        private void DrawOutlinedString(SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 pos, Color color)
-        {
-                spriteBatch.DrawString(font, text, pos + new Vector2(1,1), Color.Black);
-                spriteBatch.DrawString(font, text, pos + new Vector2(1,-1), Color.Black);
-                spriteBatch.DrawString(font, text, pos + new Vector2(-1,1), Color.Black);
-                spriteBatch.DrawString(font, text, pos + new Vector2(-1,-1), Color.Black);
-                spriteBatch.DrawString(font, text, pos, Color.White);
-        }
-
+        /// <summary>
+        /// Draws the healthbar of the tile to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch</param>
         private void DrawHpBar(SpriteBatch spriteBatch)
         {
             int hpBarWidth = width * 2 / 3;
@@ -111,13 +123,6 @@ namespace SpaceVsInvaders.View.Boards
                     position.X + (width - hpBarWidth)/2 + 5 + borderSize + 1,
                     position.Y + height - (int)measure.Y - 1),
                 Color.White);
-        }
-
-
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
         }
     }
 }

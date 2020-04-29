@@ -447,8 +447,7 @@ namespace SpaceVsInvaders.Model
             var tower = Towers[row, col] ?? throw new SVsIModelException("No tower selected.");
 
             Money += tower.SellCost;
-            Towers[row, col] = null;
-            TowerCounter--;
+            DestroyTower(row,col);
         }
 
         /// <summary>

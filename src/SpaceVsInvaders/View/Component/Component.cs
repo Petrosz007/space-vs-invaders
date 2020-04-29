@@ -25,7 +25,7 @@ namespace SpaceVsInvaders.View.Components
         /// Constructor of <c>Component</c>
         /// </summary>
         /// <param name="position">Position</param>
-        /// <param name="height">Height of teh component</param>
+        /// <param name="height">Height of the component</param>
         /// <param name="width">Width of the component</param>
         public Component(Vector2 position, int height, int width)
         {

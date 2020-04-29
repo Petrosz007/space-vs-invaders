@@ -31,7 +31,7 @@ namespace SpaceVsInvaders.View.Components
         {
             if(stateManager.GameOver) return;
             
-            base.Update(gameTime);
+            // base.Update(gameTime);
 
             secondsElapsed += gameTime.ElapsedGameTime.TotalSeconds;
 

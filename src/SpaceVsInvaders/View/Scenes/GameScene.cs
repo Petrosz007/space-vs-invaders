@@ -15,7 +15,7 @@ namespace SpaceVsInvaders.View.Scenes
     public enum Difficulty { Normal, Hard }
 
     /// <summary>
-    /// This is the main type for your game.
+    /// Main game scene
     /// </summary>
     public class GameScene : Scene
     {        
@@ -33,11 +33,21 @@ namespace SpaceVsInvaders.View.Scenes
         private double prevSecond;
         private int boardWidth;
         private int panelsWidth;
+
+        /// <summary>
+        /// Constructor of <c>GameScene</c>
+        /// </summary>
+        /// <param name="width">Window width</param>
+        /// <param name="height">Window Height</param>
         public GameScene(int width, int height)
             : base(width, height)
         {
         }
 
+        /// <summary>
+        /// Start a new game
+        /// </summary>
+        /// <param name="difficulty">Difficulty of the new game</param>
         public void NewGame(Difficulty difficulty)
         {
             var configPath = difficulty switch {
@@ -141,8 +151,6 @@ namespace SpaceVsInvaders.View.Scenes
             {
                 component.Update(gameTime);
             }
-
-            // base.Update(gameTime);
         }
 
         /// <summary>
@@ -163,6 +171,10 @@ namespace SpaceVsInvaders.View.Scenes
             // base.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// If enough time has passed it ticks the model once
+        /// </summary>
+        /// <param name="currentSeconds"></param>
         private void HandleTick(double currentSeconds)
         {
             if (currentSeconds > prevSecond + TickTime && !stateManager.GameOver)
@@ -172,6 +184,11 @@ namespace SpaceVsInvaders.View.Scenes
             }
         }
 
+        /// <summary>
+        /// Handles different key press events
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="key">Pressed key</param>
         private void HandleKeyPress(object sender, Keys key)
         {
             if(stateManager.GameOver) return;

@@ -8,6 +8,9 @@ using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Boards
 {
+    /// <summary>
+    /// Includes main informations about a Catastrophe
+    /// </summary>
     public class Catastrophe
     {
         public CatastropheType type { get; set; }
@@ -22,6 +25,9 @@ namespace SpaceVsInvaders.View.Boards
             this.SecRemaining = sec;
         }
     }
+    /// <summary>
+    /// Puts the catastrophes on the board
+    /// </summary>
     public class CatastropheAnimator : Component
     {
         private int colWidth;
@@ -40,6 +46,10 @@ namespace SpaceVsInvaders.View.Boards
             catastrophes = new List<Catastrophe>();
         }
 
+        /// <summary>
+        /// This handles the function of the class, is called in every tick
+        /// </summary>
+        /// <param name="gameTime">The time elapsed ingame</param>
         public override void Update(GameTime gameTime)
         {
             if(gameTime.TotalGameTime.TotalSeconds > LastSecond + 1)
@@ -57,6 +67,10 @@ namespace SpaceVsInvaders.View.Boards
             }
         }
 
+         /// <summary>
+        /// Draws the Catastrophe on the screen
+        /// </summary>
+        /// <param name="spriteBatch">Includes texture of the Catastrophe</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             foreach(var item in catastrophes)
@@ -82,13 +96,23 @@ namespace SpaceVsInvaders.View.Boards
               
             }
         }
-
+        /// <summary>
+        /// Eventhandler, that handles Damage Catastrophes
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="args">The information that is sent</param>
         public void HandleAsteroids(object sender, SVsIEventArgs args)
         {
             Catastrophe tmp = new Catastrophe(CatastropheType.Asteroid, args.Where.X, args.Where.Y, 0);
             
             catastrophes.Add(tmp);
         }
+
+        /// <summary>
+        /// Eventhandler, that handles Healing Catastrophes
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="args">The information that is sent</param>
          public void HandleHealing(object sender, SVsIEventArgs args)
         {
             Catastrophe tmp = new Catastrophe(CatastropheType.Healing, args.Where.X, args.Where.Y, 0);

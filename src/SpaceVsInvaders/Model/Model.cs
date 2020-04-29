@@ -506,6 +506,13 @@ namespace SpaceVsInvaders.Model
                 }
             }
         }
+
+        /// <summary>
+        /// Handles Damage Catastrophe
+        /// </summary>
+        /// <param name="i">Affected row</param>
+        /// <param name="j">Affected col</param>
+        /// <param name="dmg">Damage to be dealt</param>
         public void HandleAsteroidCatastrophe(int i, int j, int dmg)
         {
             if (null != Enemies[i,j])
@@ -529,6 +536,13 @@ namespace SpaceVsInvaders.Model
                 }
             }
         }
+
+        /// <summary>
+        /// Handles Heal Catastrophe
+        /// </summary>
+        /// <param name="i">Affected row</param>
+        /// <param name="j">Affected col</param>
+        /// <param name="dmg">Healing to be dealt</param>
         public void HandleHealingCatastrophe(int i, int j, int heal)
         {
             if (null != Towers[i,j])
@@ -545,6 +559,11 @@ namespace SpaceVsInvaders.Model
                 }
             }
         }
+
+        /// <summary>
+        /// Generates a random coordinate on the board
+        /// </summary>
+        /// <returns>A random coordinate on the board</returns>
         public Coordinate generateCoordinates()
         {
             Random rnd = new Random();

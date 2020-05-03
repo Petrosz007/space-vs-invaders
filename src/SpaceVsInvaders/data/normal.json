@@ -5,6 +5,8 @@
     "Rows": 12,
     "Cols": 6,
     "ShotSpeed": 0.3,
+    "WaveInterval": 20,
+    "ReinforceInterval": 180,
     "BuffEnemy" : {
         "Health": 150,
         "Movement": 3,

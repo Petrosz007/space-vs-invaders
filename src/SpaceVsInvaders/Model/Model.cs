@@ -34,7 +34,7 @@ namespace SpaceVsInvaders.Model
     {
         public int Money { get; set; }
         public int SecondsElapsed { get; private set; }
-        public int ThreeMinutesPassed { get; private set; }
+        public int ReinforceTimes { get; private set; }
         public int TowerCounter { get; private set; }
         public int TowerUpdates { get; private set; }
         
@@ -132,20 +132,20 @@ namespace SpaceVsInvaders.Model
             IsSpawningEnemies = true;
             IsCatastrophe = true;
             TowerCounter = 0;
-            ThreeMinutesPassed = 0;
+            ReinforceTimes = 0;
         }
 
         public void HandleTick()
         {
             Money += 1;
             SecondsElapsed += 1;
-            if(SecondsElapsed % 20 == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
+            if(SecondsElapsed % Config.GetValue<int>("WaveInterval") == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
             {
-                WS.SpawnEnemies(SecondsElapsed, Cols, TowerCounter,TowerUpdates,ThreeMinutesPassed);
+                WS.SpawnEnemies(SecondsElapsed, Cols, TowerCounter,TowerUpdates,ReinforceTimes);
             }
-            if (SecondsElapsed % 180 == 0)
+            if (SecondsElapsed % Config.GetValue<int>("ReinforceInterval") == 0)
             {
-                ThreeMinutesPassed++;
+                ReinforceTimes++;
             }
 
             //? Lehet hogy vissza kell cserélni a sorrendet ha bugos
@@ -323,7 +323,7 @@ namespace SpaceVsInvaders.Model
                             }
                         }   
                     }
-            for(int k = 0; k < 1 + ThreeMinutesPassed; k++)
+            for(int k = 0; k < 1 + ReinforceTimes; k++)
             {
                 if(WS.AreEnemiesLeft() && SecondsElapsed % 3 == 0) // itt kell megadni, hány másodpercenként jelenjenek meg, hogy az előző adag elmozduljon, mire ez bejátszódik
                 {

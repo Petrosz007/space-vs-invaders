@@ -1,5 +1,5 @@
 {
-    "RoundTime": 10,
+    "RoundTime": 600,
     "TickTime": 0.6,
     "StartingMoney": 1500,
     "Rows": 12,

@@ -68,6 +68,9 @@ namespace SpaceVsInvaders.View
             "Sounds/error",
         };
 
+        private static Dictionary<Color, Texture2D> solidTextureCache = 
+            new Dictionary<Color, Texture2D>();
+
         public static void AttachGraphicsDevice(GraphicsDevice gd)
         {
             graphicsDevice = gd;
@@ -218,8 +221,17 @@ namespace SpaceVsInvaders.View
         /// </example>
         public static Texture2D CreateSolidtexture(Color color)
         {
-            Texture2D texture = new Texture2D(graphicsDevice, 1, 1);
+            Texture2D texture;
+            if (solidTextureCache.TryGetValue(color, out texture))
+            {
+                return texture;
+            }
+
+            texture = new Texture2D(graphicsDevice, 1, 1);
             texture.SetData(new[] { color });
+
+            solidTextureCache.Add(color, texture);
+
             return texture;
         }
     }

@@ -143,6 +143,8 @@ namespace SpaceVsInvaders
 
             cursor.Draw(spriteBatch);
 
+            // DisplayFPS(spriteBatch, gameTime);
+            
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -157,6 +159,15 @@ namespace SpaceVsInvaders
         {
             ((GameScene) scenes[SceneType.Game]).NewGame(difficulty);
             activeScene = SceneType.Game;
+        }
+
+        private void DisplayFPS(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            double frameRate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
+
+            Console.WriteLine($"Elapsed = {gameTime.ElapsedGameTime.TotalSeconds} FPS = {frameRate}");
+
+            spriteBatch.DrawString(ContentLoader.GetFont("Fonts/NumberFont"), Math.Round(frameRate, 2).ToString(), new Vector2(0,0), Color.LightGreen);
         }
     }
 }

@@ -18,6 +18,9 @@ namespace SpaceVsInvaders.View.Boards
         private int maxHealth;
         private SpriteFont font;
 
+        private Texture2D hpBarForegroundTexture;
+        private Texture2D hpBarBackgroundTexture;
+
         /// <summary>
         /// Constructor of <c>EnemyTile</c>
         /// </summary>
@@ -39,6 +42,12 @@ namespace SpaceVsInvaders.View.Boards
             this.maxHealth = maxHealth;
 
             font = ContentLoader.GetFont("Fonts/NumberFont");
+
+            Color foregroundColor = Color.Red;
+            Color backgroundColor = Color.Black;
+
+            hpBarForegroundTexture = ContentLoader.CreateSolidtexture(foregroundColor);
+            hpBarBackgroundTexture = ContentLoader.CreateSolidtexture(backgroundColor);
         }
 
         /// <summary>
@@ -108,16 +117,14 @@ namespace SpaceVsInvaders.View.Boards
             int hpBarWidth = width * 2 / 3;
             int hpBarHeight = 10;
             int borderSize = 3;
-            Color bgColor = Color.Black;
-            Color fgColor = Color.Red;
 
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(bgColor), 
+            spriteBatch.Draw(hpBarBackgroundTexture, 
                 new Rectangle(
                     (int)position.X + (width - hpBarWidth)/2 + 5,
                     (int)position.Y, hpBarWidth, hpBarHeight), 
                 Color.White);
 
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(fgColor), 
+            spriteBatch.Draw(hpBarForegroundTexture, 
                 new Rectangle(
                     (int)position.X + (width - hpBarWidth)/2 + 5 + borderSize,
                     (int)position.Y + borderSize,
@@ -127,7 +134,7 @@ namespace SpaceVsInvaders.View.Boards
             
             var measure = font.MeasureString(currHealth.ToString()) + new Vector2(2,2);
 
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(bgColor), 
+            spriteBatch.Draw(hpBarBackgroundTexture, 
                 new Rectangle(
                     (int)position.X + (width - hpBarWidth)/2 + 5,
                     (int)position.Y,
@@ -135,7 +142,7 @@ namespace SpaceVsInvaders.View.Boards
                     (int)measure.Y + borderSize*2),
                 Color.White);
 
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(bgColor), 
+            spriteBatch.Draw(hpBarBackgroundTexture, 
                 new Rectangle(
                     (int)position.X + (width - hpBarWidth)/2 + 5 + (int)measure.X + borderSize,
                     (int)position.Y + hpBarHeight,
@@ -143,7 +150,7 @@ namespace SpaceVsInvaders.View.Boards
                     (int)measure.Y - hpBarHeight + borderSize*2), 
                 Color.White);
 
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(fgColor), 
+            spriteBatch.Draw(hpBarForegroundTexture, 
                 new Rectangle(
                     (int)position.X + (width - hpBarWidth)/2 + 5 + borderSize,
                     (int)position.Y + borderSize, 

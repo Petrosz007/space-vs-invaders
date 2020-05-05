@@ -5,74 +5,209 @@ using SpaceVsInvaders.Model.Enemies;
 
 namespace SpaceVsInvaders.Model
 {
+    /// <summary>
+    /// The model's own kind of exception.
+    /// </summary>
     public class SVsIModelException : Exception 
     {
+        /// <summary>
+        /// The exception's constuctor.
+        /// </summary>
+        /// <param name="message">Custom message reasoning the exception's thrown.</param>
         public SVsIModelException(string message)
             : base(message) 
         {}
     }
+    /// <summary>
+    /// Enumeration of possible tower types.
+    /// </summary>
     public enum TowerType
     {
+        /// <summary>
+        /// Tower that can damage the enemy.
+        /// </summary>
         Damage,
+        /// <summary>
+        /// Tower that produces money for the player.
+        /// </summary>
         Gold,
+        /// <summary>
+        /// Tower that can heal other towers.
+        /// </summary>
         Heal
     }
-    
+    /// <summary>
+    /// Enumeration of possible enemy types.
+    /// </summary>
     public enum EnemyType
     {
+        /// <summary>
+        /// Slow but harmful enemy.
+        /// </summary>
         Buff,
+        /// <summary>
+        /// Avarage enemy.
+        /// </summary>
         Normal,
+        /// <summary>
+        /// Fast but less harmful enemy.
+        /// </summary>
         Speedy
     }
+    /// <summary>
+    /// Enumeration of possible catasrophes.
+    /// </summary>
     public enum CatastropheType
     {
+        /// <summary>
+        /// Incase this type of disaster occurs, a randomly picked tower or a group of enemies standing on the same field will be healed.
+        /// </summary>
         Healing,
+        /// <summary>
+        /// Incase this type of disaster occurs, a randomly picked tower or a group of enemies standing on the same field will be hurt or exterminated. 
+        /// </summary>
         Asteroid
     }
 
+    /// <summary>
+    /// The model's class.
+    /// </summary>
     public class SVsIModel
     {
+        /// <summary>
+        /// Players current amount of money.
+        /// </summary>
+        /// <value> Money </value>
         public int Money { get; set; }
+        /// <summary>
+        /// Seconds elapsed since the game has started.
+        /// </summary>
+        /// <value> SecondsElapsed </value>
         public int SecondsElapsed { get; private set; }
+        /// <summary>
+        ///  Interval of the enemies' reinforcement.
+        /// </summary>
+        /// <value> ReinforceTimes </value>
         public int ReinforceTimes { get; private set; }
+        /// <summary>
+        /// Tower counter.
+        /// </summary>
+        /// <value> TowerCounter </value>
         public int TowerCounter { get; private set; }
+        /// <summary>
+        /// Amount of tower updates.
+        /// </summary>
+        /// <value>TowerUpdates</value>
         public int TowerUpdates { get; private set; }
-        
+        /// <summary>
+        /// Board of enemy lists.
+        /// </summary>
         public List<SVsIEnemy>[,] Enemies;
-
+        /// <summary>
+        /// Heigth of the gametable.
+        /// </summary>
+        /// <value>Rows</value>
         public int Rows { get; set; }
 
+        /// <summary>
+        /// Width of the gametable.
+        /// </summary>
+        /// <value>Cols</value>
         public int Cols { get; set; }
-
+        /// <summary>
+        /// Board of towers.
+        /// </summary>
         public SVsITower[,] Towers;
 
+        /// <summary>
+        /// Difficulty of the game.
+        /// </summary>
+        /// <value>Difficulty</value>
         public int Difficulty { get; private set; }
 
+        /// <summary>
+        /// Player's castle.
+        /// </summary>
         public SVsICastle Castle;
 
+        /// <summary>
+        /// Is game over.
+        /// </summary>
+        /// <value> IsGameOver </value>
         public bool IsGameOver { get; private set; }
 
+        /// <summary>
+        /// WaveSpawner.
+        /// </summary>
         public WaveSpawner WS;
+
+        /// <summary>
+        /// Wavespawner is spawning enemies.
+        /// </summary>
+        /// <value> IsSpawningEnemies </value>
         public bool IsSpawningEnemies { get; set; }
+
+        /// <summary>
+        /// Catasrophes can occur.
+        /// </summary>
+        /// <value></value>
         public bool IsCatastrophe { get; set; }
 
 #region Events
+        /// <summary>
+        /// Enemy movement event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> EnemyMoved;
+        /// <summary>
+        /// Tower attack event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> TowerHasAttacked;
+        /// <summary>
+        /// Enemy exterminated event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> EnemyDead;
+        /// <summary>
+        /// Tower destroyed event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> TowerDestroyed;
+        /// <summary>
+        /// Game over event.
+        /// </summary>
         public event EventHandler<bool> GameOver;
+        /// <summary>
+        /// Enemy entered the castle event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> EnemyMovedToCastle;
+        /// <summary>
+        /// Healing catastrophe occured event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> HealingCatastrophe;
+        /// <summary>
+        /// Asteroid catastrophe occured event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> AsteroidCatastrophe;
 
-         public void onEnemyMoved(int fromX, int fromY, int toX, int toY)
+        /// <summary>
+        /// Enemy movement event sender.
+        /// </summary>
+        /// <param name="fromX"> The row it moved from.</param>
+        /// <param name="fromY"> The coloumn it moved from. </param>
+        /// <param name="toX">  The row it moved to.</param>
+        /// <param name="toY">  The coloumn it moved to. </param>
+        public void onEnemyMoved(int fromX, int fromY, int toX, int toY)
         {
             if(EnemyMoved != null)
             {
                 EnemyMoved(this, new SVsIEventArgs(fromX, fromY, toX, toY));
             }
         }
+        /// <summary>
+        /// Tower attacked event sender.
+        /// </summary>
+        /// <param name="fromX"> The row it has attacked from.</param>
+        /// <param name="fromY"> The coloumn it has attacked from. </param>
+        /// <param name="toX">  The row of the enemy it has attacked.</param>
+        /// <param name="toY">  The coloumn of the enemy it has attacked. </param>
         public void onTowerHasAttacked(int fromX, int fromY, int toX, int toY)
         {
             if(TowerHasAttacked != null)
@@ -80,6 +215,11 @@ namespace SpaceVsInvaders.Model
                 TowerHasAttacked(this, new SVsIEventArgs(fromX, fromY, toX, toY));
             }
         }
+        /// <summary>
+        /// Tower destroyed event sender.
+        /// </summary>
+        /// <param name="whereX"> The row where it has been destroyed. </param>
+        /// <param name="whereY"> The coloumn where it has been destroyed. </param>
         public void onTowerDestroyed(int whereX, int whereY)
         {
             if(TowerDestroyed != null)
@@ -87,6 +227,11 @@ namespace SpaceVsInvaders.Model
                 TowerDestroyed(this, new SVsIEventArgs(whereX, whereY));
             }
         }
+        /// <summary>
+        /// Enemy exterminated event sender.
+        /// </summary>
+        /// <param name="whereX"> The row where it has been exterminated. </param>
+        /// <param name="whereY"> The coloumn where it has been exterminated. </param>
         public void onEnemyDead(int whereX, int whereY)
         {
             if(EnemyDead != null)
@@ -94,6 +239,10 @@ namespace SpaceVsInvaders.Model
                 EnemyDead(this, new SVsIEventArgs(whereX, whereY));
             }
         }
+        /// <summary>
+        /// Game over event sender.
+        /// </summary>
+        /// <param name="victory"> Whether the game has been won or lost. </param>
         public void onGameOver(bool victory)
         {
             IsGameOver = true;
@@ -102,6 +251,12 @@ namespace SpaceVsInvaders.Model
                 GameOver(this, victory);
             }
         }
+        /// <summary>
+        /// Enemy moved to castle event sender.
+        /// </summary>
+        /// <param name="whereX"> The row it moved to the castle from.</param>
+        /// <param name="whereY"> The coloumn it moved to the castle from.</param>
+        /// <param name="type"> The type of the enemy that moved to the castle. </param>
         public void onEnemyMovedToCastle(int whereX, int whereY, EnemyType type)
         {
             if(EnemyMovedToCastle != null)
@@ -109,6 +264,11 @@ namespace SpaceVsInvaders.Model
                 EnemyMovedToCastle(this, new SVsIEventArgs(whereX, whereY, type));
             }
         }
+        /// <summary>
+        /// Healing catasrophe event sender.
+        /// </summary>
+        /// <param name="whereX"> The row where it occurs. </param>
+        /// <param name="whereY"> The coloumn where it occurs. </param>
         public void onHealingCatastrophe(int whereX, int whereY)
         {
             if(HealingCatastrophe != null)
@@ -116,7 +276,12 @@ namespace SpaceVsInvaders.Model
                 HealingCatastrophe(this, new SVsIEventArgs(whereX, whereY));
             }
         }
-        
+
+        /// <summary>
+        /// Asteroid catasrophe event sender.
+        /// </summary>
+        /// <param name="whereX"> The row where it occurs. </param>
+        /// <param name="whereY"> The coloumn where it occurs. </param>
         public void onAsteroidCatastrophe(int whereX, int whereY)
         {
             if(AsteroidCatastrophe != null)
@@ -125,7 +290,9 @@ namespace SpaceVsInvaders.Model
             }
         }
 #endregion
-
+        /// <summary>
+        /// Model's constructor.
+        /// </summary>
         public SVsIModel()
         {
             WS = new WaveSpawner();
@@ -135,6 +302,9 @@ namespace SpaceVsInvaders.Model
             ReinforceTimes = 0;
         }
 
+        /// <summary>
+        /// Handler of time passing.
+        /// </summary>
         public void HandleTick()
         {
             Money += 1;
@@ -159,7 +329,7 @@ namespace SpaceVsInvaders.Model
         }
 
         /// <summary>
-        /// Tornyok lekezelése. (Gyógyítás, ellenség lövése, pénzmennyiség növelése.)
+        /// Handler of towers.
         /// </summary>
         private void HandleTowers()
         {

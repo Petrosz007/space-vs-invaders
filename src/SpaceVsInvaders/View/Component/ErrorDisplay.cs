@@ -14,10 +14,19 @@ namespace SpaceVsInvaders.View.Components
     {
         
         private Texture2D Texture;
+        /// <summary>
+        /// List of Errors
+        /// </summary>
         public List<(string, int)> Errors;
         private double LastSecond;
         private SpriteFont Font;
         private SoundEffectInstance soundEffectInstance;
+        /// <summary>
+        /// constructor of ErroDisplay
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
         public ErrorDisplay(Vector2 position, int height, int width)
             : base(position, height, width)
         {

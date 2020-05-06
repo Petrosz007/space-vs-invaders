@@ -13,6 +13,9 @@ namespace SpaceVsInvaders.View.Scenes
     /// </summary>
     public class LogoScene : Scene
     {
+        /// <summary>
+        /// The logo animation has ended event
+        /// </summary>
         public event EventHandler End;
         private double secondsElapsed;
         private Texture2D logo;

@@ -13,14 +13,46 @@ namespace SpaceVsInvaders.View
     {
         private SVsIModel model;
         private ErrorDisplay errorDisplay;
+
+        /// <summary>
+        /// Whether a tower is currently being placed
+        /// </summary>
+        /// <value>Whether a tower is currently being placed</value>
         public bool PlacingTower { get; private set; }
+
+        /// <summary>
+        /// Type of the tower currently being placed
+        /// </summary>
+        /// <value>Type of the tower currently being placed</value>
         public TowerType TowerPlacingType { get; private set; }
 
+        /// <summary>
+        /// Currently selected tower
+        /// </summary>
+        /// <value>Currently selected tower</value>
         public SVsITower SelectedTower { get; private set; }
+
+        /// <summary>
+        /// Selected tower's position
+        /// </summary>
+        /// <value>Selected tower's position</value>
         public (int, int) SelectedPos { get; private set; }
+
+        /// <summary>
+        /// Whether the game is over
+        /// </summary>
+        /// <value>Whether the game is over</value>
         public bool GameOver { get; private set; }
+
+        /// <summary>
+        /// Whether the game resulted in victory
+        /// </summary>
+        /// <value>Whether the game resulted in victory</value>
         public bool Victory { get; private set; }
 
+        /// <summary>
+        /// Pause menu should be opened event
+        /// </summary>
         public event EventHandler OpenPauseMenu;
 
         /// <summary>

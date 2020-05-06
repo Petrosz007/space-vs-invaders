@@ -17,7 +17,17 @@ namespace SpaceVsInvaders.View.Boards
     {
         private SVsIModel model;
         private StateManager stateManager;
+
+        /// <summary>
+        /// Shot animator of the board
+        /// </summary>
+        /// <value>Shot animator of the board</value>
         public ShotAnimator ShotAnimator { get; set; }
+
+        /// <summary>
+        /// CatastropheAnimator of the board
+        /// </summary>
+        /// <value>CatastropheAnimator of the board</value>
         public CatastropheAnimator CatastropheAnimator { get; set; }
 
         private int colWidth;
@@ -26,6 +36,10 @@ namespace SpaceVsInvaders.View.Boards
         private Texture2D divTexture;
         private int divWidth;
         private Color divColor;
+
+        /// <summary>
+        /// Board tile has been clicked event, the tuple is the row and column of the tile
+        /// </summary>
         public event EventHandler<(int, int)> TileClicked;
 
         /// <summary>

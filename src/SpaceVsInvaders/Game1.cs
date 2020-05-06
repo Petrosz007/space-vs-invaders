@@ -12,11 +12,29 @@ using SpaceVsInvaders.View.Scenes;
 
 namespace SpaceVsInvaders
 {
+    /// <summary>
+    /// Scene types
+    /// </summary>
     public enum SceneType
     {
+        /// <summary>
+        /// Game Scene
+        /// </summary>
         Game,
+
+        /// <summary>
+        /// Pause Scene
+        /// </summary>
         Pause,
+
+        /// <summary>
+        /// Main Menu Scene
+        /// </summary>
         MainMenu,
+
+        /// <summary>
+        /// Logo Scene
+        /// </summary>
         Logo,
     }
     /// <summary>
@@ -31,6 +49,9 @@ namespace SpaceVsInvaders
         private SceneType activeScene;
         private Cursor cursor;
 
+        /// <summary>
+        /// Constructor of <c>MainGame</c>
+        /// </summary>
         public MainGame()
         {
             graphics = new GraphicsDeviceManager(this);

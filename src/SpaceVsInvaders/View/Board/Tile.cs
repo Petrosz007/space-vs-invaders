@@ -11,7 +11,16 @@ namespace SpaceVsInvaders.View.Boards
     /// </summary>
     public class Tile : Clickable
     {
+        /// <summary>
+        /// Row of the tile
+        /// </summary>
+        /// <value>Row of the tile</value>
         public int Row { get; set; }
+
+        /// <summary>
+        /// Column of the tile
+        /// </summary>
+        /// <value>Column of the tile</value>
         public int Col { get; set; }
 
         private StateManager stateManager;

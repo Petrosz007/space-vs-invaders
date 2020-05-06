@@ -9,8 +9,19 @@ namespace SpaceVsInvaders.View.Components
     /// </summary>
     public abstract class Component
     {
+        /// <summary>
+        /// Height of the component
+        /// </summary>
         protected int height;
+
+        /// <summary>
+        /// Width of the component
+        /// </summary>
         protected int width;
+
+        /// <summary>
+        /// Position of the component
+        /// </summary>
         protected Vector2 position;
 
         /// <summary>

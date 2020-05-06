@@ -10,8 +10,24 @@ namespace SpaceVsInvaders.View.Scenes
     /// </summary>
     public abstract class Scene
     {
+        /// <summary>
+        /// Width of the scene
+        /// </summary>
+        /// <value>Width of the scene</value>
         protected int Width { get; private set; }
+
+        /// <summary>
+        /// Height of the scene
+        /// </summary>
+        /// <value>Height of the scene</value>
         protected int Height { get; private set; }
+
+        /// <summary>
+        /// Constructor of <c>Scene</c>
+        /// </summary>
+        /// <param name="width">Width of the scene</param>
+        /// <param name="height">Height of the scene</param>
+        /// <returns>Scene</returns>
         public Scene(int width, int height) =>
             (Width, Height) = (width, height);
 

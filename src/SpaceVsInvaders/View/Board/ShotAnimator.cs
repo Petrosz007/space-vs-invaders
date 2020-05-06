@@ -14,10 +14,34 @@ namespace SpaceVsInvaders.View.Boards
     /// </summary>
     public class Shot
     {
+        /// <summary>
+        /// Current X coordinate of the shot
+        /// </summary>
+        /// <value>Current X coordinate of the shot</value>
         public int X { get; set; }
+
+        /// <summary>
+        /// Current Y coordinate of the shot
+        /// </summary>
+        /// <value>Current Y coordinate of the shot</value>
         public double Y { get; set; }
+
+        /// <summary>
+        /// Starting Y coordinate of the shot
+        /// </summary>
+        /// <value>Starting Y coordinate of the shot</value>
         public int FromY { get; set; }
+
+        /// <summary>
+        /// Destination Y coordinate of the shot
+        /// </summary>
+        /// <value>Destination Y coordinate of the shot</value>
         public int ToY { get; set; }
+
+        /// <summary>
+        /// Seconds remaining of the shot's lifespan
+        /// </summary>
+        /// <value>Seconds remaining of the shot's lifespan</value>
         public double SecRemaining { get; set; }
     }
     /// <summary>

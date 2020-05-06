@@ -12,7 +12,14 @@ namespace SpaceVsInvaders.View.Scenes
     /// </summary>
     public class MainMenuScene : Scene
     {
+        /// <summary>
+        /// New game should be started with the difficulty
+        /// </summary>
         public event EventHandler<Difficulty> NewGame;
+
+        /// <summary>
+        /// The program should exit event
+        /// </summary>
         public event EventHandler Exit;
         private List<Component> components;
         private Texture2D background;

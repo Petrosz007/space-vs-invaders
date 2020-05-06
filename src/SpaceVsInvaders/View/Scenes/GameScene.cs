@@ -12,14 +12,35 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SpaceVsInvaders.View.Scenes
 {
-    public enum Difficulty { Normal, Hard }
+    /// <summary>
+    /// Difficulty enum
+    /// </summary>
+    public enum Difficulty 
+    {
+        /// <summary>
+        /// Normal difficulty
+        /// </summary>
+        Normal,
+
+        /// <summary>
+        /// Hard difficulty
+        /// </summary>
+        Hard,
+    }
 
     /// <summary>
     /// Main game scene
     /// </summary>
     public class GameScene : Scene
-    {        
+    {
+        /// <summary>
+        /// The pause menu should be opened event
+        /// </summary>
         public event EventHandler OpenPauseMenu;
+
+        /// <summary>
+        /// Switch to the main menu event
+        /// </summary>
         public event EventHandler ExitToMainMenu;
         private readonly double TickTime = Config.GetValue<double>("TickTime");
         private SVsIModel model;
@@ -156,7 +177,7 @@ namespace SpaceVsInvaders.View.Scenes
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="spriteBatch">Spritebatch to draw to</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(background,

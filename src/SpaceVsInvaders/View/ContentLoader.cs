@@ -71,6 +71,10 @@ namespace SpaceVsInvaders.View
         private static Dictionary<Color, Texture2D> solidTextureCache = 
             new Dictionary<Color, Texture2D>();
 
+        /// <summary>
+        /// Attach the Graphics Device to the ContentLoader, to allow the creating of textures
+        /// </summary>
+        /// <param name="gd">Main Graphics Device</param>
         public static void AttachGraphicsDevice(GraphicsDevice gd)
         {
             graphicsDevice = gd;

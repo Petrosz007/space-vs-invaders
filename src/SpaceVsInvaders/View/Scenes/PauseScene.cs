@@ -12,8 +12,19 @@ namespace SpaceVsInvaders.View.Scenes
     /// </summary>
     public class PauseScene : Scene
     {
+        /// <summary>
+        /// The game should be resumed event
+        /// </summary>
         public event EventHandler Resume;
+
+        /// <summary>
+        /// The proram should exit event
+        /// </summary>
         public event EventHandler Exit;
+
+        /// <summary>
+        /// Switch the scene to the main menu event
+        /// </summary>
         public event EventHandler ExitToMainMenu;
         private List<Component> components;
         private Texture2D background;

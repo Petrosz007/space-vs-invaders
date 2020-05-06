@@ -26,6 +26,10 @@ namespace SpaceVsInvaders.View
             prevKeyState = new Dictionary<Keys, bool>();
         }
         
+        /// <summary>
+        /// Checks the key states and emits pressed events
+        /// </summary>
+        /// <param name="gameTime">Game time</param>
         public void Update(GameTime gameTime)
         {
             var pressed = prevKeyState.Keys.Select(key => (key, false)).ToList();

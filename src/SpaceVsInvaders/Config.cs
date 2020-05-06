@@ -10,7 +10,7 @@ namespace SpaceVsInvaders
     /// </summary>
     public static class Config
     {
-        public static IConfiguration Configuration { get; set; }
+        private static IConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Uses the given file path as the configuration data
@@ -40,9 +40,28 @@ namespace SpaceVsInvaders
     /// </summary>
     public class EnemyConfig
     {
+        /// <summary>
+        /// Health of the enemy
+        /// </summary>
+        /// <value>Health of the enemy</value>
         public int Health { get; set; }
+
+        /// <summary>
+        /// Ticks it takes the enemy to move
+        /// </summary>
+        /// <value>Ticks it takes the enemy to move</value>
         public int Movement { get; set; }
+
+        /// <summary>
+        /// Damage of the enemy
+        /// </summary>
+        /// <value>Damage of the enemy</value>
         public int Damage { get; set; }
+
+        /// <summary>
+        /// Ticks it takes the enemy to attack
+        /// </summary>
+        /// <value>Ticks it takes the enemy to attack</value>
         public int TickTime { get; set; }
     }
 
@@ -51,10 +70,34 @@ namespace SpaceVsInvaders
     /// </summary>
     public class TowerConfig
     {
+        /// <summary>
+        /// Health of the tower
+        /// </summary>
+        /// <value>Health of the tower</value>
         public int Health { get; set; }
+
+        /// <summary>
+        /// Max Health of the tower
+        /// </summary>
+        /// <value>Max Health of the tower</value>
         public int MaxHealth { get; set; }
+
+        /// <summary>
+        /// Cost of the tower
+        /// </summary>
+        /// <value>Cost of the tower</value>
         public int Cost { get; set; }
+
+        /// <summary>
+        /// Ticks it takes the tower to do its action
+        /// </summary>
+        /// <value>Ticks it takes the tower to do its action</value>
         public int TickTime { get; set; }
+
+        /// <summary>
+        /// Attack range of the tower
+        /// </summary>
+        /// <value>Attack range of the tower</value>
         public int Range { get; set; }
     }
 
@@ -63,7 +106,16 @@ namespace SpaceVsInvaders
     /// </summary>
     public class CastleConfig
     {
+        /// <summary>
+        /// Health of the castle
+        /// </summary>
+        /// <value>Health of the castle</value>
         public int Health { get; set; }
+
+        /// <summary>
+        /// Upgrade cost of the castle
+        /// </summary>
+        /// <value>Upgrade cost of the castle</value>
         public int UpgradeCost { get; set; }
     }
 }

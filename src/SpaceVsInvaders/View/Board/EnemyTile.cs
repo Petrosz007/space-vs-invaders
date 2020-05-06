@@ -30,6 +30,9 @@ namespace SpaceVsInvaders.View.Boards
         /// <param name="row">Row of the tile</param>
         /// <param name="col">Column of the tile</param>
         /// <param name="stateManager">State manager to get the state from</param>
+        /// <param name="enemies">Enemies currently on the tile, the tuple is how much enemies are there of a given type</param>
+        /// <param name="currHealth">Current health of the first enemy</param>
+        /// <param name="maxHealth">Max health of the first enemy</param>
         public EnemyTile(Vector2 position, int height, int width, int row, int col, StateManager stateManager, List<(EnemyType, int)> enemies, int currHealth, int maxHealth)
             : base(position, height, width, row, col, stateManager)
         {
@@ -78,6 +81,8 @@ namespace SpaceVsInvaders.View.Boards
         /// Draws the enemy to the spritebatch
         /// </summary>
         /// <param name="spriteBatch">Spritebatch</param>
+        /// <param name="enemy">Enemy type and how much enemies are there of that type</param>
+        /// <param name="enemyPlace">Place of the enemy</param>
         private void DrawEnemy(SpriteBatch spriteBatch, (EnemyType, int) enemy, EnemyPlace enemyPlace)
         {  
             int originalSize = (width > height) ? height : width;

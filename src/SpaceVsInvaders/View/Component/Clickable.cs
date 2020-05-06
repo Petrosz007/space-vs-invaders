@@ -13,8 +13,20 @@ namespace SpaceVsInvaders.View.Components
         private ButtonState prevLeftButtonState;
         private ButtonState prevRightButtonState;
         private bool wasMouseOver;
+
+        /// <summary>
+        /// The component has been left clicked event
+        /// </summary>
         public event EventHandler LeftClicked;
+
+        /// <summary>
+        /// The component has been right clicked event
+        /// </summary>
         public event EventHandler RightClicked;
+
+        /// <summary>
+        /// The mouse entered the area of the component
+        /// </summary>
         public event EventHandler MouseEnter;
 
         /// <summary>

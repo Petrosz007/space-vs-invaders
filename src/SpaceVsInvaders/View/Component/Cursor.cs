@@ -10,10 +10,10 @@ namespace SpaceVsInvaders.View.Components
     /// </summary>
     public class Cursor : Component
     {
-        public Texture2D texture;
-        public int rows;
-        public int cols;
-        public int elems;
+        private Texture2D texture;
+        private int rows;
+        private int cols;
+        private int elems;
         private int currElem;
         private double prevSecond;
 

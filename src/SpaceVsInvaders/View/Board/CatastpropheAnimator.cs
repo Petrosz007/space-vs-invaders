@@ -13,10 +13,33 @@ namespace SpaceVsInvaders.View.Boards
     /// </summary>
     public class Catastrophe
     {
+        /// <summary>
+        /// The type of the catastrophe
+        /// </summary>
+        /// <value></value>
         public CatastropheType type { get; set; }
+        /// <summary>
+        /// the X coordinate of the catastrophe
+        /// </summary>
+        /// <value>double</value>
         public int X { get; set; }
+        /// <summary>
+        /// The Y coordinate of the catastrophe
+        /// </summary>
+        /// <value>int</value>
         public double Y { get; set; }
+        /// <summary>
+        /// How many seconds the catastrophe is on the board
+        /// </summary>
+        /// <value>int</value>
         public int SecRemaining { get; set; }
+        /// <summary>
+        /// Constructor of a Catastrophe
+        /// </summary>
+        /// <param name="type">Type of the catastrophe</param>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">y coordinate</param>
+        /// <param name="sec">Seconds on the board</param>
         public Catastrophe(CatastropheType type, int x, int y, int sec)
         {
             this.type = type;
@@ -36,6 +59,14 @@ namespace SpaceVsInvaders.View.Boards
         private double LastSecond;
         private Texture2D texture;
         private Texture2D healingTexture;
+        /// <summary>
+        /// Constructor of CatastropheAnimator
+        /// </summary>
+        /// <param name="position">where it is on the board</param>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        /// <param name="colWidth"></param>
+        /// <param name="rowHeight"></param>
         public CatastropheAnimator(Vector2 position, int height, int width, int colWidth, int rowHeight)
             : base(position, height, width)
         {

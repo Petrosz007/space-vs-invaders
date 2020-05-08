@@ -11,6 +11,11 @@ namespace SpaceVsInvaders.View.Components
         private StateManager stateManager;
         private SpriteFont font;
         private Texture2D background;
+
+        /// <summary>
+        /// Main Menu button
+        /// </summary>
+        /// <value>Main Menu button</value>
         public Button MainMenuButton { get; private set; }
 
         /// <summary>

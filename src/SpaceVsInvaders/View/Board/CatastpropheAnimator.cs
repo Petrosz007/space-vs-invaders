@@ -21,7 +21,7 @@ namespace SpaceVsInvaders.View.Boards
         /// <summary>
         /// the X coordinate of the catastrophe
         /// </summary>
-        /// <value>double</value>
+        /// <value>int</value>
         public int X { get; set; }
         /// <summary>
         /// The Y coordinate of the catastrophe

@@ -3,8 +3,7 @@ image: andipeter/monogame-test:0.4
 stages:
     - build
     - test
-    - generate-docs
-    - deploy
+    - release
 
 build:
     stage: build
@@ -19,3 +18,40 @@ test:
     artifacts:
         paths:
             - coveragereport
+
+# Build for every major platform
+release-win-x64:
+    stage: release
+    script:
+        - dotnet publish -c Release -r win-x64 --self-contained true src/SpaceVsInvaders -o publish
+    artifacts:
+        name: "SpaceVsInvaders-win-x64"
+        paths:
+            - publish
+
+release-win-x86:
+    stage: release
+    script:
+        - dotnet publish -c Release -r win-x86 --self-contained true src/SpaceVsInvaders -o publish
+    artifacts:
+        name: "SpaceVsInvaders-win-x86"
+        paths:
+            - publish
+
+release-linux-x64:
+    stage: release
+    script:
+        - dotnet publish -c Release -r linux-x64 --self-contained true src/SpaceVsInvaders -o publish
+    artifacts:
+        name: "SpaceVsInvaders-linux-x64"
+        paths:
+            - publish
+
+release-osx-x64:
+    stage: release
+    script:
+        - dotnet publish -c Release -r osx-x64 --self-contained true src/SpaceVsInvaders -o publish
+    artifacts:
+        name: "SpaceVsInvaders-osx-x64"
+        paths:
+            - publish

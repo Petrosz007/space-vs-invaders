@@ -697,7 +697,7 @@ namespace SpaceVsInvaders.Model
                 }
                 for( int k = 0; k < Enemies[i,j].Count; k++)
                 {
-                    Enemies[i,j][k].Health -= 20;
+                    Enemies[i,j][k].Health -= dmg;
                     if(Enemies[i,j][k].Health <= 0)
                     {
                         Enemies[i,j].Remove(Enemies[i,j][k]);
@@ -712,7 +712,7 @@ namespace SpaceVsInvaders.Model
         /// </summary>
         /// <param name="i">Affected row</param>
         /// <param name="j">Affected col</param>
-        /// <param name="dmg">Healing to be dealt</param>
+        /// <param name="heal">Healing to be dealt</param>
         public void HandleHealingCatastrophe(int i, int j, int heal)
         {
             if (null != Towers[i,j])

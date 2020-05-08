@@ -5,11 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <ApplicationIcon>Content\icon.ico</ApplicationIcon>
-    <!-- <GenerateAssemblyInfo>false</GenerateAssemblyInfo> -->
-    <!-- <PublishTrimmed>true</PublishTrimmed> -->
-    <!-- <PublishReadyToRun>true</PublishReadyToRun> -->
-    <!-- <PublishSingleFile>true</PublishSingleFile> -->
-    <!-- <RuntimeIdentifier>win-x64</RuntimeIdentifier> -->
+    <RuntimeIdentifiers>win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 

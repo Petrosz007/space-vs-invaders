@@ -27,16 +27,7 @@ release-win-x64:
     artifacts:
         name: "SpaceVsInvaders-win-x64"
         paths:
-            - publish
-
-release-win-x86:
-    stage: release
-    script:
-        - dotnet publish -c Release -r win-x86 --self-contained true src/SpaceVsInvaders -o publish
-    artifacts:
-        name: "SpaceVsInvaders-win-x86"
-        paths:
-            - publish
+            - publish/*
 
 release-linux-x64:
     stage: release
@@ -45,7 +36,7 @@ release-linux-x64:
     artifacts:
         name: "SpaceVsInvaders-linux-x64"
         paths:
-            - publish
+            - publish/*
 
 release-osx-x64:
     stage: release
@@ -54,4 +45,4 @@ release-osx-x64:
     artifacts:
         name: "SpaceVsInvaders-osx-x64"
         paths:
-            - publish
+            - publish/*

@@ -5,6 +5,7 @@ using SpaceVsInvaders;
 using SpaceVsInvaders.Model;
 using SpaceVsInvaders.Model.Towers;
 using SpaceVsInvaders.Model.Enemies;
+using System.Collections.Generic;
 
 namespace SpaceVsInvaders.Tests
 {
@@ -197,6 +198,37 @@ namespace SpaceVsInvaders.Tests
                 {
                   Assert.True(_model.Towers[i,j].Health == Config.GetValue<TowerConfig>("DamageTower").Health-10);
                 }
+            }
+        }
+
+         [Fact]
+        /// <summary>
+        ///  WaveSpawner tesztelése
+        /// </summary>
+        public void WaveSpawnerTest()
+        {
+            _model = new SVsIModel();
+            _model.NewGame(8,8);
+            _model.Money = 999999999;
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
+
+            //mielott elkezdodik barmi is, a wavespawner üres
+            Assert.True( !_model.WS.AreEnemiesLeft() );
+
+            // minden hívással gyártódik enemy
+            _model.WS.SpawnEnemies(100,8,2,2,0);
+            Assert.True(_model.WS.AreEnemiesLeft());
+
+            //ha van enemy, akkor egy lekéréskor ad egy sor kitöltésére elég enemy-t.
+            _model.WS.SpawnEnemies(10000,8,2,2,3);
+            List<EnemyType> tmp = new List<EnemyType>(); // ez innen eltűnik? xd
+            tmp = _model.WS.GetSpawnedEnemies(8);
+
+            Assert.True(tmp.Count == 8);
+            for (int i = 0; i < 8; i++)
+            {
+              Assert.True(tmp[i] is EnemyType.Normal || tmp[i] is EnemyType.Buff || tmp[i] is EnemyType.Speedy);
             }
         }
     }

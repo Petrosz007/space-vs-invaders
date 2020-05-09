@@ -13,8 +13,16 @@ namespace SpaceVsInvaders.Model
     {
         private int x;
         private int y;
-
+        /// <summary>
+        /// Row
+        /// </summary>
+        /// <value> Row </value>
         public int X { get { return x; } set { x = value; } }
+
+        /// <summary>
+        /// Coloumn
+        /// </summary>
+        /// <value> Coloumn </value>
         public int Y { get { return y; } set { y = value; } }
 
         /// <summary>

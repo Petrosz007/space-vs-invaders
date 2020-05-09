@@ -3,7 +3,7 @@ using System;
 namespace SpaceVsInvaders.Model.Towers
 {
     /// <summary>
-    /// Base class for towers.
+    /// Base class of towers.
     /// </summary>
     public abstract class SVsITower
     {

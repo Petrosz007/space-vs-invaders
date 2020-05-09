@@ -701,7 +701,7 @@ namespace SpaceVsInvaders.Model
                 }
                 for( int k = 0; k < Enemies[i,j].Count; k++)
                 {
-                    Enemies[i,j][k].Health -= 20;
+                    Enemies[i,j][k].Health -= dmg;
                     if(Enemies[i,j][k].Health <= 0)
                     {
                         Enemies[i,j].Remove(Enemies[i,j][k]);

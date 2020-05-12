@@ -5,73 +5,209 @@ using SpaceVsInvaders.Model.Enemies;
 
 namespace SpaceVsInvaders.Model
 {
+    /// <summary>
+    /// The model's own kind of exception.
+    /// </summary>
     public class SVsIModelException : Exception 
     {
+        /// <summary>
+        /// The exception's constuctor.
+        /// </summary>
+        /// <param name="message">Custom message reasoning the exception's thrown.</param>
         public SVsIModelException(string message)
             : base(message) 
         {}
     }
+    /// <summary>
+    /// Enumeration of possible tower types.
+    /// </summary>
     public enum TowerType
     {
+        /// <summary>
+        /// Tower that can damage the enemy.
+        /// </summary>
         Damage,
+        /// <summary>
+        /// Tower that produces money for the player.
+        /// </summary>
         Gold,
+        /// <summary>
+        /// Tower that can heal other towers.
+        /// </summary>
         Heal
     }
-    
+    /// <summary>
+    /// Enumeration of possible enemy types.
+    /// </summary>
     public enum EnemyType
     {
+        /// <summary>
+        /// Slow but harmful enemy.
+        /// </summary>
         Buff,
+        /// <summary>
+        /// Avarage enemy.
+        /// </summary>
         Normal,
+        /// <summary>
+        /// Fast but less harmful enemy.
+        /// </summary>
         Speedy
     }
+    /// <summary>
+    /// Enumeration of possible catasrophes.
+    /// </summary>
     public enum CatastropheType
     {
+        /// <summary>
+        /// Incase this type of disaster occurs, a randomly picked tower or a group of enemies standing on the same field will be healed.
+        /// </summary>
         Healing,
+        /// <summary>
+        /// Incase this type of disaster occurs, a randomly picked tower or a group of enemies standing on the same field will be hurt or exterminated. 
+        /// </summary>
         Asteroid
     }
 
+    /// <summary>
+    /// The model's class.
+    /// </summary>
     public class SVsIModel
     {
+        /// <summary>
+        /// Players current amount of money.
+        /// </summary>
+        /// <value> Money </value>
         public int Money { get; set; }
+        /// <summary>
+        /// Seconds elapsed since the game has started.
+        /// </summary>
+        /// <value> SecondsElapsed </value>
         public int SecondsElapsed { get; private set; }
-        public int ThreeMinutesPassed { get; private set; }
+        /// <summary>
+        ///  Interval of the enemies' reinforcement.
+        /// </summary>
+        /// <value> ReinforceTimes </value>
+        public int ReinforceTimes { get; private set; }
+        /// <summary>
+        /// Tower counter.
+        /// </summary>
+        /// <value> TowerCounter </value>
         public int TowerCounter { get; private set; }
+        /// <summary>
+        /// Amount of tower updates.
+        /// </summary>
+        /// <value>TowerUpdates</value>
         public int TowerUpdates { get; private set; }
-        
+        /// <summary>
+        /// Board of enemy lists.
+        /// </summary>
         public List<SVsIEnemy>[,] Enemies;
-
+        /// <summary>
+        /// Heigth of the gametable.
+        /// </summary>
+        /// <value>Rows</value>
         public int Rows { get; set; }
 
+        /// <summary>
+        /// Width of the gametable.
+        /// </summary>
+        /// <value>Cols</value>
         public int Cols { get; set; }
-
+        /// <summary>
+        /// Board of towers.
+        /// </summary>
         public SVsITower[,] Towers;
 
+        /// <summary>
+        /// Difficulty of the game.
+        /// </summary>
+        /// <value>Difficulty</value>
         public int Difficulty { get; private set; }
 
+        /// <summary>
+        /// Player's castle.
+        /// </summary>
         public SVsICastle Castle;
 
+        /// <summary>
+        /// Is game over.
+        /// </summary>
+        /// <value> IsGameOver </value>
         public bool IsGameOver { get; private set; }
 
+        /// <summary>
+        /// WaveSpawner.
+        /// </summary>
         public WaveSpawner WS;
+
+        /// <summary>
+        /// Wavespawner is spawning enemies.
+        /// </summary>
+        /// <value> IsSpawningEnemies </value>
         public bool IsSpawningEnemies { get; set; }
 
+        /// <summary>
+        /// Catasrophes can occur.
+        /// </summary>
+        /// <value></value>
+        public bool IsCatastrophe { get; set; }
+
 #region Events
+        /// <summary>
+        /// Enemy movement event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> EnemyMoved;
+        /// <summary>
+        /// Tower attack event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> TowerHasAttacked;
+        /// <summary>
+        /// Enemy exterminated event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> EnemyDead;
+        /// <summary>
+        /// Tower destroyed event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> TowerDestroyed;
+        /// <summary>
+        /// Game over event.
+        /// </summary>
         public event EventHandler<bool> GameOver;
+        /// <summary>
+        /// Enemy entered the castle event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> EnemyMovedToCastle;
+        /// <summary>
+        /// Healing catastrophe occured event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> HealingCatastrophe;
+        /// <summary>
+        /// Asteroid catastrophe occured event.
+        /// </summary>
         public event EventHandler<SVsIEventArgs> AsteroidCatastrophe;
 
-         public void onEnemyMoved(int fromX, int fromY, int toX, int toY)
+        /// <summary>
+        /// Enemy movement event sender.
+        /// </summary>
+        /// <param name="fromX"> The row it moved from.</param>
+        /// <param name="fromY"> The coloumn it moved from. </param>
+        /// <param name="toX">  The row it moved to.</param>
+        /// <param name="toY">  The coloumn it moved to. </param>
+        public void onEnemyMoved(int fromX, int fromY, int toX, int toY)
         {
             if(EnemyMoved != null)
             {
                 EnemyMoved(this, new SVsIEventArgs(fromX, fromY, toX, toY));
             }
         }
+        /// <summary>
+        /// Tower attacked event sender.
+        /// </summary>
+        /// <param name="fromX"> The row it has attacked from.</param>
+        /// <param name="fromY"> The coloumn it has attacked from. </param>
+        /// <param name="toX">  The row of the enemy it has attacked.</param>
+        /// <param name="toY">  The coloumn of the enemy it has attacked. </param>
         public void onTowerHasAttacked(int fromX, int fromY, int toX, int toY)
         {
             if(TowerHasAttacked != null)
@@ -79,6 +215,11 @@ namespace SpaceVsInvaders.Model
                 TowerHasAttacked(this, new SVsIEventArgs(fromX, fromY, toX, toY));
             }
         }
+        /// <summary>
+        /// Tower destroyed event sender.
+        /// </summary>
+        /// <param name="whereX"> The row where it has been destroyed. </param>
+        /// <param name="whereY"> The coloumn where it has been destroyed. </param>
         public void onTowerDestroyed(int whereX, int whereY)
         {
             if(TowerDestroyed != null)
@@ -86,6 +227,11 @@ namespace SpaceVsInvaders.Model
                 TowerDestroyed(this, new SVsIEventArgs(whereX, whereY));
             }
         }
+        /// <summary>
+        /// Enemy exterminated event sender.
+        /// </summary>
+        /// <param name="whereX"> The row where it has been exterminated. </param>
+        /// <param name="whereY"> The coloumn where it has been exterminated. </param>
         public void onEnemyDead(int whereX, int whereY)
         {
             if(EnemyDead != null)
@@ -93,6 +239,10 @@ namespace SpaceVsInvaders.Model
                 EnemyDead(this, new SVsIEventArgs(whereX, whereY));
             }
         }
+        /// <summary>
+        /// Game over event sender.
+        /// </summary>
+        /// <param name="victory"> Whether the game has been won or lost. </param>
         public void onGameOver(bool victory)
         {
             IsGameOver = true;
@@ -101,6 +251,12 @@ namespace SpaceVsInvaders.Model
                 GameOver(this, victory);
             }
         }
+        /// <summary>
+        /// Enemy moved to castle event sender.
+        /// </summary>
+        /// <param name="whereX"> The row it moved to the castle from.</param>
+        /// <param name="whereY"> The coloumn it moved to the castle from.</param>
+        /// <param name="type"> The type of the enemy that moved to the castle. </param>
         public void onEnemyMovedToCastle(int whereX, int whereY, EnemyType type)
         {
             if(EnemyMovedToCastle != null)
@@ -108,6 +264,11 @@ namespace SpaceVsInvaders.Model
                 EnemyMovedToCastle(this, new SVsIEventArgs(whereX, whereY, type));
             }
         }
+        /// <summary>
+        /// Healing catasrophe event sender.
+        /// </summary>
+        /// <param name="whereX"> The row where it occurs. </param>
+        /// <param name="whereY"> The coloumn where it occurs. </param>
         public void onHealingCatastrophe(int whereX, int whereY)
         {
             if(HealingCatastrophe != null)
@@ -115,7 +276,12 @@ namespace SpaceVsInvaders.Model
                 HealingCatastrophe(this, new SVsIEventArgs(whereX, whereY));
             }
         }
-        
+
+        /// <summary>
+        /// Asteroid catasrophe event sender.
+        /// </summary>
+        /// <param name="whereX"> The row where it occurs. </param>
+        /// <param name="whereY"> The coloumn where it occurs. </param>
         public void onAsteroidCatastrophe(int whereX, int whereY)
         {
             if(AsteroidCatastrophe != null)
@@ -124,37 +290,46 @@ namespace SpaceVsInvaders.Model
             }
         }
 #endregion
-
+        /// <summary>
+        /// Model's constructor.
+        /// </summary>
         public SVsIModel()
         {
             WS = new WaveSpawner();
             IsSpawningEnemies = true;
+            IsCatastrophe = true;
             TowerCounter = 0;
-            ThreeMinutesPassed = 0;
+            ReinforceTimes = 0;
         }
 
+        /// <summary>
+        /// Handler of time passing.
+        /// </summary>
         public void HandleTick()
         {
             Money += 1;
             SecondsElapsed += 1;
-            if(SecondsElapsed % 20 == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
+            if(SecondsElapsed % Config.GetValue<int>("WaveInterval") == 0 && SecondsElapsed != 0 && IsSpawningEnemies)
             {
-                WS.SpawnEnemies(SecondsElapsed, Cols, TowerCounter,TowerUpdates,ThreeMinutesPassed);
+                WS.SpawnEnemies(SecondsElapsed, Cols, TowerCounter,TowerUpdates,ReinforceTimes);
             }
-            if (SecondsElapsed % 180 == 0)
+            if (SecondsElapsed % Config.GetValue<int>("ReinforceInterval") == 0)
             {
-                ThreeMinutesPassed++;
+                ReinforceTimes++;
             }
 
             //? Lehet hogy vissza kell cserélni a sorrendet ha bugos
             HandleEnemies();
             HandleTowers();
-            Catastrophe();
+            if(IsCatastrophe)
+            {
+                Catastrophe();
+            }
             CheckGameOver();
         }
 
         /// <summary>
-        /// Tornyok lekezelése. (Gyógyítás, ellenség lövése, pénzmennyiség növelése.)
+        /// Handler of towers.
         /// </summary>
         private void HandleTowers()
         {
@@ -189,7 +364,7 @@ namespace SpaceVsInvaders.Model
         }
 
         /// <summary>
-        ///  Megkeresi a hatótávolságában hozzá legközelebb eső ellenség(eket), és ennek (ezeknek) Health-jét csökkenti.
+        /// Finds the closest enemy and reduces its healtpoints.  
         /// </summary>
         private void HandleDamageTower(int row, int col)
         {
@@ -214,7 +389,7 @@ namespace SpaceVsInvaders.Model
         }
 
         /// <summary>
-        /// A játékos pénzének mennyiségét megemeli a fejlettségi szint függvényében.
+        /// Periodically generates extra money for the player.
         /// </summary>
         private void HandleGoldTower(int row, int col)
         {
@@ -225,7 +400,7 @@ namespace SpaceVsInvaders.Model
         }
 
         /// <summary>
-        /// Önnönmaga 3x3-as környezetében emeli minden torony Health-jét.
+        /// Increases other towers' healthpoints near itself.
         /// </summary>
         public void HandleHealTower(int row, int col)
         {
@@ -249,10 +424,8 @@ namespace SpaceVsInvaders.Model
                 }
             }
         }
-
-        
         /// <summary>
-        /// Kiemeltem a placeEnemy hívást
+        /// Places given type of enemy on the gameboard.
         /// </summary>
         public void WhichEnemy(EnemyType type, int i)
         {
@@ -262,11 +435,10 @@ namespace SpaceVsInvaders.Model
         }
 
         /// <summary>
-        /// Ellenségek lövésének, mozgatásának lekezelése.
+        /// Handles enemies' movement and shots.
         /// </summary>
         private void HandleEnemies()
         {
-            //GenerateEnemy();
             for (int i = Rows-1; i >= 0; i--)
                 for (int j = Cols-1; j >=  0; j--)
                     if (null != Enemies[i,j])
@@ -280,7 +452,7 @@ namespace SpaceVsInvaders.Model
                                 {
                                     Towers[i+1,j].Health -= Enemies[i,j][k].Damage;
                                     if (Towers[i+1,j].Health <= 0)
-                                        Towers[i+1,j] = null; // ne menjen minuszba a health
+                                        Towers[i+1,j] = null; 
                                     break;   
                                 }
                             
@@ -291,7 +463,7 @@ namespace SpaceVsInvaders.Model
                                 Enemies[i,j][k].CoolDown -= 1;
                             }
 
-                            if (SecondsElapsed % Enemies[i,j][k].Movement == 0) // ha a kovetkezo sorban torony van, akkor ne masszon ra
+                            if (SecondsElapsed % Enemies[i,j][k].Movement == 0) 
                             {
                                 if( i+1 < Rows && null == Towers[i+1,j])
                                 {
@@ -299,7 +471,6 @@ namespace SpaceVsInvaders.Model
                                     {
                                         Enemies[i+1,j] = new List<SVsIEnemy>();
                                     }
-                                    //! turn back enemy moving
                                     Enemies[i+1,j].Add(Enemies[i,j][k]);
                                     Enemies[i,j].Remove(Enemies[i,j][k]);
                                     onEnemyMoved(j,i, j,i+1);
@@ -318,11 +489,11 @@ namespace SpaceVsInvaders.Model
                             }
                         }   
                     }
-            for(int k = 0; k < 1 + ThreeMinutesPassed; k++)
+            for(int k = 0; k < 1 + ReinforceTimes; k++)
             {
-                if(WS.AreEnemiesLeft() && SecondsElapsed % 3 == 0) // itt kell megadni, hány másodpercenként jelenjenek meg, hogy az előző adag elmozduljon, mire ez bejátszódik
+                if(WS.AreEnemiesLeft() && SecondsElapsed % 3 == 0) 
                 {
-                    List<EnemyType> tmp = new List<EnemyType>(); // ez innen eltűnik? xd
+                    List<EnemyType> tmp = new List<EnemyType>();
                     tmp = WS.GetSpawnedEnemies(Cols);
 
                     if(tmp.Count > Cols-1)
@@ -350,10 +521,13 @@ namespace SpaceVsInvaders.Model
             }
 
         }
-
+        /// <summary>
+        /// Stars a new game.
+        /// </summary>
+        /// <param name="rows"> Number of rows in the new game. </param>
+        /// <param name="cols"> Number of coloumns in the new game. </param>
         public void NewGame(int rows, int cols) 
         {
-            //Money = 0;
             SecondsElapsed = 0;
             Castle = new SVsICastle();
             Rows = rows;
@@ -368,20 +542,16 @@ namespace SpaceVsInvaders.Model
             IsGameOver = false;
         }
 
+        /// <summary>
+        /// Checks if the game's over.
+        /// </summary>
         private void CheckGameOver()
         {
-            /// <remarks>
-            /// Amikor a var eletereje 0-ra csokkent mar
-            /// </remarks>
             if (Castle.Health <= 0)
             {
                 // IsGameOver = true;
                 onGameOver(false);
             }
-
-            /// <remarks>
-            /// Amikor lejart az ido
-            /// </remarks>
             if (SecondsElapsed * Config.GetValue<double>("TickTime") >=  Config.GetValue<double>("RoundTime"))
             {
                 onGameOver(true);
@@ -389,8 +559,10 @@ namespace SpaceVsInvaders.Model
         }
 
         /// <summary>
-        /// Ha a játékosnak van elég pénze, akkor a kiválasztot tornyot fejleszti.
+        /// Upgrades the chosen tower if the player has enough money for it.
         /// </summary>
+        /// <param name="row"> The row of the tower that will be upgraded. </param>
+        /// <param name="col"> The coloumn of the tower that will be upgraded. </param>
         public void UpgradeTower(int row, int col)
         {
             var tower = Towers[row, col] ?? throw new SVsIModelException("No tower selected.");
@@ -408,8 +580,11 @@ namespace SpaceVsInvaders.Model
         }
 
         /// <summary>
-        /// Ha a játékosnak van elég pénze, akkor lerak egy előre kiválaszott típusú tornyot a kiválasztott mezőre.
+        /// Places a tower of the selected type if the player has enough money for it.
         /// </summary>
+        /// <param name="row"> The row where the tower will be placed. </param>
+        /// <param name="col"> The coloumn where the tower will be placed. </param>
+        /// <param name="type"> The type of the tower that will be placed. </param>
         public void PlaceTower(int row, int col, TowerType type)
         {
             if(Towers[row, col] != null) 
@@ -435,20 +610,23 @@ namespace SpaceVsInvaders.Model
         }
 
         /// <summary>
-        ///Eladja az adott tornyot, es a torony értékénel felével növel a pénzt.
+        /// Sells the selected tower and increases the player's money.
         /// </summary>
+        /// <param name="row"> The row of the tower that will be sold. </param>
+        /// <param name="col"> The coloumn of the tower that will be sold. </param>
         public void SellTower(int row, int col)
         {
             var tower = Towers[row, col] ?? throw new SVsIModelException("No tower selected.");
 
             Money += tower.SellCost;
-            Towers[row, col] = null;
-            TowerCounter--;
+            DestroyTower(row,col);
         }
 
         /// <summary>
-        /// Leromboljuk az adott tornyot.
+        /// Destroys the tower whose coordinates were given.
         /// </summary>
+        /// <param name="row"> The row where the tower will be destroyed. </param>
+        /// <param name="col"> The coloumn where the tower will be destroyed. </param>
         private void DestroyTower(int row, int col)
         {
             Towers[row, col] = null;
@@ -457,7 +635,7 @@ namespace SpaceVsInvaders.Model
         }
     
         /// <summary>
-        /// Ha van elég pénze a játékosnak, akkor fejleszti a kastélyt. (Ha sikeres a fejlesztés akkor igazat ad vissza.)
+        /// Upgrades the castle if the player has enough money for it. Returns 'true' if the upgrade was successful.
         /// </summary>
         public void UpgradeCastle()
         {
@@ -474,8 +652,8 @@ namespace SpaceVsInvaders.Model
             }
         }
 
-         /// <summary>
-        ///  Katasztrófákat generál.
+        /// <summary>
+        ///  Generates catastrophes.
         /// </summary>
         public void Catastrophe()
         {
@@ -502,6 +680,13 @@ namespace SpaceVsInvaders.Model
                 }
             }
         }
+
+        /// <summary>
+        /// Handles Damage Catastrophe
+        /// </summary>
+        /// <param name="i">Affected row</param>
+        /// <param name="j">Affected col</param>
+        /// <param name="dmg">Damage to be dealt</param>
         public void HandleAsteroidCatastrophe(int i, int j, int dmg)
         {
             if (null != Enemies[i,j])
@@ -516,7 +701,7 @@ namespace SpaceVsInvaders.Model
                 }
                 for( int k = 0; k < Enemies[i,j].Count; k++)
                 {
-                    Enemies[i,j][k].Health -= 20;
+                    Enemies[i,j][k].Health -= dmg;
                     if(Enemies[i,j][k].Health <= 0)
                     {
                         Enemies[i,j].Remove(Enemies[i,j][k]);
@@ -525,6 +710,13 @@ namespace SpaceVsInvaders.Model
                 }
             }
         }
+
+        /// <summary>
+        /// Handles Heal Catastrophe
+        /// </summary>
+        /// <param name="i">Affected row</param>
+        /// <param name="j">Affected col</param>
+        /// <param name="heal">Healing to be dealt</param>
         public void HandleHealingCatastrophe(int i, int j, int heal)
         {
             if (null != Towers[i,j])
@@ -541,6 +733,11 @@ namespace SpaceVsInvaders.Model
                 }
             }
         }
+
+        /// <summary>
+        /// Generates a random coordinate on the board
+        /// </summary>
+        /// <returns>A random coordinate on the board</returns>
         public Coordinate generateCoordinates()
         {
             Random rnd = new Random();
@@ -549,9 +746,12 @@ namespace SpaceVsInvaders.Model
             return new Coordinate(x,y);
         }
 
-        ///<summary>
-        /// Csak a teszteléshez kell.
-        ///</summary>
+        /// <summary>
+        /// Places given type of enemy on the board.
+        /// </summary>
+        /// <param name="row"> The row where the enemy will be placed. </param>
+        /// <param name="col"> The coloumn where the enemy will be placed. </param>
+        /// <param name="enemyType"> The type of the enemy that will be placed. </param>
         public void PlaceEnemy(int row, int col, EnemyType enemyType)
         {
             Enemies[row,col] ??= new List<SVsIEnemy>();
@@ -565,8 +765,5 @@ namespace SpaceVsInvaders.Model
 
             Enemies[row,col].Add(enemyToPlace);
         }
-
-
-
     }
 }

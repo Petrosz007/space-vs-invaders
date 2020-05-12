@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace SpaceVsInvaders.View.Components
 {
+    /// <summary>
+    /// Button component
+    /// </summary>
     public class Button : Clickable
     {
         private Texture2D edgeTexture;
@@ -15,6 +18,13 @@ namespace SpaceVsInvaders.View.Components
         private SoundEffectInstance hoverSoundInstance;
         private SoundEffectInstance clickSoundInstance;
 
+        /// <summary>
+        /// Constructor of <c>Button</c>
+        /// </summary>
+        /// <param name="position">Position</param>
+        /// <param name="height">Height of the button</param>
+        /// <param name="width">Width of the button</param>
+        /// <param name="text">Text of the button</param>
         public Button(Vector2 position, int height, int width, string text = "NO TEXT")
             : base(position, height, width)
         {
@@ -32,12 +42,10 @@ namespace SpaceVsInvaders.View.Components
             this.RightClicked += new EventHandler((o, e) => clickSoundInstance.Play());
         }
 
-        // public override void Update(GameTime gameTime)
-        // {
-        //     base.Update(gameTime);
-
-        // }
-
+        /// <summary>
+        /// Draws the button to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch to draw to</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             double scale = height / (double) edgeTexture.Height;
@@ -55,6 +63,10 @@ namespace SpaceVsInvaders.View.Components
             spriteBatch.DrawString(font, text, new Vector2(position.X + (width - measure.X)/2, position.Y + (height - measure.Y)/2), Color.Green);
         }
 
+        /// <summary>
+        /// Replaces the text of the button with a new text
+        /// </summary>
+        /// <param name="newText">New text</param>
         public void UpdateText(string newText) => 
             text = newText;
     }

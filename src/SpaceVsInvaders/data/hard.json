@@ -1,10 +1,12 @@
 {
-    "RoundTime": 10,
+    "RoundTime": 600,
     "TickTime": 0.6,
     "StartingMoney": 1500,
     "Rows": 12,
     "Cols": 10,
     "ShotSpeed": 0.3,
+    "WaveInterval": 20,
+    "ReinforceInterval": 120,
     "BuffEnemy" : {
         "Health": 150,
         "Movement": 3,

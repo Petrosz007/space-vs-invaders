@@ -8,8 +8,14 @@ using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Scenes
 {
+    /// <summary>
+    /// Logo scene displayed in the beginning
+    /// </summary>
     public class LogoScene : Scene
     {
+        /// <summary>
+        /// The logo animation has ended event
+        /// </summary>
         public event EventHandler End;
         private double secondsElapsed;
         private Texture2D logo;
@@ -21,6 +27,11 @@ namespace SpaceVsInvaders.View.Scenes
         private const double FontRevealTime = 2.5;
         private const double FadeOutTime = 0.4;
 
+        /// <summary>
+        /// Constructor of <c>LogoScene</c>
+        /// </summary>
+        /// <param name="width">Window width</param>
+        /// <param name="height">Window Height</param>
         public LogoScene(int width, int height)
             : base(width, height)
         {
@@ -33,14 +44,26 @@ namespace SpaceVsInvaders.View.Scenes
             MediaPlayer.IsRepeating = true;
         }
 
+        /// <summary>
+        /// Loads content, runs once per program run
+        /// </summary>
         public override void LoadContent()
         {
             logo = ContentLoader.GetTexture("SvsI_SPrites/logo");
         }
+
+        /// <summary>
+        /// Handles the unloading of content
+        /// </summary>
         public override void UnloadContent()
         {
 
         }
+
+        /// <summary>
+        /// Updates the logo animation
+        /// </summary>
+        /// <param name="gameTime">gametime</param>
         public override void Update(GameTime gameTime)
         {
             secondsElapsed += gameTime.ElapsedGameTime.TotalSeconds;
@@ -64,6 +87,11 @@ namespace SpaceVsInvaders.View.Scenes
                 backOpacity = Math.Max(0, fontOpacity - change);
             }
         }
+
+        /// <summary>
+        /// Draws the logo scene to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(ContentLoader.GetTexture("Backgrounds/pause-background"), new Rectangle(0,0, Width, Height), Color.White);

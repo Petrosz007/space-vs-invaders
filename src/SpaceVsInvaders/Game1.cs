@@ -12,17 +12,35 @@ using SpaceVsInvaders.View.Scenes;
 
 namespace SpaceVsInvaders
 {
+    /// <summary>
+    /// Scene types
+    /// </summary>
     public enum SceneType
     {
+        /// <summary>
+        /// Game Scene
+        /// </summary>
         Game,
+
+        /// <summary>
+        /// Pause Scene
+        /// </summary>
         Pause,
+
+        /// <summary>
+        /// Main Menu Scene
+        /// </summary>
         MainMenu,
+
+        /// <summary>
+        /// Logo Scene
+        /// </summary>
         Logo,
     }
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class MainGame : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -31,7 +49,10 @@ namespace SpaceVsInvaders
         private SceneType activeScene;
         private Cursor cursor;
 
-        public Game1()
+        /// <summary>
+        /// Constructor of <c>MainGame</c>
+        /// </summary>
+        public MainGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -143,15 +164,31 @@ namespace SpaceVsInvaders
 
             cursor.Draw(spriteBatch);
 
+            // DisplayFPS(spriteBatch, gameTime);
+            
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// Handles the new game event
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="difficulty">Difficulty of the new game</param>
         private void HandleNewGame(object sender, Difficulty difficulty)
         {
             ((GameScene) scenes[SceneType.Game]).NewGame(difficulty);
             activeScene = SceneType.Game;
+        }
+
+        private void DisplayFPS(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            double frameRate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
+
+            Console.WriteLine($"Elapsed = {gameTime.ElapsedGameTime.TotalSeconds} FPS = {frameRate}");
+
+            spriteBatch.DrawString(ContentLoader.GetFont("Fonts/NumberFont"), Math.Round(frameRate, 2).ToString(), new Vector2(0,0), Color.LightGreen);
         }
     }
 }

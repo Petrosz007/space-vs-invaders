@@ -4,6 +4,9 @@ using SpaceVsInvaders.Model;
 
 namespace SpaceVsInvaders.View.Components
 {
+    /// <summary>
+    /// Displays game information and castle upgrade button
+    /// </summary>
     public class InfoPanel : BasePanel
     {
         private SVsIModel model;
@@ -13,8 +16,20 @@ namespace SpaceVsInvaders.View.Components
         private int seconds;
         private int minutes;
 
+        /// <summary>
+        /// Upgrade castle button
+        /// </summary>
+        /// <value>Upgrade castle button</value>
         public Button UpgradeCastleButton { get; private set; }
 
+        /// <summary>
+        /// Constructor of <c>InfoPanel</c>
+        /// </summary>
+        /// <param name="position">Position of the panel</param>
+        /// <param name="height">Height of the panel</param>
+        /// <param name="width">Width of the panel</param>
+        /// <param name="model">Model to get the data from</param>
+        /// <param name="stateManager">State manager to get the state from</param>
         public InfoPanel(Vector2 position, int height, int width, SVsIModel model, StateManager stateManager)
             : base(position, height, width)
         {
@@ -27,11 +42,15 @@ namespace SpaceVsInvaders.View.Components
             secondsElapsed = 0;
         }
 
+        /// <summary>
+        /// Update the info panel
+        /// </summary>
+        /// <param name="gameTime">Gametime</param>
         public override void Update(GameTime gameTime)
         {
             if(stateManager.GameOver) return;
             
-            base.Update(gameTime);
+            // base.Update(gameTime);
 
             secondsElapsed += gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -43,6 +62,11 @@ namespace SpaceVsInvaders.View.Components
             UpgradeCastleButton.UpdateText($"Upgrade Castle ${model.Castle.CurrentUpgradeCost}");
             UpgradeCastleButton.Update(gameTime);
         }
+
+        /// <summary>
+        /// Draw the info panel
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch to draw to</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);

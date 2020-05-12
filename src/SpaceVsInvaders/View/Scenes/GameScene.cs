@@ -12,14 +12,35 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SpaceVsInvaders.View.Scenes
 {
-    public enum Difficulty { Normal, Hard }
+    /// <summary>
+    /// Difficulty enum
+    /// </summary>
+    public enum Difficulty 
+    {
+        /// <summary>
+        /// Normal difficulty
+        /// </summary>
+        Normal,
+
+        /// <summary>
+        /// Hard difficulty
+        /// </summary>
+        Hard,
+    }
 
     /// <summary>
-    /// This is the main type for your game.
+    /// Main game scene
     /// </summary>
     public class GameScene : Scene
-    {        
+    {
+        /// <summary>
+        /// The pause menu should be opened event
+        /// </summary>
         public event EventHandler OpenPauseMenu;
+
+        /// <summary>
+        /// Switch to the main menu event
+        /// </summary>
         public event EventHandler ExitToMainMenu;
         private readonly double TickTime = Config.GetValue<double>("TickTime");
         private SVsIModel model;
@@ -33,11 +54,21 @@ namespace SpaceVsInvaders.View.Scenes
         private double prevSecond;
         private int boardWidth;
         private int panelsWidth;
+
+        /// <summary>
+        /// Constructor of <c>GameScene</c>
+        /// </summary>
+        /// <param name="width">Window width</param>
+        /// <param name="height">Window Height</param>
         public GameScene(int width, int height)
             : base(width, height)
         {
         }
 
+        /// <summary>
+        /// Start a new game
+        /// </summary>
+        /// <param name="difficulty">Difficulty of the new game</param>
         public void NewGame(Difficulty difficulty)
         {
             var configPath = difficulty switch {
@@ -141,14 +172,12 @@ namespace SpaceVsInvaders.View.Scenes
             {
                 component.Update(gameTime);
             }
-
-            // base.Update(gameTime);
         }
 
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="spriteBatch">Spritebatch to draw to</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(background,
@@ -163,6 +192,10 @@ namespace SpaceVsInvaders.View.Scenes
             // base.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// If enough time has passed it ticks the model once
+        /// </summary>
+        /// <param name="currentSeconds"></param>
         private void HandleTick(double currentSeconds)
         {
             if (currentSeconds > prevSecond + TickTime && !stateManager.GameOver)
@@ -172,6 +205,11 @@ namespace SpaceVsInvaders.View.Scenes
             }
         }
 
+        /// <summary>
+        /// Handles different key press events
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="key">Pressed key</param>
         private void HandleKeyPress(object sender, Keys key)
         {
             if(stateManager.GameOver) return;

@@ -4,6 +4,9 @@ using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Boards
 {
+    /// <summary>
+    /// Animated mothership component
+    /// </summary>
     public class Mothership : Component
     {
         private StateManager stateManager;
@@ -11,6 +14,14 @@ namespace SpaceVsInvaders.View.Boards
         private double currXOffset;
         private bool goingRight;
         private int scaledWidth;
+
+        /// <summary>
+        /// Constructor of <c>Mothership</c>
+        /// </summary>
+        /// <param name="position">Position</param>
+        /// <param name="height">Height of the area to patrol</param>
+        /// <param name="width"></param>
+        /// <param name="stateManager"></param>
         public Mothership(Vector2 position, int height, int width, StateManager stateManager)
             : base(position, height, width)
         {
@@ -20,6 +31,10 @@ namespace SpaceVsInvaders.View.Boards
             scaledWidth = (int) (texture.Width * (height / (double) texture.Height));
         }
 
+        /// <summary>
+        /// Updates the position of the mothership
+        /// </summary>
+        /// <param name="gameTime">Gametime</param>
         public override void Update(GameTime gameTime)
         {
             if(stateManager.GameOver) return;
@@ -43,6 +58,10 @@ namespace SpaceVsInvaders.View.Boards
             currXOffset += currMove;
         }
 
+        /// <summary>
+        /// Draws the mothership to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch</param>
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, new Rectangle((int) (position.X + currXOffset), (int) position.Y, scaledWidth, height), 

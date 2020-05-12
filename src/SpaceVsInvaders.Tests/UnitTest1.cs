@@ -78,6 +78,7 @@ namespace SpaceVsInvaders.Tests
             _model = new SVsIModel();
             _model.NewGame(20,20);
             _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
 
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int buffEnemyHealth = Config.GetValue<TowerConfig>("BuffEnemy").Health;   
@@ -121,6 +122,7 @@ namespace SpaceVsInvaders.Tests
             _model = new SVsIModel();
             _model.NewGame(20,20);
             _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
 
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int buffEnemyHealth = Config.GetValue<TowerConfig>("BuffEnemy").Health;   
@@ -165,10 +167,13 @@ namespace SpaceVsInvaders.Tests
             int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
             
             _model = new SVsIModel();
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
 
             _model.NewGame(8,8);
             _model.Money = goldTowerCost;
             _model.PlaceTower(1,1, TowerType.Gold);
+
 
             var goldTower = (SVsIGoldTower) _model.Towers[1, 1];
 
@@ -209,6 +214,9 @@ namespace SpaceVsInvaders.Tests
         {
             _model = new SVsIModel();
             _model.NewGame(8,8);
+
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
 
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
@@ -293,6 +301,9 @@ namespace SpaceVsInvaders.Tests
             _model = new SVsIModel();
             _model.NewGame(8,8);
 
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
+
             _model.PlaceEnemy(0,0, EnemyType.Buff);
             _model.PlaceEnemy(0,1, EnemyType.Normal);
             _model.PlaceEnemy(0,2, EnemyType.Speedy);
@@ -368,6 +379,9 @@ namespace SpaceVsInvaders.Tests
             _model = new SVsIModel();
             _model.NewGame(8,8);
 
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
+
             // Több ugyanolyan fajta ellenség is kerülhet ugyanarra a mezőre.
 
             _model.PlaceEnemy(3,3, EnemyType.Buff);
@@ -414,6 +428,9 @@ namespace SpaceVsInvaders.Tests
             _model = new SVsIModel();
             _model.NewGame(10,10);
 
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
+
             // Amíg nem ér a várig, addig egyik ellenség sem sebez, de amikor már odaért, akkor igen.
             int castleHealth = Config.GetValue<TowerConfig>("Castle").Health;   
 
@@ -440,6 +457,7 @@ namespace SpaceVsInvaders.Tests
 
             
             _model.NewGame(10,10);
+
             _model.PlaceEnemy(0,2, EnemyType.Buff);
             for (int i = 0; i < 10; i++)
             {
@@ -452,6 +470,7 @@ namespace SpaceVsInvaders.Tests
 
             // Amíg nem ér el a megegyező oszlopban levő toronyig, addig egyik ellenség sem sebez.
             _model.NewGame(10,10);
+
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
             int healTowerCost = Config.GetValue<TowerConfig>("HealTower").Cost;
@@ -526,7 +545,9 @@ namespace SpaceVsInvaders.Tests
         {
             // Létrejöttükkor egyből támadnak, ha van kit.
             _model = new SVsIModel();
-            _model.NewGame(10,10);          
+            _model.NewGame(10,10);
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;          
 
             int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
             int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
@@ -637,6 +658,121 @@ namespace SpaceVsInvaders.Tests
             Assert.True(_model.Towers[1,6].Health == healTowerHealth - _model.Enemies[0,6][0].Damage);
 
         }
+
+        [Fact]
+        /// <summary>
+        /// Toronyfejlesztés tesztelése.
+        /// </summary>
+        public void UpgradeTower()
+        {
+            _model = new SVsIModel();
+            _model.NewGame(10,10);
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;     
+
+            int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
+            int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
+            int healTowerCost = Config.GetValue<TowerConfig>("HealTower").Cost;
+
+            _model.Money = 3 * (damageTowerCost + goldTowerCost + healTowerCost);
+
+            // Bármely tornyot lehet fejleszteni.
+            _model.PlaceTower(6,4,TowerType.Damage);
+            var damageTower = (SVsIDamageTower)_model.Towers[6,4];
+            int beforeMoney = _model.Money;
+            int damageTowerUpCost = damageTower.UpgradeCost;
+            int damageTowerHealth = damageTower.Health;
+            int damageTowerMaxHealth = damageTower.MaxHealth;
+            int damageTowerLevel = damageTower.Level;
+            _model.UpgradeTower(6,4);
+            Assert.True(_model.Money == beforeMoney - damageTowerUpCost);
+            Assert.True(_model.Towers[6,4].Health == damageTowerHealth + 50);
+            Assert.True(_model.Towers[6,4].MaxHealth == damageTowerMaxHealth + 100);
+            Assert.True(_model.Towers[6,4].Level == damageTowerLevel + 1);
+
+
+            _model.PlaceTower(0,0, TowerType.Gold);
+            var goldTower = (SVsIGoldTower)_model.Towers[0,0];
+            beforeMoney = _model.Money;
+            int goldTowerUpCost = goldTower.UpgradeCost;
+            int goldTowerHealth = goldTower.Health;
+            int goldTowerMaxHealth = goldTower.MaxHealth;
+            int goldTowerLevel = goldTower.Level;
+            _model.UpgradeTower(0,0);
+            Assert.True(_model.Money == beforeMoney - goldTowerUpCost);
+            Assert.True(_model.Towers[0,0].Health == goldTowerHealth + 50);
+            Assert.True(_model.Towers[0,0].MaxHealth == goldTowerMaxHealth + 100);
+            Assert.True(_model.Towers[0,0].Level == goldTowerLevel + 1);
+
+
+            _model.PlaceTower(9,9, TowerType.Heal);
+            var healTower = (SVsIHealTower)_model.Towers[9,9];
+            beforeMoney = _model.Money;
+            int healTowerUpCost = healTower.UpgradeCost;
+            int healTowerHealth = healTower.Health;
+            int healTowerMaxHealth = healTower.MaxHealth;
+            int healTowerLevel = healTower.Level;
+            _model.UpgradeTower(9,9);
+            Assert.True(_model.Money == beforeMoney - healTowerUpCost);
+            Assert.True(_model.Towers[9,9].Health == healTowerHealth + 50);
+            Assert.True(_model.Towers[9,9].MaxHealth == healTowerMaxHealth + 100);
+            Assert.True(_model.Towers[9,9].Level == healTowerLevel + 1);
+
+            // Ha nincs pénzünk, nem tudunk fejleszteni.
+            _model.Money = 0;   
+            Assert.Throws<SVsIModelException>(() => _model.UpgradeTower(6,4));  
+            Assert.Throws<SVsIModelException>(() => _model.UpgradeTower(0,0));  
+            Assert.Throws<SVsIModelException>(() => _model.UpgradeTower(9,9));         
+
+            // Ha egy olyan mezőt jelölünk ki, ahol nincs torony, akkor kivételt dob a program.
+            Assert.Throws<SVsIModelException>(() => _model.UpgradeTower(4,4));  
+
+            // Limitet kell rakni, hogy meddig lehet fejleszteni a tornyokat...
+        }
+
+        [Fact]
+        /// <summary>
+        /// Toronyok eladásának tesztelése. Lerombolás után valamennyi pénzt kapunk értük.
+        /// </summary>
+        public void SellTower()
+        {
+            _model = new SVsIModel();
+            _model.NewGame(10,10);
+            _model.IsSpawningEnemies = false;
+            _model.IsCatastrophe = false;
+
+            int damageTowerCost = Config.GetValue<TowerConfig>("DamageTower").Cost;
+            int goldTowerCost = Config.GetValue<TowerConfig>("GoldTower").Cost;
+            int healTowerCost = Config.GetValue<TowerConfig>("HealTower").Cost;
+
+            _model.Money = damageTowerCost + goldTowerCost + healTowerCost;
+
+            // Bármely típusú tornyot el tudunk adni; ezek ténylegesen megszűnnek.
+            _model.PlaceTower(0,0, TowerType.Damage);
+            int beforeMoney = _model.Money;
+            int damageTowerSellCost = _model.Towers[0,0].SellCost;
+            _model.SellTower(0,0);
+            Assert.True(_model.Money == beforeMoney + damageTowerSellCost);
+            Assert.True(null == _model.Towers[0,0]);
+
+            _model.PlaceTower(3,7, TowerType.Gold);
+            beforeMoney = _model.Money;
+            int goldTowerSellCost = _model.Towers[3,7].SellCost;
+            _model.SellTower(3,7);
+            Assert.True(_model.Money == beforeMoney + goldTowerSellCost);
+            Assert.True(null == _model.Towers[3,7]);
+
+            _model.PlaceTower(9,9, TowerType.Heal);
+            beforeMoney = _model.Money;
+            int healTowerSellCost = _model.Towers[9,9].SellCost;
+            _model.SellTower(9,9);
+            Assert.True(_model.Money == beforeMoney + healTowerSellCost);
+            Assert.True(null == _model.Towers[9,9]);
+
+            // Nem tudunk eladni nemlétező tornyot.
+            Assert.Throws<SVsIModelException>(() => _model.UpgradeTower(6,9));
+        }
+           
     }
 }
 

@@ -10,11 +10,24 @@ using System.Collections.Generic;
 
 namespace SpaceVsInvaders.View.Boards
 {
+    /// <summary>
+    /// Game board component
+    /// </summary>
     public class Board : Component
     {
         private SVsIModel model;
         private StateManager stateManager;
+
+        /// <summary>
+        /// Shot animator of the board
+        /// </summary>
+        /// <value>Shot animator of the board</value>
         public ShotAnimator ShotAnimator { get; set; }
+
+        /// <summary>
+        /// CatastropheAnimator of the board
+        /// </summary>
+        /// <value>CatastropheAnimator of the board</value>
         public CatastropheAnimator CatastropheAnimator { get; set; }
 
         private int colWidth;
@@ -23,7 +36,20 @@ namespace SpaceVsInvaders.View.Boards
         private Texture2D divTexture;
         private int divWidth;
         private Color divColor;
+
+        /// <summary>
+        /// Board tile has been clicked event, the tuple is the row and column of the tile
+        /// </summary>
         public event EventHandler<(int, int)> TileClicked;
+
+        /// <summary>
+        /// Constructor of <c>Board</c>
+        /// </summary>
+        /// <param name="position">Position</param>
+        /// <param name="height">Height of the board</param>
+        /// <param name="width">Width of the board</param>
+        /// <param name="model">Model to get the data from</param>
+        /// <param name="stateManager">State manager to get the state from</param>
         public Board(Vector2 position, int height, int width, SVsIModel model, StateManager stateManager)
             : base(position, height, width)
         {
@@ -42,14 +68,21 @@ namespace SpaceVsInvaders.View.Boards
             CatastropheAnimator = new CatastropheAnimator(position, height, width, colWidth, rowHeight);
         }
 
+        /// <summary>
+        /// Handles when one tile has been clicked
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args (not used)</param>
         private void HandleTileClick(object sender, EventArgs e)
         {
             Tile tile = (Tile)sender;
-
-            // Console.WriteLine("Clicked Row={0} Col={1}", tile.Row, tile.Col);
             TileClicked?.Invoke(this, (tile.Row, tile.Col));
         }
 
+        /// <summary>
+        /// Draws the board to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch to draw to</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             foreach (var tile in tiles)
@@ -88,6 +121,10 @@ namespace SpaceVsInvaders.View.Boards
             CatastropheAnimator.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Updates the board
+        /// </summary>
+        /// <param name="gameTime">Gametime</param>
         public override void Update(GameTime gameTime)
         {
             if(stateManager.GameOver) return;

@@ -7,6 +7,9 @@ using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Boards
 {
+    /// <summary>
+    /// Manages one or more enemies on a given tile
+    /// </summary>
     public class EnemyTile : Tile
     {
         private enum EnemyPlace { LEFT, CENTER, RIGHT };
@@ -15,6 +18,21 @@ namespace SpaceVsInvaders.View.Boards
         private int maxHealth;
         private SpriteFont font;
 
+        private Texture2D hpBarForegroundTexture;
+        private Texture2D hpBarBackgroundTexture;
+
+        /// <summary>
+        /// Constructor of <c>EnemyTile</c>
+        /// </summary>
+        /// <param name="position">Position</param>
+        /// <param name="height">Height</param>
+        /// <param name="width">Width</param>
+        /// <param name="row">Row of the tile</param>
+        /// <param name="col">Column of the tile</param>
+        /// <param name="stateManager">State manager to get the state from</param>
+        /// <param name="enemies">Enemies currently on the tile, the tuple is how much enemies are there of a given type</param>
+        /// <param name="currHealth">Current health of the first enemy</param>
+        /// <param name="maxHealth">Max health of the first enemy</param>
         public EnemyTile(Vector2 position, int height, int width, int row, int col, StateManager stateManager, List<(EnemyType, int)> enemies, int currHealth, int maxHealth)
             : base(position, height, width, row, col, stateManager)
         {
@@ -27,8 +45,18 @@ namespace SpaceVsInvaders.View.Boards
             this.maxHealth = maxHealth;
 
             font = ContentLoader.GetFont("Fonts/NumberFont");
+
+            Color foregroundColor = Color.Red;
+            Color backgroundColor = Color.Black;
+
+            hpBarForegroundTexture = ContentLoader.CreateSolidtexture(foregroundColor);
+            hpBarBackgroundTexture = ContentLoader.CreateSolidtexture(backgroundColor);
         }
 
+        /// <summary>
+        /// Draws the tile to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             DrawHpBar(spriteBatch);
@@ -49,6 +77,12 @@ namespace SpaceVsInvaders.View.Boards
             base.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Draws the enemy to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch</param>
+        /// <param name="enemy">Enemy type and how much enemies are there of that type</param>
+        /// <param name="enemyPlace">Place of the enemy</param>
         private void DrawEnemy(SpriteBatch spriteBatch, (EnemyType, int) enemy, EnemyPlace enemyPlace)
         {  
             int originalSize = (width > height) ? height : width;
@@ -79,30 +113,23 @@ namespace SpaceVsInvaders.View.Boards
             }
         }
 
-        private void DrawOutlinedString(SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 pos, Color color)
-        {
-                spriteBatch.DrawString(font, text, pos + new Vector2(1,1), Color.Black);
-                spriteBatch.DrawString(font, text, pos + new Vector2(1,-1), Color.Black);
-                spriteBatch.DrawString(font, text, pos + new Vector2(-1,1), Color.Black);
-                spriteBatch.DrawString(font, text, pos + new Vector2(-1,-1), Color.Black);
-                spriteBatch.DrawString(font, text, pos, Color.White);
-        }
-
+        /// <summary>
+        /// Draws the healthbar of the tile to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch</param>
         private void DrawHpBar(SpriteBatch spriteBatch)
         {
             int hpBarWidth = width * 2 / 3;
             int hpBarHeight = 10;
             int borderSize = 3;
-            Color bgColor = Color.Black;
-            Color fgColor = Color.Red;
 
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(bgColor), 
+            spriteBatch.Draw(hpBarBackgroundTexture, 
                 new Rectangle(
                     (int)position.X + (width - hpBarWidth)/2 + 5,
                     (int)position.Y, hpBarWidth, hpBarHeight), 
                 Color.White);
 
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(fgColor), 
+            spriteBatch.Draw(hpBarForegroundTexture, 
                 new Rectangle(
                     (int)position.X + (width - hpBarWidth)/2 + 5 + borderSize,
                     (int)position.Y + borderSize,
@@ -112,7 +139,7 @@ namespace SpaceVsInvaders.View.Boards
             
             var measure = font.MeasureString(currHealth.ToString()) + new Vector2(2,2);
 
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(bgColor), 
+            spriteBatch.Draw(hpBarBackgroundTexture, 
                 new Rectangle(
                     (int)position.X + (width - hpBarWidth)/2 + 5,
                     (int)position.Y,
@@ -120,7 +147,7 @@ namespace SpaceVsInvaders.View.Boards
                     (int)measure.Y + borderSize*2),
                 Color.White);
 
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(bgColor), 
+            spriteBatch.Draw(hpBarBackgroundTexture, 
                 new Rectangle(
                     (int)position.X + (width - hpBarWidth)/2 + 5 + (int)measure.X + borderSize,
                     (int)position.Y + hpBarHeight,
@@ -128,7 +155,7 @@ namespace SpaceVsInvaders.View.Boards
                     (int)measure.Y - hpBarHeight + borderSize*2), 
                 Color.White);
 
-            spriteBatch.Draw(ContentLoader.CreateSolidtexture(fgColor), 
+            spriteBatch.Draw(hpBarForegroundTexture, 
                 new Rectangle(
                     (int)position.X + (width - hpBarWidth)/2 + 5 + borderSize,
                     (int)position.Y + borderSize, 
@@ -142,11 +169,6 @@ namespace SpaceVsInvaders.View.Boards
                     position.X + (width - hpBarWidth)/2 + 5 + borderSize + 1,
                     position.Y + borderSize + 1),
                 Color.White);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
         }
     }
 }

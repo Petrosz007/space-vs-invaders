@@ -8,12 +8,38 @@ using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Boards
 {
+    /// <summary>
+    /// Includes main informations about a Catastrophe
+    /// </summary>
     public class Catastrophe
     {
+        /// <summary>
+        /// The type of the catastrophe
+        /// </summary>
+        /// <value></value>
         public CatastropheType type { get; set; }
+        /// <summary>
+        /// the X coordinate of the catastrophe
+        /// </summary>
+        /// <value>int</value>
         public int X { get; set; }
+        /// <summary>
+        /// The Y coordinate of the catastrophe
+        /// </summary>
+        /// <value>int</value>
         public double Y { get; set; }
+        /// <summary>
+        /// How many seconds the catastrophe is on the board
+        /// </summary>
+        /// <value>int</value>
         public int SecRemaining { get; set; }
+        /// <summary>
+        /// Constructor of a Catastrophe
+        /// </summary>
+        /// <param name="type">Type of the catastrophe</param>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">y coordinate</param>
+        /// <param name="sec">Seconds on the board</param>
         public Catastrophe(CatastropheType type, int x, int y, int sec)
         {
             this.type = type;
@@ -22,6 +48,9 @@ namespace SpaceVsInvaders.View.Boards
             this.SecRemaining = sec;
         }
     }
+    /// <summary>
+    /// Puts the catastrophes on the board
+    /// </summary>
     public class CatastropheAnimator : Component
     {
         private int colWidth;
@@ -30,6 +59,14 @@ namespace SpaceVsInvaders.View.Boards
         private double LastSecond;
         private Texture2D texture;
         private Texture2D healingTexture;
+        /// <summary>
+        /// Constructor of CatastropheAnimator
+        /// </summary>
+        /// <param name="position">where it is on the board</param>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        /// <param name="colWidth"></param>
+        /// <param name="rowHeight"></param>
         public CatastropheAnimator(Vector2 position, int height, int width, int colWidth, int rowHeight)
             : base(position, height, width)
         {
@@ -40,6 +77,10 @@ namespace SpaceVsInvaders.View.Boards
             catastrophes = new List<Catastrophe>();
         }
 
+        /// <summary>
+        /// This handles the function of the class, is called in every tick
+        /// </summary>
+        /// <param name="gameTime">The time elapsed ingame</param>
         public override void Update(GameTime gameTime)
         {
             if(gameTime.TotalGameTime.TotalSeconds > LastSecond + 1)
@@ -57,6 +98,10 @@ namespace SpaceVsInvaders.View.Boards
             }
         }
 
+         /// <summary>
+        /// Draws the Catastrophe on the screen
+        /// </summary>
+        /// <param name="spriteBatch">Includes texture of the Catastrophe</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             foreach(var item in catastrophes)
@@ -82,13 +127,23 @@ namespace SpaceVsInvaders.View.Boards
               
             }
         }
-
+        /// <summary>
+        /// Eventhandler, that handles Damage Catastrophes
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="args">The information that is sent</param>
         public void HandleAsteroids(object sender, SVsIEventArgs args)
         {
             Catastrophe tmp = new Catastrophe(CatastropheType.Asteroid, args.Where.X, args.Where.Y, 0);
             
             catastrophes.Add(tmp);
         }
+
+        /// <summary>
+        /// Eventhandler, that handles Healing Catastrophes
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="args">The information that is sent</param>
          public void HandleHealing(object sender, SVsIEventArgs args)
         {
             Catastrophe tmp = new Catastrophe(CatastropheType.Healing, args.Where.X, args.Where.Y, 0);

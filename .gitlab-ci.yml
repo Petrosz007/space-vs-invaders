@@ -1,4 +1,9 @@
-image: andipeter/monogame-test:0.3
+image: andipeter/monogame-test:0.4
+
+stages:
+    - build
+    - test
+    - release
 
 build:
     stage: build
@@ -12,5 +17,32 @@ test:
         - reportgenerator "-reports:src/SpaceVsInvaders.Tests/lcov.info" "-targetdir:coveragereport" -reporttypes:Html
     artifacts:
         paths:
-        - coveragereport
-    
+            - coveragereport
+
+# Build for every major platform
+release-win-x64:
+    stage: release
+    script:
+        - dotnet publish -c Release -r win-x64 --self-contained true src/SpaceVsInvaders -o publish/SpaceVsInvaders-win-x64
+    artifacts:
+        name: "SpaceVsInvaders-win-x64"
+        paths:
+            - publish/SpaceVsInvaders-win-x64
+
+release-linux-x64:
+    stage: release
+    script:
+        - dotnet publish -c Release -r linux-x64 --self-contained true src/SpaceVsInvaders -o publish/SpaceVsInvaders-linux-x64
+    artifacts:
+        name: "SpaceVsInvaders-linux-x64"
+        paths:
+            - publish/SpaceVsInvaders-linux-x64
+
+release-osx-x64:
+    stage: release
+    script:
+        - dotnet publish -c Release -r osx-x64 --self-contained true src/SpaceVsInvaders -o publish/SpaceVsInvaders-osx-x64
+    artifacts:
+        name: "SpaceVsInvaders-osx-x64"
+        paths:
+            - publish/SpaceVsInvaders-osx-x64

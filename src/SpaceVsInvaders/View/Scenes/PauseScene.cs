@@ -7,21 +7,44 @@ using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Scenes
 {
+    /// <summary>
+    /// Pause scene
+    /// </summary>
     public class PauseScene : Scene
     {
+        /// <summary>
+        /// The game should be resumed event
+        /// </summary>
         public event EventHandler Resume;
+
+        /// <summary>
+        /// The proram should exit event
+        /// </summary>
         public event EventHandler Exit;
+
+        /// <summary>
+        /// Switch the scene to the main menu event
+        /// </summary>
         public event EventHandler ExitToMainMenu;
         private List<Component> components;
         private Texture2D background;
 
         private bool prevEscapeState;
+
+        /// <summary>
+        /// Constructor of <c>PauseScene</c>
+        /// </summary>
+        /// <param name="width">Window Width</param>
+        /// <param name="height">Window Height</param>
         public PauseScene(int width, int height)
             : base(width, height)
         {
 
         }
 
+        /// <summary>
+        /// Loads content, runs once per program run
+        /// </summary>
         public override void LoadContent()
         {
             prevEscapeState = true;
@@ -48,10 +71,19 @@ namespace SpaceVsInvaders.View.Scenes
 
             background = ContentLoader.GetTexture("Backgrounds/pause-background");
         }
+
+        /// <summary>
+        /// Handles the unloading of content
+        /// </summary>
         public override void UnloadContent()
         {
 
         }
+
+        /// <summary>
+        /// Updates the scene
+        /// </summary>
+        /// <param name="gameTime">gametime</param>
         public override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape) != prevEscapeState && !prevEscapeState)
@@ -65,6 +97,11 @@ namespace SpaceVsInvaders.View.Scenes
                 component.Update(gameTime);
             }
         }
+
+        /// <summary>
+        /// Draws the scene to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(background, new Rectangle(0,0,Width,Height), new Rectangle(0,0,background.Width,background.Height), Color.White);

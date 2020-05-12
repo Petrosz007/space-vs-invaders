@@ -7,19 +7,37 @@ using SpaceVsInvaders.View.Components;
 
 namespace SpaceVsInvaders.View.Scenes
 {
+    /// <summary>
+    /// Main menu scene
+    /// </summary>
     public class MainMenuScene : Scene
     {
+        /// <summary>
+        /// New game should be started with the difficulty
+        /// </summary>
         public event EventHandler<Difficulty> NewGame;
+
+        /// <summary>
+        /// The program should exit event
+        /// </summary>
         public event EventHandler Exit;
         private List<Component> components;
         private Texture2D background;
 
+        /// <summary>
+        /// Constructor of <c>MainMenuScene</c>
+        /// </summary>
+        /// <param name="width">Window Width</param>
+        /// <param name="height">Window Height</param>
         public MainMenuScene(int width, int height)
             : base(width, height)
         {
 
         }
 
+        /// <summary>
+        /// Loads content, runs once per program run
+        /// </summary>
         public override void LoadContent()
         {
             int btnWidth = 400;
@@ -44,10 +62,19 @@ namespace SpaceVsInvaders.View.Scenes
 
             background = ContentLoader.GetTexture("Backgrounds/pause-background");
         }
+
+        /// <summary>
+        /// Handles the unloading of content
+        /// </summary>
         public override void UnloadContent()
         {
 
         }
+
+        /// <summary>
+        /// Updates the scene
+        /// </summary>
+        /// <param name="gameTime">gametime</param>
         public override void Update(GameTime gameTime)
         {           
             foreach(var component in components)
@@ -55,6 +82,11 @@ namespace SpaceVsInvaders.View.Scenes
                 component.Update(gameTime);
             }
         }
+
+        /// <summary>
+        /// Draws the scene to the spritebatch
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(background, new Rectangle(0,0,Width,Height), new Rectangle(0,0,background.Width,background.Height), Color.White);

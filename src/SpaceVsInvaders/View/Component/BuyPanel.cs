@@ -4,15 +4,39 @@ using SpaceVsInvaders.Model;
 
 namespace SpaceVsInvaders.View.Components
 {
+    /// <summary>
+    /// Buy panel with buttons to buy towers
+    /// </summary>
     public class BuyPanel : BasePanel
     {
         private StateManager stateManager;
         private SpriteFont font;
 
+        /// <summary>
+        /// Damage tower buy button
+        /// </summary>
+        /// <value>Damage tower buy button</value>
         public Button DamageTowerButton { get; private set; }
+
+        /// <summary>
+        /// Gold tower buy button
+        /// </summary>
+        /// <value>Gold tower buy button</value>
         public Button GoldTowerButton { get; private set; }
+
+        /// <summary>
+        /// Heal tower buy button
+        /// </summary>
+        /// <value>Heal tower buy button</value>
         public Button HealTowerButton { get; private set; }
 
+        /// <summary>
+        /// Constructor of <c>BuyPanel</c>
+        /// </summary>
+        /// <param name="position">Position of the panel</param>
+        /// <param name="height">Height of the panel</param>
+        /// <param name="width">Width of the panel</param>
+        /// <param name="stateManager">State manager to get the state from</param>
         public BuyPanel(Vector2 position, int height, int width, StateManager stateManager)
             : base(position, height, width)
         {
@@ -25,6 +49,10 @@ namespace SpaceVsInvaders.View.Components
             HealTowerButton = new Button(new Vector2(PanelX + 60, PanelY + 120), 50, PanelWidth - 60, $"Heal ${Config.GetValue<TowerConfig>("HealTower").Cost}");
         }
 
+        /// <summary>
+        /// Update the buttons of the buy panel
+        /// </summary>
+        /// <param name="gameTime">Game time</param>
         public override void Update(GameTime gameTime)
         {
             if(stateManager.GameOver) return;
@@ -35,6 +63,11 @@ namespace SpaceVsInvaders.View.Components
             GoldTowerButton.Update(gameTime);
             HealTowerButton.Update(gameTime);
         }
+
+        /// <summary>
+        /// Draw the buy panel
+        /// </summary>
+        /// <param name="spriteBatch">Sprite batch to draw to</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);

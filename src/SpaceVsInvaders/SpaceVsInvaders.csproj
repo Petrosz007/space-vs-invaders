@@ -7,6 +7,9 @@
     <ApplicationIcon>Content\icon.ico</ApplicationIcon>
     <RuntimeIdentifiers>win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- Hides the useless "switch non exhaustive" warning -->
+    <NoWarn>8509</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

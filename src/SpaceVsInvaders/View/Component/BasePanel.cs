@@ -14,9 +14,29 @@ namespace SpaceVsInvaders.View.Components
     public abstract class BasePanel : Component
     {
         private Texture2D backgroundPanel;
+
+        /// <summary>
+        /// Usable base X position of the panel
+        /// </summary>
+        /// <value>X position</value>
         protected int PanelX { get; private set; }
+
+        /// <summary>
+        /// Usable base Y position of the panel
+        /// </summary>
+        /// <value>Y position</value>
         protected int PanelY { get; private set; }
+
+        /// <summary>
+        /// Usable width of the panel
+        /// </summary>
+        /// <value>Width</value>
         protected int PanelWidth { get; private set; }
+
+        /// <summary>
+        /// Usable height of the panel
+        /// </summary>
+        /// <value>Height</value>
         protected int PanelHeight { get; private set; }
 
         /// <summary>
